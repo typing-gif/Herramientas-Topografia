@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TopoCalc - Agrimensura</title>
+    <style>
+        :root {
+            --bg-body: #f4f7fb; --bg-card: #ffffff; --text-primary: #1e2a3e; --text-secondary: #475569;
+            --border: #dce3ec; --accent: #2c6e9e; --accent-hover: #1f557d; --success: #2b7a4b;
+            --success-hover: #1f5c38; --danger: #c2412c; --danger-hover: #9b2c1a;
+            --notebook-bg: #fefce8; --header-bg: #eef2f8; --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --cut-bg: rgba(239, 68, 68, 0.2); --fill-bg: rgba(34, 197, 94, 0.2);
+        }
+        body.dark {
+            --bg-body: #121826; --bg-card: #1e293b; --text-primary: #e2e8f0; --text-secondary: #94a3b8;
+            --border: #334155; --accent: #3b82f6; --accent-hover: #60a5fa; --success: #22c55e;
+            --success-hover: #4ade80; --danger: #f87171; --danger-hover: #ef4444;
+            --notebook-bg: #1e293b; --header-bg: #0f172a; --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --cut-bg: rgba(239, 68, 68, 0.4); --fill-bg: rgba(34, 197, 94, 0.4);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg-body); color: var(--text-primary); padding: 24px; transition: background 0.2s; overflow-x: hidden; }
+        .container { max-width: 1400px; margin: 0 auto; background: var(--bg-card); border-radius: 20px; box-shadow: var(--shadow); padding: 28px 32px; transition: 0.3s; }
+        
+        /* HEADER */
+        .app-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border); gap: 15px;}
+        .app-title h1 { font-size: 1.8rem; font-weight: 700; color: var(--accent); margin-bottom: 5px; cursor: help;}
+        .app-title p { font-size: 0.85rem; color: var(--text-secondary); cursor: help;}
+        .header-controls { display: flex; flex-direction: row; gap: 8px; align-items: center; }
+        
+        .control-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--header-bg); padding: 8px 16px; border-radius: 40px; cursor: pointer; border: 1px solid var(--border); color: var(--text-primary); font-weight: 600; font-size: 0.85rem; transition: 0.2s;}
+        .control-btn:hover { background: var(--accent); color: white; }
+        .control-btn.accent { background: var(--accent); color: white; border: none; }
+        .control-btn.accent:hover { background: var(--accent-hover); }
+
+        /* TABS */
+        .tabs-nav { display: flex; gap: 6px; margin-bottom: 28px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+        .tab-btn { background: transparent; color: var(--text-secondary); border: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 20px 20px 0 0; cursor: pointer; transition: 0.2s; }
+        .tab-btn.active { background: var(--accent); color: white; }
+        .tab-btn:hover:not(.active) { background: var(--header-bg); color: var(--text-primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        h2 { font-size: 1.4rem; margin-bottom: 5px; color: var(--accent); cursor: help; }
+        h3 { font-size: 1.1rem; color: var(--text-primary); margin-bottom: 10px; cursor: help; }
+        .subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; cursor: help; }
+        
+        /* INPUTS */
+        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: var(--header-bg); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); cursor: help; }
+        input { padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; background: var(--bg-card); color: var(--text-primary); transition: 0.3s;}
+        input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+        
+        /* BUTTONS */
+        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center;}
+        .action-btn { background-color: var(--accent); color: white; border: none; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px;}
+        .action-btn:hover { background-color: var(--accent-hover); transform: translateY(-1px);}
+        .success-btn { background-color: var(--success); }
+        .success-btn:hover { background-color: var(--success-hover); }
+        .danger-btn { background-color: transparent; border: 1px solid var(--danger); color: var(--danger); }
+        .danger-btn:hover { background-color: var(--danger); color: white; }
+        
+        /* TABLES */
+        .table-container { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); margin-top: 15px; -webkit-overflow-scrolling: touch;}
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { padding: 12px; text-align: center; border-bottom: 1px solid var(--border); }
+        th { background: var(--header-bg); font-weight: 600; position: sticky; top: 0; z-index: 10;}
+        
+        /* PANELS */
+        .summary-panel { background: var(--header-bg); border-radius: 12px; padding: 16px; margin-top: 15px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 0.9rem; line-height: 1.5;}
+        .error-panel { background: #fef2f2; color: #b91c1c; padding: 12px; border-radius: 10px; margin-top: 10px; display: none; font-weight: 600; }
+        body.dark .error-panel { background: #450a0a; color: #f87171; }
+        
+        /* NOTEBOOK */
+        .toggle-container { margin-top: 20px; text-align: center; }
+        .toggle-btn { width: 100%; background: var(--header-bg); border: 1px solid var(--border); padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; color: var(--text-primary); transition: 0.2s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        .toggle-btn:hover { background: var(--accent); color: white; }
+        .notebook-panel { background: var(--notebook-bg); border-radius: 12px; padding: 20px; margin-top: 10px; border-left: 5px solid var(--accent); font-family: 'Courier New', monospace; display: none; font-size: 0.9rem;}
+        .note-step { margin-bottom: 15px; line-height: 1.6; }
+        .note-step h4 { color: var(--accent); margin-bottom: 5px; font-size: 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;}
+        .pencil-res { color: var(--success); font-weight: bold; }
+        
+        /* CANVAS GENERAL */
+        canvas { max-width: 100%; height: auto; background: var(--bg-card); border-radius: 12px; margin-top: 20px; border: 1px solid var(--border); display: block; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); margin-left: auto; margin-right: auto;}
+        
+        /* EFECTO LUPA (ZOOM) PARA DIBUJOS */
+        #canvasMalla, #canvasLongitudinal, #curvaCanvas {
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        #canvasMalla:hover, #canvasLongitudinal:hover, #curvaCanvas:hover {
+            transform: scale(1.15); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            z-index: 10; 
+            position: relative; 
+        }
+
+        /* BOTONES DE CONTROL FLOTANTES GENERALES */
+        .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; }
+        .help-btn-circle { background: var(--accent); color: white; border: none; width: 52px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .help-btn-circle:hover { transform: scale(1.1); }
+
+        /* PANEL ASISTENTE DESPLEGABLE SIDE DRAWER */
+        #assistantPanel { position: fixed; top: 0; right: -400px; width: 380px; height: 100vh; background: var(--bg-card); border-left: 3px solid var(--accent); box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 2500; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 24px; overflow-y: auto; }
+        #assistantPanel.open { right: 0; }
+        .assistant-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 12px; margin-bottom: 20px; }
+        .assistant-header h3 { margin: 0; color: var(--accent); display: flex; align-items: center; gap: 8px; font-size: 1.2rem;}
+        .close-assistant { background: transparent; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-secondary); transition: 0.2s;}
+        .close-assistant:hover { color: var(--danger); transform: scale(1.1);}
+        .assistant-box p { font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 15px; text-align: justify;}
+        .assistant-img { width: 100%; background: var(--bg-body); border-radius: 12px; padding: 15px; border: 1px dashed var(--border); margin-bottom: 15px; display: flex; justify-content: center; align-items: center; background: #ffffff; }
+
+        /* WIDGET CALCULADORA CIENTÍFICA AVANZADA GMS */
+        #calcFlotante { position: fixed; top: 150px; left: 40px; width: 340px; background: var(--bg-card); border: 2px solid var(--accent); border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); display: none; z-index: 2000; overflow: hidden; }
+        #calcHeader { background: var(--accent); color: white; padding: 14px; cursor: move; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; user-select: none; }
+        #calcDisplay { width: 100%; height: 65px; background: #0f172a; color: #38bdf8; text-align: right; padding: 10px 15px; font-size: 1.6rem; font-family: 'Courier New', monospace; border: none; outline: none; box-sizing: border-box; }
+        .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 12px; background: var(--header-bg); }
+        .calc-btn { padding: 12px 6px; font-size: 0.8rem; font-weight: bold; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer; text-align: center; transition: 0.15s; }
+        .calc-btn:hover { background: var(--accent); color: white; }
+        .calc-btn.op { background: rgba(44, 110, 158, 0.15); color: var(--accent); }
+        .calc-btn.shift-active { background: #f59e0b; color: #000; }
+        .calc-btn.eq { grid-column: span 2; background: var(--success); color: white; border: none; font-size: 1.1rem; }
+        .calc-btn.eq:hover { background: var(--success-hover); }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg-card); padding: 32px; border-radius: 20px; max-width: 850px; width: 95%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);}
+        .modal-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .modal-table th, .modal-table td { border: 1px solid var(--border); padding: 12px; text-align: left; font-size: 0.85rem;}
+        .modal-table th { background: var(--header-bg); font-weight: bold; }
+        .watermark { position: fixed; bottom: 12px; right: 20px; font-size: 0.75rem; color: var(--text-secondary); background: var(--bg-card); padding: 6px 14px; border-radius: 40px; box-shadow: var(--shadow); pointer-events: none; font-weight: 600; border: 1px solid var(--border); z-index: 10;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="app-header">
+        <div class="app-title">
+            <h1 title="Calculadora Topográfica de Altimetría Avanzada">📐 TopoCalc v9.3</h1>
+            <p title="Diseñado bajo las directrices académicas de Topografía y Agrimensura">Herramientas de Altimetría | Desarrollo por Cristopher Cedeño</p>
+        </div>
+        <div class="header-controls">
+            <button class="control-btn accent" onclick="restablecerTodosEjemplos()" title="Carga datos de ejemplo prediseñados al instante para comprobar el funcionamiento">🔄 Restablecer ejemplos</button>
+            <button class="control-btn" id="darkModeToggle" onclick="toggleDarkMode()" title="Cambiar tema visual (Claro/Oscuro) para proteger la vista"><span>🌙</span> <span>Modo oscuro</span></button>
+        </div>
+    </div>
+    
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('modIsohipsas', this)" title="Cálculo Lineal y Malla 2D para curvas de nivel">📈 Isohipsas</button>
+        <button class="tab-btn" onclick="switchTab('modTransversales', this)" title="Interpolación de cota hacia el eje central">🛣️ Cotas Eje</button>
+        <button class="tab-btn" onclick="switchTab('modPendiente', this)" title="Cálculo porcentual y análisis de pendiente">📐 Pendiente</button>
+        <button class="tab-btn" onclick="switchTab('modRasante', this)" title="Diseño de perfil longitudinal y cotas teóricas">🛤️ Rasante</button>
+        <button class="tab-btn" onclick="switchTab('modCorteRelleno', this)" title="Movimiento de tierras por el método del trapecio">📊 Corte/Relleno</button>
+        <button class="tab-btn" onclick="switchTab('modPerfilTransversal', this)" title="Visualización y áreas (Gauss) de una sección transversal">📐 Perfil Transversal</button>
+        <button class="tab-btn" onclick="switchTab('modCurvaHorizontal', this)" title="Cálculo y dibujo dinámico de Curva Circular Simple">🔄 Curva Horizontal</button>
+    </div>
+
+    <!-- 1. ISOHIPSAS -->
+    <div id="modIsohipsas" class="tab-content active">
+        <h2 title="Interpolación matemática entre dos puntos">Interpolación de Isohipsas (Lineal)</h2>
+        <div class="subtitle" title="Teorema de Thales para curvas de nivel">Determinación analítica del paso de curvas de nivel enteras entre dos puntos (A y B).</div>
+        <div class="grid-inputs">
+            <div class="input-group"><label title="Elevación exacta del punto inicial">Cota Punto A (m)</label><input type="number" id="isoCotaA" step="any" title="Ingrese la cota del primer punto"></div>
+            <div class="input-group"><label title="Elevación exacta del punto final">Cota Punto B (m)</label><input type="number" id="isoCotaB" step="any" title="Ingrese la cota del segundo punto"></div>
+            <div class="input-group"><label title="Distancia física medida en el papel o terreno">Distancia AB (cm/m)</label><input type="number" id="isoDistPlano" step="any" title="Distancia total de la recta que une A y B"></div>
+            <div class="input-group"><label title="Separación vertical deseada entre las curvas">Equidistancia (m)</label><input type="number" id="isoEquidistancia" step="any" title="Valor del intervalo entre curvas (ej. 0.25, 1, 5)"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn" onclick="ejecutarCalculoIsohipsas()" title="Procesar matemáticamente la interpolación lineal">Procesar Lineal</button>
+            <button class="action-btn success-btn" onclick="exportarCSV('isoTbody', 'Isohipsas_Lineal.csv')" title="Exportar la tabla de resultados a formato Excel">📊 Exportar CSV</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modIsohipsas'); document.getElementById('isoTableWrapper').style.display='none'; document.getElementById('notebookIsohipsas').style.display='none'; pStates['notebookIsohipsas']=false;" title="Borrar todos los datos de la sección lineal">Limpiar Lineal</button>
+        </div>
+        <div id="isoError" class="error-panel"></div>
+        <div id="isoTableWrapper" class="table-container" style="display:none;">
+            <table title="Resultados de la interpolación lineal"><thead><tr><th>Curva de Nivel (m)</th><th>Distancia desde Punto A</th></tr></thead><tbody id="isoTbody"></tbody></table>
+        </div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookIsohipsas')" title="Ver el desglose matemático detallado de los 6 pasos"><span>▼ Mostrar memoria (6 pasos de cálculo)</span></button></div>
+        <div class="notebook-panel" id="notebookIsohipsas">
+            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA DE CÁLCULO: ISOHIPSA LINEAL</b></div>
+            <div class="note-step"><h4>1) Desnivel Total (ΔH)</h4><div id="iso_paso1"></div></div>
+            <div class="note-step"><h4>2) Módulos (Paquetes)</h4><div id="iso_paso2"></div></div>
+            <div class="note-step"><h4>3) Curvas Enteras a Encontrar</h4><div id="iso_paso3"></div></div>
+            <div class="note-step"><h4>4) Desniveles Parciales (dh)</h4><div id="iso_paso4"></div></div>
+            <div class="note-step"><h4>5) Planteamiento Regla de Tres</h4><div id="iso_paso5"></div></div>
+            <div class="note-step"><h4>6) Distancias Calculadas (Resultado Final)</h4><div id="iso_paso6"></div></div>
+        </div>
+
+        <hr style="border: 1px dashed var(--border); margin: 40px 0;">
+
+        <h3 title="Generación de curvas de nivel evaluando un cuadrante topográfico" style="color:var(--accent); font-size:1.4rem;">🧩 Interpolación en Malla 2D (Cuadrícula Suavizada)</h3>
+        <div class="subtitle" title="Cuadricula 2D">Cálculo matemático y trazado de curvas de nivel evaluando los 4 lados simultáneamente. Pase el ratón sobre el dibujo para ampliar.</div>
+        <div class="grid-inputs" style="background: var(--notebook-bg); border-color: var(--accent);">
+            <div class="input-group"><label title="Elevación de la esquina superior izquierda">Cota A (Sup. Izq)</label><input type="number" id="mallaA" step="any" title="Cota A"></div>
+            <div class="input-group"><label title="Elevación de la esquina superior derecha">Cota B (Sup. Der)</label><input type="number" id="mallaB" step="any" title="Cota B"></div>
+            <div class="input-group"><label title="Elevación de la esquina inferior izquierda">Cota D (Inf. Izq)</label><input type="number" id="mallaD" step="any" title="Cota D"></div>
+            <div class="input-group"><label title="Elevación de la esquina inferior derecha">Cota C (Inf. Der)</label><input type="number" id="mallaC" step="any" title="Cota C"></div>
+            <div class="input-group"><label title="Distancia física entre A-B y D-C">Ancho Horizontal (cm)</label><input type="number" id="mallaAncho" step="any" title="Ancho del rectángulo"></div>
+            <div class="input-group"><label title="Distancia física entre A-D y B-C">Alto Vertical (cm)</label><input type="number" id="mallaAlto" step="any" title="Alto del rectángulo"></div>
+            <div class="input-group"><label title="Intervalo vertical de separación entre las curvas">Equidistancia (m)</label><input type="number" id="mallaEq" step="any" title="Separación de las curvas"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn success-btn" onclick="procesarMalla2D()" title="Calcular los 4 bordes y dibujar la cuadrícula con curvas suavizadas">📐 Dibujar Malla 2D</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputsMalla2D();" title="Borrar cotas, vaciar la tabla y ocultar el dibujo de la cuadrícula">Limpiar Datos y Dibujo</button>
+        </div>
+        <canvas id="canvasMalla" width="700" height="700" style="display:none; margin: 20px auto; width: 100%; max-width: 600px; background: #ffffff;" title="Papel cuadriculado virtual mostrando las curvas de nivel suavizadas"></canvas>
+        <div id="tablaMallaWrapper" class="table-container" style="display:none; margin-top:20px;">
+            <table title="Puntos exactos por donde cruza cada curva en los bordes"><thead><tr><th>Lado Evaluado</th><th>Curva (m)</th><th>Distancia desde el origen (cm)</th></tr></thead><tbody id="mallaTbody"></tbody></table>
+        </div>
+    </div>
+
+    <!-- 2. TRANSVERSALES (COTAS EJE) -->
+    <div id="modTransversales" class="tab-content">
+        <h2 title="Llevar la cota de una curva lateral hacia el centro del eje">Cotas del Terreno Natural en el Eje</h2>
+        <div class="subtitle" title="Interpolación hacia el centro">Interpolación por regla de tres para hallar la elevación central.</div>
+        <div class="grid-inputs" style="grid-template-columns: 1fr; max-width: 350px;"><div class="input-group"><label title="Separación vertical entre las curvas mayores del plano base">Equidistancia global del plano (m)</label><input type="number" id="transEquidistanciaGlobal" step="any" onchange="actualizarEquidistanciaMatriz()" title="Este valor afecta a todos los cálculos de abajo"></div></div>
+        <div class="grid-inputs">
+            <div class="input-group"><label title="Nombre o progresiva del punto (Ej: 0+020)">Estación</label><input type="text" id="transProg" title="Identificador de la sección"></div>
+            <div class="input-group"><label title="Cota de la curva de nivel más baja cercana al punto">Cota Curva Inferior (m)</label><input type="number" id="transCotaInf" step="any" title="Elevación base para sumar"></div>
+            <div class="input-group"><label title="Distancia total medida entre la curva inferior y la superior">Distancia Total Curva-Curva (cm)</label><input type="number" id="transDistTotal" step="any" title="Espacio total en el plano"></div>
+            <div class="input-group"><label title="Distancia medida desde la curva inferior hasta el eje central">Dist. al Eje Central (cm)</label><input type="number" id="transDistEje" step="any" title="Distancia parcial al centro"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn" onclick="agregarEstacionTransversal()" title="Procesar los datos y añadirlos como una nueva fila en la tabla inferior">➕ Insertar a la Tabla</button>
+            <button class="action-btn danger-btn" onclick="baseDatosTransversales=[]; procesarMatrizTransversales(); document.getElementById('notebookTransversales').style.display='none'; pStates['notebookTransversales']=false;" title="Borrar todas las estaciones registradas">Reiniciar Tabla Completa</button>
+        </div>
+        <div class="table-container">
+            <table title="Registro de estaciones calculadas"><thead><tr><th>Estación</th><th>Cota Base (m)</th><th>Dist.Total (cm)</th><th>Dist.Eje (cm)</th><th>Cota Eje Calculada (m)</th><th>Acción</th></tr></thead><tbody id="transTbody"></tbody></table>
+        </div>
+        <div class="summary-panel" id="transResumen" title="Controles de exportación"><span>Esperando datos...</span></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookTransversales')" title="Ver el desarrollo matemático de la última fila insertada"><span>▼ Mostrar memoria de la Última Estación</span></button></div>
+        <div class="notebook-panel" id="notebookTransversales">
+            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: REGLA DE TRES HACIA EL EJE</b></div>
+            <div class="note-step"><h4>1. Datos de Entrada</h4><div id="trans_s1"></div></div>
+            <div class="note-step"><h4>2. Cálculo del Desnivel Parcial (Δz)</h4><div id="trans_s2"></div></div>
+            <div class="note-step"><h4>3. Cota Final del Eje</h4><div id="trans_s3"></div></div>
+        </div>
+    </div>
+
+    <!-- 3. PENDIENTE -->
+    <div id="modPendiente" class="tab-content">
+        <h2 title="Calcular la inclinación del terreno">📐 Cálculo de Pendiente Longitudinal</h2>
+        <div class="subtitle" title="Inclinación porcentual y angular">Determinación del desnivel porcentual (%) entre dos puntos conocidos.</div>
+        
+        <div style="background: var(--notebook-bg); border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; color: var(--text-primary);">
+            <b>💡 Concepto Topográfico:</b> Entre más distancia horizontal tengamos, nuestra pendiente será más pequeña (terreno más plano). Y entre menos distancia horizontal tengamos para el mismo desnivel, la pendiente será mucho más grande (terreno escarpado).
+        </div>
+
+        <div class="grid-inputs">
+            <div class="input-group"><label title="Elevación del punto donde inicia el tramo">Cota Inicial - A (m)</label><input type="number" id="pendCotaA" step="any" title="Cota de partida"></div>
+            <div class="input-group"><label title="Elevación del punto donde finaliza el tramo">Cota Final - B (m)</label><input type="number" id="pendCotaB" step="any" title="Cota de llegada"></div>
+            <div class="input-group"><label title="Distancia lineal y horizontal que separa ambos puntos">Distancia Horizontal (m)</label><input type="number" id="pendDistancia" step="any" title="Distancia entre A y B"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn" onclick="calcularPendiente()" title="Procesar la fórmula P=(ΔH/D)*100">Calcular Pendiente</button>
+            <button class="action-btn success-btn" onclick="usarPendienteEnRasante()" title="Llevar el valor calculado automáticamente a la calculadora de Rasante">↗ Usar en módulo Rasante</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modPendiente'); document.getElementById('pendResultados').innerHTML='---'; document.getElementById('notebookPendiente').style.display='none'; pStates['notebookPendiente']=false;" title="Borrar campos">Limpiar</button>
+        </div>
+        <div id="pendError" class="error-panel"></div>
+        
+        <div class="summary-panel" style="justify-content: center; text-align: center; border: 2px solid var(--accent);" title="Pendiente Resultante"><h3 style="margin:0; font-size:1.3rem;">Pendiente Resultante: <br><span id="pendResultados" style="color:var(--accent); font-weight:900; font-size: 1.8rem; display:block; margin-top:10px;">---</span></h3></div>
+        
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookPendiente')" title="Ver el desglose matemático"><span>▼ Mostrar memoria del cálculo</span></button></div>
+        <div class="notebook-panel" id="notebookPendiente">
+            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ANÁLISIS DE PENDIENTE</b></div>
+            <div class="note-step"><h4>1. Extracción de Datos</h4><div id="pend_paso1"></div></div>
+            <div class="note-step"><h4>2. Cálculo del Desnivel (ΔH)</h4><div id="pend_paso2"></div></div>
+            <div class="note-step"><h4>3. Aplicación de la Fórmula</h4><div id="pend_paso3"></div></div>
+            <div class="note-step"><h4>4. Análisis de Signo</h4><div id="pend_paso4"></div></div>
+        </div>
+    </div>
+
+    <!-- 4. RASANTE -->
+    <div id="modRasante" class="tab-content">
+        <h2 title="Proyectar las cotas de diseño de una vía o canal">🛤️ Rasante (Perfil Longitudinal de Diseño)</h2>
+        <div class="subtitle" title="Interpolación de cota rasante">Generación de tabla de cotas de proyecto teóricas a partir de una pendiente constante.</div>
+        <div class="grid-inputs">
+            <div class="input-group"><label title="Elevación oficial donde arranca el proyecto">Cota inicial de proyecto (m)</label><input type="number" id="rasCotaInicial" step="any" title="Elevación de arranque (C0)"></div>
+            <div class="input-group"><label title="Inclinación porcentual del diseño (puede ser negativa)">Pendiente de diseño (%)</label><input type="number" id="rasPendiente" step="any" title="Pendiente en porcentaje (P)"></div>
+            <div class="input-group"><label title="Longitud total del trazado recto a calcular">Longitud total del tramo (m)</label><input type="number" id="rasLongitud" step="any" title="Longitud final (L)"></div>
+            <div class="input-group"><label title="Cada cuántos metros se colocará una estaca">Intervalo de estacado (m)</label><input type="number" id="rasIntervalo" step="any" title="Ejemplo: 10 o 20 metros"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn" onclick="calcularRasante()" title="Generar iteración de cotas por cada intervalo">Calcular Cotas</button>
+            <button class="action-btn success-btn" onclick="exportarCSV('rasTbody', 'Rasante_Proyecto.csv')" title="Descargar tabla en formato Excel (.csv)">📊 Exportar a Excel (CSV)</button>
+            <button class="action-btn" style="background:#2c5a7a;" onclick="exportarCivil3D('rasTbody', 'Rasante_Civil3D.txt')" title="Formato compatible con AutoCAD Civil 3D">📐 Exportar a Civil 3D</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modRasante'); document.getElementById('rasTableContainer').style.display='none'; document.getElementById('notebookRasante').style.display='none'; pStates['notebookRasante']=false;" title="Borrar todo">Limpiar</button>
+        </div>
+        <div id="rasError" class="error-panel"></div>
+        <div class="table-container" id="rasTableContainer" style="display:none;">
+            <table title="Registro de progresivas y sus cotas de diseño"><thead><tr><th>Progresiva (Estación)</th><th>Distancia Acumulada (x)</th><th>Cota de Proyecto Calculada (m)</th></tr></thead><tbody id="rasTbody"></tbody></table>
+        </div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookRasante')" title="Ver la fórmula base y comprobaciones"><span>▼ Mostrar memoria matemática</span></button></div>
+        <div class="notebook-panel" id="notebookRasante">
+            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: PROYECCIÓN DE RASANTE</b></div>
+            <div class="note-step"><h4>Ecuación de la Recta Aplicada</h4><div id="ras_formula"></div></div>
+            <div class="note-step"><h4>Demostración de los 3 primeros intervalos</h4><div id="ras_ejemplo"></div></div>
+            <div class="note-step"><h4>Comprobación de Cierre Final</h4><div id="ras_cierre"></div></div>
+        </div>
+    </div>
+
+    <!-- 5. CORTE Y RELLENO -->
+    <div id="modCorteRelleno" class="tab-content">
+        <h2 title="Calcular cuánta tierra sacar o poner y visualizar perfil">📊 Movimiento de Tierras (Corte y Relleno)</h2>
+        <div class="subtitle" title="Cubicación topográfica">Volúmenes acumulados mediante el método de áreas medias (Trapecio) y <b>Gráfico de Perfil Longitudinal</b>.</div>
+        <div class="grid-inputs" style="grid-template-columns: 1fr; max-width: 350px;"><div class="input-group"><label title="Se asume una sección rectangular constante para el método de áreas medias simples">Ancho de sección de diseño (m)</label><input type="number" id="anchoSeccion" step="any" title="Ancho de la vía o canal"></div></div>
+        <div class="grid-inputs">
+            <div class="input-group"><label title="Distancia acumulada (estación)">Progresiva actual (m)</label><input type="number" id="prog" step="any" title="Estación longitudinal"></div>
+            <div class="input-group"><label title="Cota natural extraída de la topografía">Cota del Terreno Natural (m)</label><input type="number" id="cotaTerreno" step="any" title="Cota TN"></div>
+            <div class="input-group"><label title="Cota teórica de diseño (Rasante)">Cota de Diseño Rasante (m)</label><input type="number" id="cotaRasante" step="any" title="Cota Proyecto"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn" onclick="agregarPuntoCorteRelleno()" title="Evaluar punto y añadir volumen a la tabla">➕ Evaluar y Agregar</button>
+            <button class="action-btn success-btn" onclick="exportarCSV('crTbody', 'Volumenes_Trapecio.csv')" title="Descargar reporte de cubicación">📊 Exportar Reporte CSV</button>
+            <button class="action-btn danger-btn" onclick="limpiarCorteRellenoTotal()" title="Borrar todo el registro de movimiento">Reiniciar Cubicación</button>
+        </div>
+        <div id="crError" class="error-panel"></div>
+        <div class="table-container" id="crTableContainer" style="display:none;">
+            <table title="Tabla de cubicación acumulada"><thead><tr><th>Prog (m)</th><th>Terr (m)</th><th>Ras (m)</th><th>Dif. Cota (m)</th><th>Corte (m)</th><th>Rell (m)</th><th>Área Secc (m²)</th><th>Dist. Parcial (m)</th><th>Vol. Parcial (m³)</th><th>Vol. Acumulado (m³)</th><th>Acción</th></tr></thead><tbody id="crTbody"></tbody></table>
+        </div>
+        <div class="summary-panel" id="crResumen" title="Balance total de tierras"><span>Ingrese progresivas para iniciar el cálculo de volúmenes.</span></div>
+        
+        <div id="contenedorPerfilLongitudinal" style="display:none; margin-top:35px;">
+            <h3 style="text-align:center; color:var(--accent);" title="Vista 2D del terreno vs diseño">🗺️ Vista de Perfil Longitudinal</h3>
+            <canvas id="canvasLongitudinal" class="zoom-canvas" width="800" height="350" style="margin: 10px auto; background:#ffffff; border:1px solid var(--border); border-radius:12px;" title="Gráfico a escala del perfil longitudinal. Pase el ratón para efecto lupa."></canvas>
+            <div id="leyendaLongitudinal" style="text-align:center; margin-top: 10px; font-weight:bold; font-size: 0.9rem;">
+                <span style="color: #8b4513; margin-right: 15px;">━ Terreno Natural</span>
+                <span style="color: #ef4444; margin-right: 15px;">--- Rasante de Proyecto</span>
+                <span style="color: #ef4444; margin-right: 15px;">■ Área de Corte</span>
+                <span style="color: #22c55e;">■ Área de Relleno</span>
+            </div>
+        </div>
+
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookCorteRelleno')" title="Ver el desglose matemático del volumen entre las últimas dos secciones"><span>▼ Mostrar memoria (Método del Trapecio del último tramo)</span></button></div>
+        <div class="notebook-panel" id="notebookCorteRelleno">
+            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: CUBICACIÓN POR ÁREAS MEDIAS</b></div>
+            <div class="note-step"><h4>1. Análisis de Diferencias (Rasante - Terreno)</h4><div id="cr_paso1"></div></div>
+            <div class="note-step"><h4>2. Clasificación de la Sección</h4><div id="cr_paso2"></div></div>
+            <div class="note-step"><h4>3. Áreas de la Sección Transversal</h4><div id="cr_paso3"></div></div>
+            <div class="note-step"><h4>4. Ecuación de Volumen (Método del Trapecio)</h4><div id="cr_paso4"></div></div>
+            <div class="note-step"><h4>5. Integración al Acumulado</h4><div id="cr_paso5"></div></div>
+            <div class="note-step"><h4>6. Balance General de la Obra</h4><div id="cr_paso6"></div></div>
+        </div>
+    </div>
+
+    <!-- 6. PERFIL TRANSVERSAL -->
+    <div id="modPerfilTransversal" class="tab-content">
+        <h2 title="Analizar el área de una sección específica (perpendicular al eje)">📐 Perfil Transversal de Construcción</h2>
+        <div class="subtitle" title="Áreas por coordenadas de sección">Cálculo analítico de áreas de desmonte (Sb) y terraplén (Sr) mediante coordenadas (Gauss) con visualización de colores topográficos.</div>
+        <div class="grid-inputs">
+            <div class="input-group"><label title="Ancho medido hacia la izquierda del centro">Dist. Límite Izquierda (m)</label><input type="number" id="distIzq" step="any" title="Distancia (-) en X"></div>
+            <div class="input-group"><label title="Elevación del terreno en el límite izquierdo">Cota Extremo Izquierdo (m)</label><input type="number" id="cotaIzq" step="any" title="Elevación en borde izquierdo"></div>
+            <div class="input-group"><label title="Elevación teórica de la línea de diseño en el centro">Cota Rasante (Eje central) m</label><input type="number" id="cotaEje" step="any" title="Altura del proyecto (Cota roja)"></div>
+            <div class="input-group"><label title="Ancho medido hacia la derecha del centro">Dist. Límite Derecha (m)</label><input type="number" id="distDer" step="any" title="Distancia (+) en X"></div>
+            <div class="input-group"><label title="Elevación del terreno en el límite derecho">Cota Extremo Derecho (m)</label><input type="number" id="cotaDer" step="any" title="Elevación en borde derecho"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn" onclick="calcularPerfilTransversal()" title="Resolver áreas mediante intersecciones y generar gráfico de la sección">Calcular Áreas y Generar Gráfico</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modPerfilTransversal'); document.getElementById('perfilCanvas').style.display='none'; document.getElementById('leyendaPerfil').style.display='none'; document.getElementById('perfilResumen').innerHTML='Ingrese datos para visualizar el perfil transversal.'; document.getElementById('notebookPerfil').style.display='none'; pStates['notebookPerfil']=false;" title="Borrar gráfico y cálculos">Limpiar Sección</button>
+        </div>
+        <div class="summary-panel" id="perfilResumen" title="Resultados geométricos"><span>Ingrese datos para visualizar el perfil transversal.</span></div>
+        
+        <div id="leyendaPerfil" style="display:none; text-align:center; margin-top: 25px; font-weight:bold; font-size: 0.95rem;">
+            <span style="color: #ef4444; margin-right: 20px;">■ Área Roja = Sb (Corte / Desmonte)</span>
+            <span style="color: #22c55e;">■ Área Verde = Sr (Relleno / Terraplén)</span>
+        </div>
+        <canvas id="perfilCanvas" width="800" height="400" style="display:none; margin: 10px auto; max-width: 100%; background:#f8fafc;" title="Representación visual de la sección transversal. La línea punteada oscura es la rasante."></canvas>
+        
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookPerfil')" title="Ver el detalle del cálculo de áreas (integración geométrica)"><span>▼ Mostrar memoria detallada (Cálculo de Áreas Sb/Sr)</span></button></div>
+        <div class="notebook-panel" id="notebookPerfil">
+            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ÁREAS DE SECCIÓN (MÉTODO GEOMÉTRICO)</b></div>
+            <div class="note-step"><h4>1. Definición de Coordenadas (Origen en el Eje)</h4><div id="perfil_paso1"></div></div>
+            <div class="note-step"><h4>2. Ecuación de la Rasante</h4><div id="perfil_paso2"></div></div>
+            <div class="note-step"><h4>3. Resolución de Áreas Parciales por Segmento</h4><div id="perfil_paso3"></div></div>
+            <div class="note-step"><h4>4. Sumatoria y Clasificación de la Sección</h4><div id="perfil_paso4"></div></div>
+        </div>
+    </div>
+
+    <!-- 7. CURVA HORIZONTAL -->
+    <div id="modCurvaHorizontal" class="tab-content">
+        <h2 title="Diseño geométrico de curvas circulares y plan de replanteo">🔄 Curva Horizontal Simple (Método Universitario)</h2>
+        <div class="subtitle" title="Teoría de Curvas">Cálculo de elementos (ST, LC) y cuadro de replanteo mediante deflexiones (Sen⁻¹). Incluye <b>Simulador Visual de la Curva</b>.</div>
+        <div class="grid-inputs">
+            <div class="input-group"><label title="Ángulo principal de giro entre las dos tangentes">Ángulo de Deflexión Δ (°)</label><input type="number" id="curvaDelta" step="any" title="Ángulo Delta"></div>
+            <div class="input-group"><label title="Radio geométrico diseñado para la curva">Radio R (m)</label><input type="number" id="curvaRadio" step="any" title="Radio de diseño"></div>
+            <div class="input-group"><label title="Progresiva exacta donde se intersectan las líneas rectas">Estación del PI (Punto de Inflexión)</label><input type="number" id="curvaEstPI" step="any" title="Progresiva del PI"></div>
+            <div class="input-group"><label title="Separación en metros para colocar las estacas topográficas">Intervalo de Estacado (m)</label><input type="number" id="curvaIntervalo" step="any" title="Cuerda unidad (ej: 10 o 20 metros)"></div>
+        </div>
+        <div class="btn-group">
+            <button class="action-btn" onclick="calcularCurvaHorizontal()" title="Procesar la geometría completa y dibujar el plano interactivo">📐 Calcular Curva y Generar Plano</button>
+            <button class="action-btn success-btn" onclick="exportarCSV('curvaReplanteoTbody', 'Replanteo_Curva.csv')" title="Descargar libreta de replanteo">📊 Exportar Libreta de Replanteo</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modCurvaHorizontal'); document.getElementById('curvaTableWrapper').style.display='none'; document.getElementById('curvaReplanteoWrapper').style.display='none'; document.getElementById('notebookCurva').style.display='none'; document.getElementById('canvasCurvaWrapper').style.display='none'; pStates['notebookCurva']=false;" title="Borrar todos los cálculos e imágenes">Limpiar Todo</button>
+        </div>
+        <div id="curvaError" class="error-panel"></div>
+        
+        <div id="canvasCurvaWrapper" style="display:none; margin-top: 25px;">
+            <h3 style="text-align:center; color:var(--accent);" title="Geometría topográfica">🗺️ Simulador Visual de Trazado de Curva</h3>
+            <canvas id="curvaCanvas" class="zoom-canvas" width="800" height="450" style="margin: 0 auto; background: #f8fafc; border: 2px solid var(--border);" title="Representación geométrica a escala de la curva calculada, mostrando PI, PC, PT y las estaciones de replanteo. Pase el ratón para hacer zoom."></canvas>
+            <div style="text-align:center; font-size:0.8rem; margin-top: 5px; color:var(--text-secondary);">El dibujo muestra de forma esquemática la disposición de los elementos. Los puntos indican las estaciones de replanteo.</div>
+        </div>
+
+        <div class="table-container" id="curvaTableWrapper" style="display:none; margin-top: 25px;">
+            <table title="Resumen de elementos de la curva circular"><thead><tr><th colspan="2" style="background:var(--accent); color:white;">Elementos Geométricos Calculados</th></tr></thead><tbody id="curvaElementos"></tbody></table>
+        </div>
+        
+        <div class="table-container" id="curvaReplanteoWrapper" style="display:none; margin-top:20px;">
+            <table title="Libreta de replanteo lista para trabajo de campo"><thead><tr><th colspan="4" style="background:var(--success); color:white;">Libreta de Replanteo por Deflexiones (Método de Arco)</th></tr><tr><th>Estación / Punto</th><th>Dist. Acumulada S (m)</th><th>Ángulo Deflexión (G° M' S")</th><th>Observación Topográfica</th></tr></thead><tbody id="curvaReplanteoTbody"></tbody></table>
+        </div>
+        
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookCurva')" title="Ver las fórmulas aplicadas de la libreta universitaria"><span>▼ Mostrar Memoria Universitaria (Paso a Paso)</span></button></div>
+        <div class="notebook-panel" id="notebookCurva">
+            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: FÓRMULAS DE CURVA CIRCULAR SIMPLE</b></div>
+            <div class="note-step"><h4>1. Conversión de Ángulo Δ a Radianes</h4><div id="curva_paso1"></div></div>
+            <div class="note-step"><h4>2. Cálculo de la Sub-Tangente (ST)</h4><div id="curva_paso2"></div></div>
+            <div class="note-step"><h4>3. Cálculo de la Longitud de Curva (LC)</h4><div id="curva_paso3"></div></div>
+            <div class="note-step"><h4>4. Cálculo de la Externa (E)</h4><div id="curva_paso4"></div></div>
+            <div class="note-step"><h4>5. Cálculo de la Ordenada Media (M)</h4><div id="curva_paso5"></div></div>
+            <div class="note-step"><h4>6. Cálculo de la Cuerda Larga (CL)</h4><div id="curva_paso6"></div></div>
+            <div class="note-step"><h4>7. Determinación Estación PC (Principio de Curva)</h4><div id="curva_paso7"></div></div>
+            <div class="note-step"><h4>8. Determinación Estación PT (Principio de Tangente)</h4><div id="curva_paso8"></div></div>
+            <hr style="border: 1px dashed var(--border); margin: 25px 0;">
+            <div class="note-step"><h4>📍 METODOLOGÍA DE REPLANTEO (Demostración)</h4><div id="curva_paso_def"></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     ASISTENTE DESPLEGABLE SIDE DRAWER
+     ========================================== -->
+<div id="assistantPanel">
+    <div class="assistant-header">
+        <h3 title="Panel dinámico que te enseña a usar la ventana en la que te encuentras">💡 Guía de Asistencia</h3>
+        <button class="close-assistant" onclick="toggleAssistant()" title="Ocultar el panel de guía lateral">✖</button>
+    </div>
+    <div class="assistant-box" id="assistantBoxContent">
+        <!-- JS Inyecta contenido interactivo aquí -->
+    </div>
+</div>
+
+<!-- COMPONENTES DE CONTROL FLOTANTES GENERALES -->
+<div class="flotante-controls no-print">
+    <button class="help-btn-circle" onclick="document.getElementById('helpModal').style.display='flex'" title="Abre el manual oficial de uso de la herramienta">❓</button>
+    <button class="help-btn-circle" style="background:#f59e0b; color:#0f172a;" onclick="toggleAssistant()" title="Abre el panel del asistente de aprendizaje inteligente">💡</button>
+    <button class="help-btn-circle" style="background:#0284c7;" onclick="toggleCalculatorLocal()" title="Abre la calculadora científica arrastrable de escritorio">🧮</button>
+</div>
+
+<div class="watermark" title="Sello de Autoría de Propiedad Intelectual">👨‍💻 Cristopher Cedeño | TopoCalc v9.3 Premium</div>
+
+<!-- MODAL DE AYUDA ACADÉMICA -->
+<div id="helpModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-content" id="printArea">
+        <h2 style="text-align: center; color:var(--accent);">📘 Guía de Usuario Completa TopoCalc</h2>
+        <p style="text-align: center;">Herramienta profesional de apoyo para estudiantes de Agrimensura y Topografía.</p>
+        <hr style="margin: 15px 0; border: 1px solid var(--border);">
+        <table class="modal-table">
+            <thead><tr><th>Módulo</th><th>¿Qué hace la herramienta?</th><th>Variables de Entrada</th><th>Resultados de Salida</th></tr></thead>
+            <tbody>
+                <tr><td><b>📈 Isohipsas</b></td><td>Interpola el paso exacto de las curvas de nivel. Tiene módulo lineal y un generador de Malla 2D suavizada.</td><td>Cotas A/B, distancia de separación, equidistancia base.</td><td>Valores de curvas enteras y distancias métricas de paso.</td></tr>
+                <tr><td><b>🛣️ Cotas Eje</b></td><td>Halla la cota del terreno en el centro de la vía usando datos de las curvas laterales.</td><td>Cota inferior, distancia total entre curvas, distancia hacia el eje.</td><td>Cota matemática central en el eje.</td></tr>
+                <tr><td><b>📐 Pendiente</b></td><td>Calcula la inclinación longitudinal de un terreno.</td><td>Cotas de inicio y fin, distancia horizontal real.</td><td>Porcentaje (%) con signo analítico (ascendente ➕ / descendente ➖).</td></tr>
+                <tr><td><b>🛤️ Rasante</b></td><td>Crea el perfil longitudinal teórico del trazado de una obra.</td><td>Cota base oficial, pendiente de diseño, longitud, intervalo.</td><td>Tabla de progresivas con sus cotas rasantes de proyecto.</td></tr>
+                <tr><td><b>📊 Corte y Relleno</b></td><td>Cubica el volumen de tierras usando el método de áreas medias (Trapecio). Incluye visualización de Perfil Longitudinal.</td><td>Progresiva (estación), cota terreno, cota rasante, ancho tipo.</td><td>Volúmenes parciales y acumulados de desmonte/terraplén, y gráfico de perfil.</td></tr>
+                <tr><td><b>📐 Perfil Transversal</b></td><td>Evalúa geométricamente una sección y pinta el área.</td><td>Distancias izquierdas/derechas y sus cotas, cota rasante eje.</td><td>S_b (Área de corte roja), S_r (Área de relleno verde).</td></tr>
+                <tr><td><b>🔄 Curva Horizontal</b></td><td>Diseña la geometría circular simple y simula su trazo.</td><td>Ángulo Δ, radio R de diseño, estación PI de quiebre, intervalo.</td><td>Elementos (ST, LC, E, M, CL) y libreta topográfica de deflexión.</td></tr>
+            </tbody>
+        </table>
+        
+        <h3 style="margin-top:25px; color:var(--accent);">⚙️ Consideraciones Metodológicas</h3>
+        <ul style="padding-left: 20px; font-size: 0.9rem; line-height: 1.6; color:var(--text-secondary);">
+            <li>El botón <b>"Mostrar memoria"</b> en cada pestaña desglosa el cálculo paso a paso como se exige en las entregas de prácticas universitarias.</li>
+            <li>En <b>Pendiente</b> se aplica la regla de proporcionalidad inversa: a mayor distancia, menor pendiente (más plano); a menor distancia, mayor pendiente (escarpado).</li>
+            <li>En <b>Curvas Horizontales</b> se utiliza la nomenclatura <b>ST</b> (Sub-Tangente) y <b>LC</b> (Longitud de Curva). El cálculo de deflexiones para el replanteo utiliza la fórmula del Arco inverso: <code>Sen⁻¹(Distancia / 2R)</code> exportando en formato GMS.</li>
+            <li>Para cálculos rápidos, simplemente presione la tecla <b>ENTER</b> dentro de cualquier campo numérico.</li>
+        </ul>
+        <div style="text-align: center; margin-top: 30px; font-size: 0.85rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top:15px;">Diseño e Ingeniería de Software: Cristopher Cedeño</div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 25px;" class="no-print">
+            <button class="action-btn danger-btn" onclick="document.getElementById('helpModal').style.display='none'" title="Cerrar ventana emergente">Cerrar Guía</button>
+            <button class="action-btn success-btn" onclick="imprimirGuiaPDF()" title="Abre el menú de impresión para guardar este documento como PDF">📥 Imprimir Guía PDF</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     WIDGET CALCULADORA FLOTANTE ARRASTRABLE
+     ========================================== -->
+<div id="calcFlotante">
+    <div id="calcHeader" title="Manten presionado este bloque azul para mover la calculadora por la pantalla">
+        <span>🧮 Calculadora Topográfica</span>
+        <span onclick="toggleCalculatorLocal()" style="cursor:pointer; font-size:1.1rem;" title="Cerrar la calculadora">✖</span>
+    </div>
+    <input type="text" id="calcDisplay" readonly value="0" title="Pantalla matemática">
+    <div class="calc-grid">
+        <button class="calc-btn op trig" onclick="calcOp('sin')" title="Calcula el Seno trigonométrico">sin</button>
+        <button class="calc-btn op trig" onclick="calcOp('cos')" title="Calcula el Coseno trigonométrico">cos</button>
+        <button class="calc-btn op trig" onclick="calcOp('tan')" title="Calcula la Tangente trigonométrica">tan</button>
+        <button class="calc-btn op" onclick="calcOp('sqrt')" title="Extrae la raíz cuadrada del número en pantalla">√</button>
+        <button class="calc-btn op" onclick="calcClear()" title="Limpia la pantalla dejándola en 0" style="color:var(--danger)">C</button>
+        
+        <button class="calc-btn op" id="btnGMSInserter" onclick="calcOp('°')" title="Formateador Casio de Grados, Minutos y Segundos (GMS)" style="font-weight:900; background:rgba(37, 99, 235, 0.1); color:var(--accent);">° ' "</button>
+        <button class="calc-btn" onclick="calcNum('7')">7</button>
+        <button class="calc-btn" onclick="calcNum('8')">8</button>
+        <button class="calc-btn" onclick="calcNum('9')">9</button>
+        <button class="calc-btn op" onclick="calcOp('/')">/</button>
+        
+        <button class="calc-btn op" onclick="calcOp('pow')" title="Eleva el número actual a su cuadrado (x²)">x²</button>
+        <button class="calc-btn" onclick="calcNum('4')">4</button>
+        <button class="calc-btn" onclick="calcNum('5')">5</button>
+        <button class="calc-btn" onclick="calcNum('6')">6</button>
+        <button class="calc-btn op" onclick="calcOp('*')">*</button>
+        
+        <button class="calc-btn op" onclick="calcOp('radDeg')" title="Alternar el procesamiento del sistema entre Radianes y Grados puros">R/D</button>
+        <button class="calc-btn" onclick="calcNum('1')">1</button>
+        <button class="calc-btn" onclick="calcNum('2')">2</button>
+        <button class="calc-btn" onclick="calcNum('3')">3</button>
+        <button class="calc-btn op" onclick="calcOp('-')">-</button>
+        
+        <button class="calc-btn op" id="btnShiftGMS" onclick="toggleShift()" title="Transforma sin, cos y tan en ArcoSeno, ArcoCoseno y ArcoTangente (Inversas)">INV</button>
+        <button class="calc-btn" onclick="calcNum('0')">0</button>
+        <button class="calc-btn" onclick="calcNum('.')">.</button>
+        <button class="calc-btn eq" onclick="calcEqual()" title="Resolver la expresión matemática ingresada">=</button>
+        <button class="calc-btn op" onclick="calcOp('+')">+</button>
+    </div>
+    <div style="background:#0f172a; color:#94a3b8; font-size:0.7rem; text-align:center; padding-bottom:5px;" id="calcModeText">Modo: GRADOS (DEG)</div>
+</div>
+
+
+<!-- =======================================================================================
+     MOTOR CORE JAVASCRIPT GLOBAL UNIFICADO
+     ======================================================================================= -->
+<script>
+    // -----------------------------------------------------
+    // VARIABLES GLOBALES (Declaradas 1 sola vez)
+    // -----------------------------------------------------
+    let pStates = {};
+    let currentTabId = 'modIsohipsas';
+    let baseDatosTransversales = [];
+    let ultimaPendiente = 0;
+    let puntosCR = [];
+    
+    // Variables Calculadora y Drag
+    let isDragging = false; 
+    let startX, startY, initialLeft, initialTop;
+    let isRad = false; 
+    let shiftActive = false;
+
+    // -----------------------------------------------------
+    // FUNCIONES DE MATEMÁTICA Y FORMATO COMÚN
+    // -----------------------------------------------------
+    function decToGMSStr(dec) {
+        let sign = dec < 0 ? -1 : 1; dec = Math.abs(dec); let d = Math.floor(dec);
+        let mFloat = (dec - d) * 60; let m = Math.floor(mFloat); let s = (mFloat - m) * 60;
+        return `${sign < 0 ? '-' : ''}${d}° ${m.toString().padStart(2, '0')}' ${s.toFixed(2).padStart(5, '0')}"`;
+    }
+
+    // -----------------------------------------------------
+    // FUNCIONES DE CONTROL DE PANTALLA Y UX
+    // -----------------------------------------------------
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+        currentTabId = tabId;
+        if(document.getElementById('assistantPanel').classList.contains('open')){
+            actualizarAsistente(currentTabId);
+        }
+    }
+
+    function toggleNotebookPanel(id) {
+        const p = document.getElementById(id); pStates[id] = !pStates[id];
+        p.style.display = pStates[id] ? 'block' : 'none';
+        const btn = document.querySelector(`button[onclick="toggleNotebookPanel('${id}')"] span`);
+        if(btn) btn.innerText = pStates[id] ? btn.innerText.replace('▼', '▲') : btn.innerText.replace('▲', '▼');
+    }
+
+    function toggleDarkMode() { 
+        document.body.classList.toggle('dark'); 
+        const dk = document.getElementById('darkModeToggle');
+        if(dk) {
+            dk.querySelector('span:first-child').innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
+        }
+    }
+    
+    function limpiarInputs(id) { document.querySelectorAll(`#${id} input`).forEach(i => i.value = ''); }
+    function limpiarInputsMalla2D() {
+        ['mallaA', 'mallaB', 'mallaC', 'mallaD', 'mallaAncho', 'mallaAlto', 'mallaEq'].forEach(id => { document.getElementById(id).value = ''; });
+        document.getElementById('canvasMalla').style.display = 'none'; document.getElementById('tablaMallaWrapper').style.display = 'none';
+    }
+    function limpiarCorteRellenoTotal() {
+        puntosCR = []; actualizarTablaCorteRelleno();
+        document.getElementById('notebookCorteRelleno').style.display='none'; pStates['notebookCorteRelleno']=false;
+    }
+
+    // -----------------------------------------------------
+    // ASISTENTE DINÁMICO (MODO BEBÉ)
+    // -----------------------------------------------------
+    function toggleAssistant() {
+        const panel = document.getElementById('assistantPanel');
+        panel.classList.toggle('open');
+        if(panel.classList.contains('open')) actualizarAsistente(currentTabId);
+    }
+
+    function actualizarAsistente(modulo) {
+        const box = document.getElementById('assistantBoxContent');
+        let html = ""; let svg = "";
+
+        if(modulo === 'modIsohipsas') {
+            html = "<h3>〽️ Interpolación de Curvas</h3><p><b>¿Para qué sirve?</b> Utiliza triángulos semejantes (Thales) para hallar a qué distancia exacta debes pintar la curva de nivel entera en tu plano.</p><p><b>Malla 2D:</b> Si tienes un cuadro de 4 estacas (A, B, C, D), el sistema interpola automáticamente los 4 lados y te dibuja la forma suave en que las curvas atraviesan el terreno.</p>";
+            svg = `<svg viewBox="0 0 200 200" width="100%"><line x1="20" y1="170" x2="180" y2="30" stroke="var(--accent)" stroke-width="3"/><circle cx="20" cy="170" r="5" fill="#ef4444"/><circle cx="180" cy="30" r="5" fill="#ef4444"/><circle cx="90" cy="108" r="5" fill="var(--success)"/><line x1="20" y1="170" x2="180" y2="170" stroke="var(--border)" stroke-dasharray="4,4"/><line x1="180" y1="30" x2="180" y2="170" stroke="var(--border)" stroke-dasharray="4,4"/><line x1="90" y1="108" x2="90" y2="170" stroke="var(--success)" stroke-dasharray="4,4"/><text x="15" y="185" font-weight="bold" fill="var(--text-primary)">A (Bajo)</text><text x="175" y="20" font-weight="bold" fill="var(--text-primary)">B (Alto)</text><text x="55" y="165" font-weight="bold" fill="var(--success)">X</text></svg>`;
+        } else if(modulo === 'modTransversales') {
+            html = "<h3>🛣️ Cotas en Eje</h3><p><b>¿Para qué sirve?</b> Calcula la cota central de una sección transversal partiendo de las curvas de nivel laterales mediante regla de tres, determinando cuánto sube el terreno desde la curva hasta el centro.</p>";
+            svg = `<svg viewBox="0 0 200 200" width="100%"><polygon points="30,150 170,150 170,50" fill="rgba(37,99,235,0.1)" stroke="var(--accent)" stroke-width="2"/><line x1="100" y1="150" x2="100" y2="100" stroke="var(--success)" stroke-width="3" stroke-dasharray="4,4"/><circle cx="100" cy="100" r="5" fill="var(--success)"/><text x="100" y="90" font-weight="bold" fill="var(--success)" text-anchor="middle">Eje Central</text></svg>`;
+        } else if(modulo === 'modPendiente') {
+            html = "<h3>🏔️ Pendiente Topográfica</h3><p><b>¿Para qué sirve?</b> Calcula el porcentaje de inclinación y el ángulo entre dos cotas conocidas. <br><br><b>La Regla:</b> A mayor distancia, la pendiente será más pequeña (plano). A menor distancia, la pendiente será mayor (escarpado).</p>";
+            svg = `<svg viewBox="0 0 200 200" width="100%"><polygon points="30,150 170,150 170,50" fill="rgba(37,99,235,0.1)" stroke="var(--accent)" stroke-width="2"/><text x="100" y="165" font-weight="bold" fill="var(--text-secondary)" text-anchor="middle">Distancia (D)</text><text x="135" y="100" font-weight="bold" fill="var(--danger)">ΔZ</text><path d="M 60,150 A 30,30 0 0,0 55,130" fill="none" stroke="var(--success)" stroke-width="2"/><text x="75" y="140" font-weight="bold" fill="var(--success)">%</text></svg>`;
+        } else if(modulo === 'modRasante') {
+            html = "<h3>🛤️ Rasante de Diseño</h3><p><b>¿Para qué sirve?</b> Genera las cotas teóricas o 'Cotas Rojas' de un proyecto a lo largo del kilometraje basándose en una pendiente constante estipulada por el ingeniero.</p>";
+            svg = `<svg viewBox="0 0 200 200" width="100%"><line x1="20" y1="160" x2="180" y2="160" stroke="var(--border)" stroke-width="2"/><line x1="20" y1="160" x2="180" y2="60" stroke="var(--danger)" stroke-width="3" stroke-dasharray="5,5"/><circle cx="60" cy="135" r="4" fill="var(--text-primary)"/><circle cx="100" cy="110" r="4" fill="var(--text-primary)"/><circle cx="140" cy="85" r="4" fill="var(--text-primary)"/><text x="100" y="95" font-weight="bold" fill="var(--danger)" text-anchor="middle">Línea de Diseño</text></svg>`;
+        } else if(modulo === 'modCorteRelleno') {
+            html = "<h3>📊 Movimiento de Tierras</h3><p><b>¿Para qué sirve?</b> Calcula el volumen de tierra a mover comparando el terreno natural con la rasante usando el método de áreas medias o del trapecio, trazando el perfil a escala.</p>";
+            svg = `<svg viewBox="0 0 200 200" width="100%"><path d="M 20,100 Q 100,50 180,100" fill="none" stroke="#8b4513" stroke-width="3"/><line x1="20" y1="120" x2="180" y2="80" stroke="#ef4444" stroke-width="3" stroke-dasharray="4,4"/><text x="100" y="60" font-weight="bold" fill="#8b4513" text-anchor="middle">Terreno Natural</text><text x="100" y="125" font-weight="bold" fill="#ef4444" text-anchor="middle">Rasante</text></svg>`;
+        } else if(modulo === 'modPerfilTransversal') {
+            html = "<h3>📐 Perfil Transversal</h3><p><b>¿Para qué sirve?</b> Halla las áreas exactas geométricas de corte (Sb) y relleno (Sr) en una estación determinada trazando el cruce de la rasante contra el terreno real.</p>";
+            svg = `<svg viewBox="0 0 200 200" width="100%"><line x1="20" y1="100" x2="180" y2="100" stroke="#1e293b" stroke-width="2" stroke-dasharray="8,4"/><polygon points="20,70 100,100 20,100" fill="rgba(239,68,68,0.4)"/><polygon points="100,100 180,130 180,100" fill="rgba(34,197,94,0.4)"/><line x1="20" y1="70" x2="180" y2="130" stroke="#000" stroke-width="3"/><text x="60" y="90" font-weight="bold" fill="var(--danger)">Corte</text><text x="140" y="120" font-weight="bold" fill="var(--success)">Relleno</text></svg>`;
+        } else if(modulo === 'modCurvaHorizontal') {
+            html = "<h3>🔄 Curva Circular Simple</h3><p><b>¿Para qué sirve?</b> Calcula los elementos de trazado vial (SubTangente, Longitud de Curva) y genera la libreta de replanteo con deflexiones en grados, minutos y segundos.</p>";
+            svg = `<svg viewBox="0 0 200 200" width="100%"><line x1="20" y1="150" x2="100" y2="50" stroke="#1e293b" stroke-width="2"/><line x1="100" y1="50" x2="180" y2="150" stroke="#1e293b" stroke-width="2"/><path d="M 60,100 Q 100,150 140,100" fill="none" stroke="var(--success)" stroke-width="4"/><circle cx="100" cy="50" r="4" fill="var(--danger)"/><text x="100" y="40" font-weight="bold" fill="var(--danger)" text-anchor="middle">PI</text><text x="50" y="100" font-weight="bold" fill="var(--accent)">PC</text><text x="150" y="100" font-weight="bold" fill="var(--accent)">PT</text></svg>`;
+        }
+
+        box.innerHTML = html + `<div class="assistant-img">${svg}</div>`;
+    }
+
+    // -----------------------------------------------------
+    // EXPORTACIÓN (PDF, CSV Y CIVIL 3D)
+    // -----------------------------------------------------
+    function exportarCSV(tbodyId, filename) {
+        let csv = "data:text/csv;charset=utf-8,\uFEFF";
+        let thead = document.getElementById(tbodyId).parentElement.querySelector('thead');
+        if(thead) {
+            let headers = Array.from(thead.rows[thead.rows.length-1].cells).map(c => `"${c.innerText}"`).join(",");
+            csv += headers + "\n";
+        }
+        Array.from(document.getElementById(tbodyId).rows).forEach(r => {
+            let rowData = Array.from(r.cells).map(c => `"${c.innerText}"`).join(",");
+            csv += rowData + "\n";
+        });
+        let a = document.createElement('a'); a.href = encodeURI(csv); a.download = filename; a.click();
+    }
+    
+    function exportarCivil3D(tbodyId, filename) {
+        let txt = "";
+        Array.from(document.getElementById(tbodyId).rows).forEach(r => {
+            let prog = r.cells[0].innerText.replace("+", "");
+            let cota = r.cells[2].innerText; // asume cota es 3ra col
+            if(tbodyId === "transTbody") cota = r.cells[4].innerText; 
+            txt += `${prog} ${cota}\n`;
+        });
+        let blob = new Blob([txt], {type: 'text/plain'});
+        let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+    }
+
+    // -----------------------------------------------------
+    // CALCULADORA CIENTÍFICA (ARRASTRABLE + GMS + INVERSAS)
+    // -----------------------------------------------------
+    let calc = document.getElementById('calcFlotante');
+    let calcHeader = document.getElementById('calcHeader');
+    
+    calcHeader.addEventListener('mousedown', (e) => {
+        isDragging = true; startX = e.clientX; startY = e.clientY;
+        initialLeft = calc.offsetLeft; initialTop = calc.offsetTop;
+        document.addEventListener('mousemove', dragCalculator);
+        document.addEventListener('mouseup', stopDragCalculator);
+    });
+    function dragCalculator(e) {
+        if (!isDragging) return;
+        let dx = e.clientX - startX; let dy = e.clientY - startY;
+        calc.style.left = (initialLeft + dx) + 'px'; calc.style.top = (initialTop + dy) + 'px';
+    }
+    function stopDragCalculator() { isDragging = false; document.removeEventListener('mousemove', dragCalculator); }
+    function toggleCalculatorLocal() { calc.style.display = (calc.style.display === 'none' || calc.style.display==='') ? 'block' : 'none'; }
+
+    let disp = document.getElementById('calcDisplay');
+    function calcNum(n) { if(disp.value === '0' || disp.value === 'Error') disp.value = n; else disp.value += n; }
+    function calcClear() { disp.value = '0'; }
+    function calcBack() { disp.value = disp.value.slice(0, -1) || '0'; }
+    
+    function toggleShift() {
+        shiftActive = !shiftActive;
+        const btn = document.getElementById('btnShiftGMS');
+        if(shiftActive) {
+            btn.classList.add('shift-active');
+            document.querySelectorAll('.calc-btn.trig').forEach(b => {
+                if(b.innerText === 'sin') b.innerText = 'asin';
+                else if(b.innerText === 'cos') b.innerText = 'acos';
+                else if(b.innerText === 'tan') b.innerText = 'atan';
+            });
+        } else {
+            btn.classList.remove('shift-active');
+            document.querySelectorAll('.calc-btn.trig').forEach(b => {
+                if(b.innerText === 'asin') b.innerText = 'sin';
+                else if(b.innerText === 'acos') b.innerText = 'cos';
+                else if(b.innerText === 'atan') b.innerText = 'tan';
+            });
+        }
+    }
+
+    function calcEqual() {
+        try {
+            let expr = disp.value;
+            // Parse GMS to decimal for evaluation
+            expr = expr.replace(/(\d+(?:\.\d+)?)°(\d+(?:\.\d+)?)?'?(\d+(?:\.\d+)?)?"?/g, function(m, g, min, s) {
+                let deg = parseFloat(g) || 0; let mn = parseFloat(min) || 0; let sc = parseFloat(s) || 0;
+                return "(" + (deg + (mn / 60) + (sc / 3600)).toString() + ")";
+            });
+            let res = eval(expr);
+            if(Number.isInteger(res)) { disp.value = res; } else { disp.value = Number(res).toFixed(5); }
+        } catch(e) { disp.value = 'Error'; }
+    }
+
+    function calcOp(op) {
+        if(disp.value === 'Error') disp.value = '0';
+        let v = parseFloat(disp.value);
+        
+        if(op === 'sin' || op === 'cos' || op === 'tan') {
+            calcEqual(); v = parseFloat(disp.value);
+            let angle = isRad ? v : v * Math.PI / 180;
+            if(!shiftActive) {
+                if(op === 'sin') disp.value = Math.sin(angle).toFixed(5);
+                if(op === 'cos') disp.value = Math.cos(angle).toFixed(5);
+                if(op === 'tan') disp.value = Math.tan(angle).toFixed(5);
+            } else {
+                let resRad = 0;
+                if(op === 'sin') resRad = Math.asin(v);
+                if(op === 'cos') resRad = Math.acos(v);
+                if(op === 'tan') resRad = Math.atan(v);
+                let resFinal = isRad ? resRad : resRad * 180 / Math.PI;
+                disp.value = resFinal.toFixed(5);
+                toggleShift();
+            }
+        } 
+        else if(op === 'sqrt') { calcEqual(); v = parseFloat(disp.value); disp.value = Math.sqrt(v).toFixed(5); }
+        else if(op === 'pow') { calcEqual(); v = parseFloat(disp.value); disp.value = Math.pow(v,2).toFixed(4); }
+        else if(op === 'radDeg') { isRad = !isRad; document.getElementById('calcModeText').innerText = isRad ? "Modo: RADIANES (RAD)" : "Modo: GRADOS (DEG)"; }
+        else if(op === '°') {
+            let str = disp.value;
+            if(!str.includes('°')) disp.value += '°';
+            else if(str.includes('°') && !str.includes("'")) disp.value += "'";
+            else if(str.includes("'") && !str.includes('"')) disp.value += '"';
+        } 
+        else { disp.value += op; }
+    }
+
+    // -----------------------------------------------------
+    // LÓGICA DE ALTIMETRÍA (ISOHIPSAS LINEAL Y MALLA 2D)
+    // -----------------------------------------------------
+    function ejecutarCalculoIsohipsas() {
+        const cA=parseFloat(document.getElementById('isoCotaA').value), cB=parseFloat(document.getElementById('isoCotaB').value), dP=parseFloat(document.getElementById('isoDistPlano').value), eq=parseFloat(document.getElementById('isoEquidistancia').value);
+        if(isNaN(cA)||isNaN(cB)||isNaN(dP)||isNaN(eq)) return;
+        const delH = Math.abs(cA-cB), minC = Math.min(cA,cB), maxC = Math.max(cA,cB);
+        
+        document.getElementById('iso_paso1').innerHTML = `ΔH = |${cA.toFixed(3)} - ${cB.toFixed(3)}| = <b class="pencil-res">${delH.toFixed(3)} m</b>`;
+        document.getElementById('iso_paso2').innerHTML = `Paquetes = ${delH.toFixed(3)} / ${eq.toFixed(3)} = <b class="pencil-res">${(delH/eq).toFixed(3)} intervalos</b>`;
+        
+        let cHtml='', pHtml='', fHtml='', sHtml=''; const tbody = document.getElementById('isoTbody'); tbody.innerHTML='';
+        let numCurvas = 0;
+        for(let c=Math.ceil(minC/eq)*eq; c<=maxC+0.0001; c+=eq) {
+            numCurvas++;
+            let cur=Math.round(c*1000)/1000, dh=Math.abs(cur-cA), dist=(dh/delH)*dP;
+            cHtml+=`<b class="pencil-res">${cur.toFixed(2)} m</b>, `;
+            pHtml+=`Curva ${cur.toFixed(2)}m → |${cur.toFixed(2)} - CotaA(${cA.toFixed(2)})| = <b>${dh.toFixed(3)} m</b><br>`;
+            fHtml+=`Si ${delH.toFixed(3)} m de desnivel representan ${dP.toFixed(2)} cm en el plano.<br>Entonces, ${dh.toFixed(3)} m de desnivel representan X cm.<br><br>`;
+            sHtml+=`Para la curva <b>${cur.toFixed(2)}</b>: X = (${dh.toFixed(3)} × ${dP.toFixed(2)}) / ${delH.toFixed(3)} = <b class="pencil-res">${dist.toFixed(2)} cm</b> (desde A).<br>`;
+            tbody.innerHTML+=`<tr><td>${cur.toFixed(2)} m</td><td class="pencil-res">${dist.toFixed(2)} cm</td></tr>`;
+        }
+        if(numCurvas===0) { cHtml="No cruzan curvas enteras en este tramo."; pHtml="-"; fHtml="-"; sHtml="-"; }
+        document.getElementById('iso_paso3').innerHTML=cHtml; document.getElementById('iso_paso4').innerHTML=pHtml;
+        document.getElementById('iso_paso5').innerHTML=fHtml; document.getElementById('iso_paso6').innerHTML=sHtml;
+        document.getElementById('isoTableWrapper').style.display='block';
+    }
+
+    function procesarMalla2D() {
+        const cA=parseFloat(document.getElementById('mallaA').value), cB=parseFloat(document.getElementById('mallaB').value), cC=parseFloat(document.getElementById('mallaC').value), cD=parseFloat(document.getElementById('mallaD').value), w=parseFloat(document.getElementById('mallaAncho').value), h=parseFloat(document.getElementById('mallaAlto').value), eq=parseFloat(document.getElementById('mallaEq').value);
+        if(isNaN(cA)||isNaN(cB)||isNaN(cC)||isNaN(cD)||isNaN(w)||isNaN(h)||isNaN(eq)) return;
+        
+        function calcSeg(c1,c2,d,lado) {
+            let minC=Math.min(c1,c2), maxC=Math.max(c1,c2), delH=maxC-minC, r=[]; if(delH===0)return r;
+            for(let c=Math.ceil(minC/eq)*eq; c<=maxC+0.0001; c+=eq) r.push({l:lado, cur:Math.round(c*1000)/1000, dist:d*(Math.abs(c-c1)/delH)});
+            return r;
+        }
+        let pts = [].concat(calcSeg(cA,cB,w,"A-B (Sup)"), calcSeg(cB,cC,h,"B-C (Der)"), calcSeg(cD,cC,w,"D-C (Inf)"), calcSeg(cA,cD,h,"A-D (Izq)"));
+        
+        const tbody=document.getElementById('mallaTbody'); tbody.innerHTML='';
+        pts.forEach(p => tbody.innerHTML+=`<tr><td>${p.l}</td><td>${p.cur.toFixed(2)} m</td><td class="pencil-res">${p.dist.toFixed(2)} cm</td></tr>`);
+        document.getElementById('tablaMallaWrapper').style.display='block';
+
+        const cv=document.getElementById('canvasMalla'); cv.style.display='block'; const ctx=cv.getContext('2d');
+        const CW = cv.width, CH = cv.height; ctx.clearRect(0,0,CW,CH);
+        
+        let m=100, sc=Math.min((CW-2*m)/w, (CH-2*m)/h), rw=w*sc, rh=h*sc, ox=(CW-rw)/2, oy=(CH-rh)/2;
+        
+        ctx.fillStyle="#f8fafc"; ctx.fillRect(ox,oy,rw,rh);
+        ctx.strokeStyle="rgba(59, 130, 246, 0.15)"; ctx.lineWidth=1;
+        for(let x=ox; x<=ox+rw; x+=20) { ctx.beginPath(); ctx.moveTo(x, oy); ctx.lineTo(x, oy+rh); ctx.stroke(); }
+        for(let y=oy; y<=oy+rh; y+=20) { ctx.beginPath(); ctx.moveTo(ox, y); ctx.lineTo(ox+rw, y); ctx.stroke(); }
+        
+        ctx.strokeStyle="#cbd5e1"; ctx.lineWidth=3; ctx.strokeRect(ox,oy,rw,rh);
+        
+        function drawCorner(text, x, y, align, baseline) {
+            ctx.save(); ctx.font = "bold 15px sans-serif"; ctx.textAlign = align; ctx.textBaseline = baseline;
+            let met = ctx.measureText(text); let tw = met.width; let th = 15; 
+            let bgX = x; let bgY = y;
+            if (align === 'right') bgX -= tw; if (baseline === 'bottom') bgY -= th;
+            ctx.fillStyle = "rgba(255, 255, 255, 0.85)"; ctx.fillRect(bgX - 4, bgY - 4, tw + 8, th + 8);
+            ctx.fillStyle = "#0f172a"; ctx.fillText(text, x, y); ctx.restore();
+        }
+        drawCorner(`A (${cA.toFixed(2)})`, ox - 8, oy - 8, 'right', 'bottom'); drawCorner(`B (${cB.toFixed(2)})`, ox + rw + 8, oy - 8, 'left', 'bottom');
+        drawCorner(`D (${cD.toFixed(2)})`, ox - 8, oy + rh + 8, 'right', 'top'); drawCorner(`C (${cC.toFixed(2)})`, ox + rw + 8, oy + rh + 8, 'left', 'top');
+        
+        let groups={}; 
+        pts.forEach(p=>{
+            if(!groups[p.cur]) groups[p.cur]=[]; let cx=0, cy=0;
+            if(p.l==="A-B (Sup)"){cx=ox+(p.dist*sc);cy=oy;} if(p.l==="B-C (Der)"){cx=ox+rw;cy=oy+(p.dist*sc);} 
+            if(p.l==="D-C (Inf)"){cx=ox+(p.dist*sc);cy=oy+rh;} if(p.l==="A-D (Izq)"){cx=ox;cy=oy+(p.dist*sc);}
+            groups[p.cur].push({x:cx,y:cy}); 
+            ctx.beginPath(); ctx.arc(cx,cy,4,0,2*Math.PI); ctx.fillStyle="#ef4444"; ctx.fill();
+            
+            ctx.save(); ctx.font = "bold 12px sans-serif"; let distStr = p.dist.toFixed(2) + " cm";
+            if (p.l === "A-B (Sup)") { ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.fillStyle = "#16a34a"; ctx.fillText(distStr, cx, cy - 8); } 
+            else if (p.l === "B-C (Der)") { ctx.textBaseline = "middle"; ctx.textAlign = "left"; ctx.fillStyle = "#16a34a"; ctx.fillText(distStr, cx + 8, cy); } 
+            else if (p.l === "D-C (Inf)") { ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.fillStyle = "#16a34a"; ctx.fillText(distStr, cx, cy + 8); } 
+            else if (p.l === "A-D (Izq)") { ctx.textBaseline = "middle"; ctx.textAlign = "right"; ctx.fillStyle = "#16a34a"; ctx.fillText(distStr, cx - 8, cy); }
+            ctx.restore();
+        });
+        
+        ctx.strokeStyle="var(--accent)"; ctx.lineWidth=2.5; ctx.lineJoin = "round";
+        for(let c in groups) { 
+            let arrayPts = groups[c];
+            if(arrayPts.length >= 2){ 
+                let p1=arrayPts[0], p2=arrayPts[arrayPts.length-1];
+                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); 
+                let centerCellX = ox + rw/2, centerCellY = oy + rh/2;
+                let midLineX = (p1.x+p2.x)/2, midLineY = (p1.y+p2.y)/2;
+                let ctrlX = midLineX + (centerCellX - midLineX)*0.15; let ctrlY = midLineY + (centerCellY - midLineY)*0.15;
+                ctx.quadraticCurveTo(ctrlX, ctrlY, p2.x, p2.y); ctx.stroke(); 
+                
+                let ang = Math.atan2(p2.y-p1.y, p2.x-p1.x);
+                ctx.save(); ctx.translate(ctrlX, ctrlY); ctx.rotate(ang);
+                ctx.fillStyle = "rgba(255,255,255,0.95)"; ctx.fillRect(-22, -12, 44, 24); 
+                ctx.fillStyle = "var(--text-primary)"; ctx.font = "bold 13px monospace"; ctx.textAlign = "center"; ctx.textBaseline="middle"; 
+                ctx.fillText(Number(c).toFixed(1), 0, 0); 
+                ctx.restore();
+            } 
+        }
+    }
+
+    // -----------------------------------------------------
+    // LÓGICA COTAS TRANSVERSALES EJE
+    // -----------------------------------------------------
+    function agregarEstacionTransversal() {
+        const est=document.getElementById('transProg').value, cInf=parseFloat(document.getElementById('transCotaInf').value), dTot=parseFloat(document.getElementById('transDistTotal').value), dEje=parseFloat(document.getElementById('transDistEje').value), eq=parseFloat(document.getElementById('transEquidistanciaGlobal').value);
+        if(isNaN(cInf)||isNaN(dTot)||isNaN(dEje)||isNaN(eq)) return;
+        baseDatosTransversales.push({ est: est||`P-${baseDatosTransversales.length+1}`, cInf, dTot, dEje, eq });
+        procesarMatrizTransversales();
+    }
+    function procesarMatrizTransversales() {
+        const tbody=document.getElementById('transTbody'); tbody.innerHTML='';
+        if(!baseDatosTransversales.length){document.getElementById('transResumen').innerHTML="<span>Sin datos ingresados.</span>"; return;}
+        let last = baseDatosTransversales[baseDatosTransversales.length-1], lastCota = 0;
+        baseDatosTransversales.forEach((e,i)=>{
+            let cota = e.cInf + (e.dEje/e.dTot)*e.eq;
+            tbody.innerHTML+=`<tr><td>${e.est}</td><td>${e.cInf.toFixed(3)}</td><td>${e.dTot.toFixed(2)}</td><td>${e.dEje.toFixed(2)}</td><td class="pencil-res">${cota.toFixed(3)}</td><td><button class="action-btn danger-btn" style="padding:4px 10px; margin: 0 auto; font-size:1.1rem;" onclick="baseDatosTransversales.splice(${i},1); procesarMatrizTransversales();">🗑️</button></td></tr>`;
+            if(i === baseDatosTransversales.length-1) lastCota = cota;
+        });
+        document.getElementById('transResumen').innerHTML=`<button class="action-btn success-btn" onclick="exportarCSV('transTbody', 'Cotas_Eje.csv')">📊 Exportar a Excel</button> <button class="action-btn accent-btn" style="background:#2c5a7a;" onclick="exportarCivil3D('transTbody', 'Civil3D_Eje.txt')">📐 Exportar Civil 3D (.txt)</button>`;
+        
+        document.getElementById('trans_s1').innerHTML = `Se evalúa la estación <b>${last.est}</b>:<br>Cota Curva Inferior (Base) = ${last.cInf.toFixed(3)} m<br>Distancia Total Planimétrica (D) = ${last.dTot.toFixed(2)} cm<br>Distancia parcial al Eje (d) = ${last.dEje.toFixed(2)} cm<br>Equidistancia del plano (E) = ${last.eq.toFixed(2)} m`;
+        document.getElementById('trans_s2').innerHTML = `Fórmula de proporcionalidad: Δz = (d × E) / D<br>Δz = (${last.dEje.toFixed(2)} cm × ${last.eq.toFixed(2)} m) / ${last.dTot.toFixed(2)} cm = <b class="pencil-res">${(last.dEje*last.eq/last.dTot).toFixed(4)} m</b> de desnivel a subir.`;
+        document.getElementById('trans_s3').innerHTML = `Se suma el desnivel hallado a la cota base inferior:<br>Cota Eje = ${last.cInf.toFixed(3)} m + ${(last.dEje*last.eq/last.dTot).toFixed(4)} m = <b class="pencil-res" style="font-size:1.2rem;">${lastCota.toFixed(3)} m</b>`;
+    }
+
+    // -----------------------------------------------------
+    // LÓGICA PENDIENTE
+    // -----------------------------------------------------
+    function calcularPendiente() {
+        let A=parseFloat(document.getElementById('pendCotaA').value), B=parseFloat(document.getElementById('pendCotaB').value), D=parseFloat(document.getElementById('pendDistancia').value);
+        if(isNaN(A)||isNaN(B)||isNaN(D)) return;
+        let dh = B-A; ultimaPendiente = (dh/D)*100;
+        let signoTexto = ultimaPendiente > 0 ? `➕ (Ascendente)` : (ultimaPendiente < 0 ? `➖ (Descendente)` : `Cero (Plano)`);
+        document.getElementById('pendResultados').innerText = `${ultimaPendiente.toFixed(3)}% \n ${signoTexto}`;
+        document.getElementById('pend_paso1').innerHTML = `Cota A = ${A.toFixed(3)} m<br>Cota B = ${B.toFixed(3)} m<br>Distancia Horizontal Constante = ${D.toFixed(3)} m`;
+        document.getElementById('pend_paso2').innerHTML = `Desnivel (ΔH) = Cota Final - Cota Inicial<br>ΔH = ${B.toFixed(3)} - ${A.toFixed(3)} = <b>${dh.toFixed(3)} m</b>`;
+        document.getElementById('pend_paso3').innerHTML = `Ecuación: Pendiente(%) = (ΔH / Distancia) × 100<br>P(%) = (${dh.toFixed(3)} / ${D.toFixed(3)}) × 100 = <b class="pencil-res">${ultimaPendiente.toFixed(4)}%</b>`;
+        document.getElementById('pend_paso4').innerHTML = `Signo aritmético: <b>${signoTexto}</b>.`;
+    }
+    function usarPendienteEnRasante(){ document.getElementById('rasPendiente').value=ultimaPendiente.toFixed(4); switchTab('modRasante', document.querySelectorAll('.tab-btn')[3]); }
+    
+    // -----------------------------------------------------
+    // LÓGICA RASANTE
+    // -----------------------------------------------------
+    function calcularRasante() {
+        let C0=parseFloat(document.getElementById('rasCotaInicial').value), P=parseFloat(document.getElementById('rasPendiente').value), L=parseFloat(document.getElementById('rasLongitud').value), int=parseFloat(document.getElementById('rasIntervalo').value);
+        if(isNaN(C0)||isNaN(P)||isNaN(L)||isNaN(int)) return;
+        let tbody=document.getElementById('rasTbody'); tbody.innerHTML='';
+        let memEjemplos = "";
+        for(let x=0; x<=L; x+=int) {
+            let cotaProyectada = C0+(P/100)*x;
+            tbody.innerHTML+=`<tr><td>${Math.floor(x/1000)}+${(x%1000).toFixed(3)}</td><td>${x.toFixed(3)}</td><td class="pencil-res">${cotaProyectada.toFixed(3)}</td></tr>`;
+            if(x > 0 && x <= int*3) memEjemplos += `Progresiva 0+${(x%1000).toFixed(3)} (X=${x}):<br>Cota = ${C0.toFixed(3)} + (${P.toFixed(4)}/100) × ${x} = <b>${cotaProyectada.toFixed(3)} m</b><br><br>`;
+        }
+        document.getElementById('rasTableContainer').style.display='block';
+        document.getElementById('ras_formula').innerHTML = `Ecuación: <b class="pencil-res">Cota(x) = ${C0.toFixed(3)} + (${P.toFixed(4)}/100) × x</b>`;
+        document.getElementById('ras_ejemplo').innerHTML = memEjemplos;
+        document.getElementById('ras_cierre').innerHTML = `Terminal (L = ${L.toFixed(3)} m): Cota Final = ${C0.toFixed(3)} + (${P.toFixed(4)}/100) × ${L} = <b class="pencil-res">${(C0+(P/100)*L).toFixed(3)} m</b>.`;
+    }
+
+    // -----------------------------------------------------
+    // LÓGICA CORTE Y RELLENO (MOVIMIENTO DE TIERRA)
+    // -----------------------------------------------------
+    function agregarPuntoCorteRelleno() {
+        let p=parseFloat(document.getElementById('prog').value), t=parseFloat(document.getElementById('cotaTerreno').value), r=parseFloat(document.getElementById('cotaRasante').value);
+        if(!isNaN(p)&&!isNaN(t)&&!isNaN(r)){ puntosCR.push({p,t,r}); puntosCR.sort((a,b)=>a.p-b.p); actualizarTablaCorteRelleno(); }
+    }
+    
+    function actualizarTablaCorteRelleno() {
+        let w=parseFloat(document.getElementById('anchoSeccion').value), tb=document.getElementById('crTbody'); tb.innerHTML='';
+        const cvLong = document.getElementById('contenedorPerfilLongitudinal');
+        if(puntosCR.length < 2) { cvLong.style.display = 'none'; } else { cvLong.style.display = 'block'; dibujarPerfilLongitudinal(); }
+        if(isNaN(w)||!puntosCR.length) return;
+        
+        let vC=0, vR=0, sV=0, mHTML1="", mHTML2="", mHTML3="", mHTML4="", mHTML5="";
+        for(let i=0; i<puntosCR.length; i++) {
+            let o=puntosCR[i], dif=o.r-o.t, a=w*Math.abs(dif), dp=0, vp=0;
+            if(i<puntosCR.length-1) {
+                let sig = puntosCR[i+1]; dp = sig.p - o.p; 
+                let a2=w*Math.abs(sig.r - sig.t); vp = (a+a2)/2 * dp;
+                let sumDif = dif + (sig.r - sig.t);
+                if(sumDif > 0) vR+=vp; else vC+=vp;
+                sV+=vp;
+                if(i===puntosCR.length-2) {
+                    mHTML1=`Estación 1: Dif = <b>${dif.toFixed(3)} m</b><br>Estación 2: Dif = <b>${(sig.r-sig.t).toFixed(3)} m</b>`;
+                    mHTML2=`La zona requiere ${sumDif>0?"<b>Relleno (Terraplén)</b>":"<b>Corte (Desmonte)</b>"}.`;
+                    mHTML3=`Área 1 = <b>${a.toFixed(2)} m²</b><br>Área 2 = <b>${a2.toFixed(2)} m²</b>`;
+                    mHTML4=`V = [(${a.toFixed(2)} + ${a2.toFixed(2)}) / 2] × ${dp.toFixed(3)} = <b class="pencil-res">${vp.toFixed(3)} m³</b>`;
+                    mHTML5=`Volumen total acumulado: <b style="color:var(--text-primary); font-size:1.1rem;">${sV.toFixed(2)} m³</b>`;
+                }
+            }
+            tb.innerHTML+=`<tr><td>${o.p.toFixed(3)}</td><td>${o.t.toFixed(3)}</td><td>${o.r.toFixed(3)}</td><td>${dif.toFixed(3)}</td><td>${dif<0?-dif.toFixed(3):0}</td><td>${dif>0?dif.toFixed(3):0}</td><td>${a.toFixed(2)}</td><td>${i<puntosCR.length-1?dp.toFixed(3):'-'}</td><td>${i<puntosCR.length-1?vp.toFixed(2):'-'}</td><td>${sV.toFixed(2)}</td><td><button class="action-btn danger-btn" style="padding:4px 10px;" onclick="puntosCR.splice(${i},1); actualizarTablaCorteRelleno();">🗑️</button></td></tr>`;
+        }
+        document.getElementById('crTableContainer').style.display='block';
+        document.getElementById('crResumen').innerHTML=`<div style="font-size:1.1rem;">Corte Total: <b style="color:var(--danger);">${vC.toFixed(2)} m³</b> | Relleno Total: <b style="color:var(--success);">${vR.toFixed(2)} m³</b></div>`;
+        document.getElementById('cr_paso1').innerHTML = mHTML1; document.getElementById('cr_paso2').innerHTML = mHTML2; document.getElementById('cr_paso3').innerHTML = mHTML3; document.getElementById('cr_paso4').innerHTML = mHTML4; document.getElementById('cr_paso5').innerHTML = mHTML5; document.getElementById('cr_paso6').innerHTML = `Balance Final (Corte - Relleno) = <b>${(vC-vR).toFixed(2)} m³</b>`;
+    }
+
+    function dibujarPerfilLongitudinal() {
+        const cv = document.getElementById('canvasLongitudinal'); const ctx = cv.getContext('2d'); const CW = cv.width, CH = cv.height; ctx.clearRect(0,0,CW,CH);
+        let minX = Math.min(...puntosCR.map(p=>p.p)), maxX = Math.max(...puntosCR.map(p=>p.p));
+        let minY = Math.min(...puntosCR.map(p=>Math.min(p.t, p.r))), maxY = Math.max(...puntosCR.map(p=>Math.max(p.t, p.r)));
+        let diffY = maxY - minY; if(diffY === 0) diffY = 1; minY -= diffY * 0.2; maxY += diffY * 0.2;
+        let m = 50; let escX = (CW - 2*m) / Math.max(maxX - minX, 0.1), escY = (CH - 2*m) / Math.max(maxY - minY, 0.1);
+        let getX = prog => m + (prog - minX) * escX; let getY = cota => CH - m - (cota - minY) * escY;
+        
+        ctx.fillStyle="#f8fafc"; ctx.fillRect(0,0,CW,CH); ctx.strokeStyle="rgba(0,0,0,0.05)"; ctx.lineWidth=1;
+        for(let i=m; i<=CW-m; i+=40){ ctx.beginPath(); ctx.moveTo(i,m); ctx.lineTo(i,CH-m); ctx.stroke();}
+        for(let i=m; i<=CH-m; i+=40){ ctx.beginPath(); ctx.moveTo(m,i); ctx.lineTo(CW-m,i); ctx.stroke();}
+        
+        ctx.strokeStyle="#94a3b8"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(m, m); ctx.lineTo(m, CH-m); ctx.lineTo(CW-m, CH-m); ctx.stroke();
+
+        for(let i=0; i<puntosCR.length-1; i++) {
+            let p1 = puntosCR[i], p2 = puntosCR[i+1];
+            ctx.beginPath(); ctx.moveTo(getX(p1.p), getY(p1.t)); ctx.lineTo(getX(p2.p), getY(p2.t)); ctx.lineTo(getX(p2.p), getY(p2.r)); ctx.lineTo(getX(p1.p), getY(p1.r)); ctx.closePath();
+            let midT = (p1.t + p2.t)/2; let midR = (p1.r + p2.r)/2;
+            ctx.fillStyle = midT > midR ? "rgba(239, 68, 68, 0.3)" : "rgba(34, 197, 94, 0.3)"; ctx.fill();
+        }
+        
+        ctx.beginPath(); ctx.moveTo(getX(puntosCR[0].p), getY(puntosCR[0].r));
+        for(let i=1; i<puntosCR.length; i++) ctx.lineTo(getX(puntosCR[i].p), getY(puntosCR[i].r));
+        ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 2.5; ctx.setLineDash([6,4]); ctx.stroke(); ctx.setLineDash([]);
+        
+        ctx.beginPath(); ctx.moveTo(getX(puntosCR[0].p), getY(puntosCR[0].t));
+        for(let i=1; i<puntosCR.length; i++) ctx.lineTo(getX(puntosCR[i].p), getY(puntosCR[i].t));
+        ctx.strokeStyle = "#8b4513"; ctx.lineWidth = 3; ctx.stroke();
+
+        ctx.fillStyle = "#1e293b"; ctx.font = "bold 11px sans-serif"; ctx.textAlign="center"; ctx.textBaseline="top";
+        puntosCR.forEach(p => {
+            ctx.fillText(p.p.toFixed(0), getX(p.p), CH-m+8);
+            ctx.beginPath(); ctx.arc(getX(p.p), getY(p.t), 4, 0, Math.PI*2); ctx.fillStyle="#8b4513"; ctx.fill();
+            ctx.beginPath(); ctx.arc(getX(p.p), getY(p.r), 4, 0, Math.PI*2); ctx.fillStyle="#ef4444"; ctx.fill();
+        });
+
+        ctx.textAlign="right"; ctx.textBaseline="middle"; ctx.fillStyle = "#64748b";
+        ctx.fillText(minY.toFixed(1), m-8, CH-m); ctx.fillText(maxY.toFixed(1), m-8, m);
+    }
+
+    // -----------------------------------------------------
+    // LÓGICA PERFIL TRANSVERSAL
+    // -----------------------------------------------------
+    function calcularPerfilTransversal() {
+        let di=parseFloat(document.getElementById('distIzq').value), ci=parseFloat(document.getElementById('cotaIzq').value), ce=parseFloat(document.getElementById('cotaEje').value), dd=parseFloat(document.getElementById('distDer').value), cd=parseFloat(document.getElementById('cotaDer').value);
+        if(isNaN(di)||isNaN(ci)||isNaN(ce)||isNaN(dd)||isNaN(cd)) return;
+        
+        function areaGauss(y1, y2, x, r) {
+            let h1 = y1-r, h2 = y2-r;
+            if(h1>=0 && h2>=0) return {corte: (h1+h2)/2*x, relleno: 0};
+            if(h1<=0 && h2<=0) return {corte: 0, relleno: Math.abs(h1+h2)/2*x};
+            let xIntercept = Math.abs(h1) / (Math.abs(h1) + Math.abs(h2)) * x;
+            let a1 = Math.abs(h1)/2 * xIntercept; let a2 = Math.abs(h2)/2 * (x - xIntercept);
+            return h1>0 ? {corte: a1, relleno: a2} : {corte: a2, relleno: a1};
+        }
+        
+        let sI = areaGauss(ci,ce,di,ce), sD = areaGauss(cd,ce,dd,ce); 
+        let aC=sI.corte+sD.corte, aR=sI.relleno+sD.relleno;
+        let tipoSec = aC>0 && aR===0 ? "Perfil en Desmonte" : (aR>0 && aC===0 ? "Perfil en Terraplén" : "Perfil a Media Ladera");
+
+        document.getElementById('perfilResumen').innerHTML = `<div style="width:100%; margin-bottom:10px;"><b style="font-size:1.1rem; color:var(--accent);">${tipoSec}</b></div><div style="font-size:1.1rem;">Sb (Desmonte/Corte) = <b style="color:#ef4444;">${aC.toFixed(2)} m²</b></div><div style="font-size:1.1rem;">Sr (Terraplén/Relleno) = <b style="color:#22c55e;">${aR.toFixed(2)} m²</b></div>`;
+        document.getElementById('perfil_paso1').innerHTML = `Límite Izquierdo P1 (-${di.toFixed(2)}, ${ci.toFixed(2)})<br>Eje P2 (0.00, ${ce.toFixed(2)})<br>Límite Derecho P3 (${dd.toFixed(2)}, ${cd.toFixed(2)})`;
+        document.getElementById('perfil_paso2').innerHTML = `Ecuación Rasante: Y = ${ce.toFixed(2)} m.<br>Mayor a ${ce.toFixed(2)}m = Desmonte. Menor = Terraplén.`;
+        document.getElementById('perfil_paso3').innerHTML = `Lado Izquierdo:<br>Corte = ${sI.corte.toFixed(3)} m² | Relleno = ${sI.relleno.toFixed(3)} m²<br>Lado Derecho:<br>Corte = ${sD.corte.toFixed(3)} m² | Relleno = ${sD.relleno.toFixed(3)} m²`;
+        document.getElementById('perfil_paso4').innerHTML = `Sb = <b class="pencil-res" style="color:#ef4444;">${aC.toFixed(3)} m²</b><br>Sr = <b class="pencil-res" style="color:#22c55e;">${aR.toFixed(3)} m²</b>`;
+        
+        document.getElementById('leyendaPerfil').style.display='block';
+        let cv=document.getElementById('perfilCanvas'); cv.style.display='block'; let ctx=cv.getContext('2d');
+        const CW=cv.width, CH=cv.height; ctx.clearRect(0,0,CW,CH); ctx.fillStyle="#f8fafc"; ctx.fillRect(0,0,CW,CH);
+        let ys=[ci,ce,cd], minY=Math.min(...ys)-1, maxY=Math.max(...ys)+1, m=60, sx=(CW-2*m)/(di+dd), sy=(CH-2*m)/(maxY-minY);
+        let tX=x=>m+(x+di)*sx, tY=y=>CH-m-(y-minY)*sy;
+        
+        function pintarSombra(x1, y1, x2, y2, ras) {
+            let px1=tX(x1), py1=tY(y1), px2=tX(x2), py2=tY(y2), pras=tY(ras);
+            ctx.beginPath(); ctx.moveTo(px1, py1); ctx.lineTo(px2, py2); ctx.lineTo(px2, pras); ctx.lineTo(px1, pras); ctx.closePath();
+            let medY = (y1+y2)/2; ctx.fillStyle = medY > ras ? "rgba(239, 68, 68, 0.4)" : "rgba(34, 197, 94, 0.4)"; ctx.fill();
+        }
+        pintarSombra(-di, ci, 0, ce, ce); pintarSombra(0, ce, dd, cd, ce);
+        
+        ctx.beginPath(); ctx.moveTo(tX(-di),tY(ce)); ctx.lineTo(tX(dd),tY(ce)); ctx.strokeStyle="#1e293b"; ctx.lineWidth=2; ctx.setLineDash([10,10]); ctx.stroke(); ctx.setLineDash([]);
+        ctx.beginPath(); ctx.moveTo(tX(-di),tY(ci)); ctx.lineTo(tX(0),tY(ce)); ctx.lineTo(tX(dd),tY(cd)); ctx.strokeStyle="#000000"; ctx.lineWidth=3; ctx.stroke();
+        
+        [[-di,ci],[0,ce],[dd,cd]].forEach(p=>{
+            ctx.beginPath(); ctx.arc(tX(p[0]), tY(p[1]), 6, 0, 2*Math.PI); ctx.fillStyle="#0f172a"; ctx.fill();
+            ctx.fillStyle="#0f172a"; ctx.font="bold 13px sans-serif"; ctx.fillText(`(${p[0]}, ${p[1].toFixed(2)})`, tX(p[0])-20, tY(p[1])-12);
+        });
+    }
+
+    // -----------------------------------------------------
+    // LÓGICA CURVA HORIZONTAL SIMPLE CON DMS PARA REPLANTEO
+    // -----------------------------------------------------
+    function calcularCurvaHorizontal() {
+        const delta=parseFloat(document.getElementById('curvaDelta').value), R=parseFloat(document.getElementById('curvaRadio').value), PI=parseFloat(document.getElementById('curvaEstPI').value), int=parseFloat(document.getElementById('curvaIntervalo').value);
+        if(isNaN(delta)||isNaN(R)||isNaN(PI)||isNaN(int)) return;
+        
+        let dRad = delta * Math.PI / 180;
+        let ST = R * Math.tan(dRad / 2); let LC = R * dRad;               
+        let PC = PI - ST; let PT = PC + LC;
+        let E = R * ((1 / Math.cos(dRad/2)) - 1); let M = R * (1 - Math.cos(dRad/2)); let CL = 2 * R * Math.sin(dRad / 2);
+
+        document.getElementById('curvaElementos').innerHTML = `
+            <tr><td><b>Sub-Tangente / Tangente (ST)</b></td><td class="pencil-res">${ST.toFixed(3)} m</td></tr><tr><td><b>Longitud de Curva (LC)</b></td><td class="pencil-res">${LC.toFixed(3)} m</td></tr>
+            <tr><td><b>Estación Inicio de Curva (PC)</b></td><td>${PC.toFixed(3)}</td></tr><tr><td><b>Estación Final de Tangente (PT)</b></td><td>${PT.toFixed(3)}</td></tr>
+            <tr><td><b>Externa (E)</b></td><td>${E.toFixed(3)} m</td></tr><tr><td><b>Ordenada Media (M)</b></td><td>${M.toFixed(3)} m</td></tr><tr><td><b>Cuerda Larga Principal (CL)</b></td><td>${CL.toFixed(3)} m</td></tr>
+        `;
+        document.getElementById('curvaTableWrapper').style.display = 'block';
+
+        let tbody = document.getElementById('curvaReplanteoTbody'); tbody.innerHTML = '';
+        let mHtml = `La fórmula de campo establece: <b>Δ/2 = Sen⁻¹(S / 2R)</b>, donde S es la distancia métrica acumulada sobre el arco desde el PC.<br><br>`;
+        let replanteoData = []; 
+        let estInicio = Math.ceil(PC/int)*int; if(estInicio === PC) estInicio += int; 
+        
+        replanteoData.push({est: PC, S: 0, deltaDeg: 0, tag: "PC"});
+        tbody.innerHTML += `<tr style="background:#f8fafc;"><td><b>${PC.toFixed(3)} (PC)</b></td><td>0.000</td><td>0° 0' 0.00"</td><td>Punto de Arranque</td></tr>`;
+
+        for(let est = estInicio; est <= PT; est += int) {
+            let S = est - PC; let anguloRad = Math.asin(S / (2 * R)); let deflexionDeg = anguloRad * (180 / Math.PI);
+            replanteoData.push({est: est, S: S, deltaDeg: deflexionDeg, tag: est.toFixed(0)});
+            tbody.innerHTML += `<tr><td><b>${est.toFixed(3)}</b></td><td>${S.toFixed(3)}</td><td class="pencil-res">${decToGMSStr(deflexionDeg)}</td><td>Estaca Intermedia</td></tr>`;
+            mHtml += `Estaca ${est.toFixed(0)} (S = ${S.toFixed(3)}m) → Sen⁻¹(${S.toFixed(3)} / ${2*R}) = <b>${decToGMSStr(deflexionDeg)}</b><br>`;
+        }
+        
+        let S_PT = PT - PC; replanteoData.push({est: PT, S: S_PT, deltaDeg: delta/2, tag: "PT"});
+        tbody.innerHTML += `<tr style="background:#f8fafc;"><td><b>${PT.toFixed(3)} (PT)</b></td><td>${S_PT.toFixed(3)}</td><td class="pencil-res">${decToGMSStr(delta/2)}</td><td>Chequeo: Ángulo = Δ/2</td></tr>`;
+        document.getElementById('curvaReplanteoWrapper').style.display = 'block';
+        
+        document.getElementById('curva_paso1').innerHTML = `Δ_rad = Δ × π/180 = <b class="pencil-res">${dRad.toFixed(6)} rad</b>`;
+        document.getElementById('curva_paso2').innerHTML = `ST = R · tan(Δ/2) = <b class="pencil-res">${ST.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso3').innerHTML = `LC = R · Δ_rad = <b class="pencil-res">${LC.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso4').innerHTML = `E = R · (sec(Δ/2) - 1) = <b>${E.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso5').innerHTML = `M = R · (1 - cos(Δ/2)) = <b>${M.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso6').innerHTML = `CL = 2R · sen(Δ/2) = <b>${CL.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso7').innerHTML = `PC = PI - ST = ${PI.toFixed(3)} - ${ST.toFixed(3)} = <b class="pencil-res">${PC.toFixed(3)}</b>`;
+        document.getElementById('curva_paso8').innerHTML = `PT = PC + LC = ${PC.toFixed(3)} + ${LC.toFixed(3)} = <b class="pencil-res">${PT.toFixed(3)}</b>`;
+        document.getElementById('curva_paso_def').innerHTML = mHtml;
+
+        document.getElementById('canvasCurvaWrapper').style.display = 'block';
+        const cv = document.getElementById('curvaCanvas'); const ctx = cv.getContext('2d'); const CW = cv.width, CH = cv.height;
+        ctx.clearRect(0,0,CW,CH);
+        
+        let piX = CW / 2, piY = 60; let angTangente = (90 - delta/2) * Math.PI / 180; 
+        let factorEscala = 300 / ST; let STpx = ST * factorEscala; let Rpx = R * factorEscala;
+
+        let pcX = piX - STpx * Math.cos(angTangente), pcY = piY + STpx * Math.sin(angTangente);
+        let ptX = piX + STpx * Math.cos(angTangente), ptY = piY + STpx * Math.sin(angTangente);
+        let oX = piX, oY = piY + E * factorEscala + Rpx;
+
+        ctx.strokeStyle = "rgba(0,0,0,0.1)"; ctx.lineWidth = 1; ctx.setLineDash([5,5]);
+        ctx.beginPath(); ctx.moveTo(oX, oY); ctx.lineTo(pcX, pcY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(oX, oY); ctx.lineTo(ptX, ptY); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle="#0f172a"; ctx.font="12px sans-serif"; ctx.fillText(`O (Radio=${R}m)`, oX-30, oY+15);
+
+        ctx.strokeStyle = "#1e293b"; ctx.lineWidth = 3; ctx.beginPath();
+        ctx.moveTo(pcX - 100*Math.cos(angTangente), pcY + 100*Math.sin(angTangente)); 
+        ctx.lineTo(pcX, pcY); ctx.lineTo(piX, piY); ctx.lineTo(ptX, ptY);
+        ctx.lineTo(ptX + 100*Math.cos(angTangente), ptY + 100*Math.sin(angTangente)); ctx.stroke();
+        
+        ctx.strokeStyle = "#059669"; ctx.lineWidth = 5; ctx.beginPath();
+        ctx.arc(oX, oY, Rpx, Math.PI + angTangente, Math.PI*2 - angTangente); ctx.stroke();
+
+        ctx.strokeStyle = "rgba(59, 130, 246, 0.8)"; ctx.lineWidth = 2; ctx.setLineDash([8,4]);
+        ctx.beginPath(); ctx.moveTo(pcX, pcY); ctx.lineTo(ptX, ptY); ctx.stroke(); ctx.setLineDash([]);
+
+        function drawPoint(x,y, text, color) {
+            ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fillStyle=color; ctx.fill();
+            ctx.fillStyle="#000"; ctx.font="bold 14px sans-serif"; ctx.fillText(text, x-10, y-15);
+        }
+        drawPoint(piX, piY, "PI", "#ef4444"); drawPoint(pcX, pcY, "PC", "#3b82f6"); drawPoint(ptX, ptY, "PT", "#3b82f6");
+
+        ctx.fillStyle = "#dc2626"; ctx.font="bold 11px sans-serif";
+        for(let i=1; i<replanteoData.length-1; i++) {
+            let data = replanteoData[i]; let angleCenterRad = (data.deltaDeg * 2) * Math.PI / 180;
+            let alpha = Math.PI + angTangente + angleCenterRad;
+            let ex = oX + Rpx * Math.cos(alpha), ey = oY + Rpx * Math.sin(alpha);
+            ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI*2); ctx.fill(); ctx.fillText(data.tag, ex-15, ey-10);
+        }
+    }
+
+    // -----------------------------------------------------
+    // FUNCIÓN DE EJEMPLOS GLOBALES "MODO SILENCIOSO"
+    // -----------------------------------------------------
+    function restablecerTodosEjemplos() {
+        document.getElementById('isoCotaA').value='280.350'; document.getElementById('isoCotaB').value='279.720'; document.getElementById('isoDistPlano').value='10.00'; document.getElementById('isoEquidistancia').value='0.25';
+        document.getElementById('mallaA').value='105'; document.getElementById('mallaB').value='103.5'; document.getElementById('mallaC').value='101.2'; document.getElementById('mallaD').value='102.8'; document.getElementById('mallaAncho').value='10'; document.getElementById('mallaAlto').value='10'; document.getElementById('mallaEq').value='1';
+        document.getElementById('transCotaInf').value='510'; document.getElementById('transDistTotal').value='1.7'; document.getElementById('transDistEje').value='0.7'; document.getElementById('transEquidistanciaGlobal').value='10';
+        document.getElementById('pendCotaA').value='505'; document.getElementById('pendCotaB').value='508'; document.getElementById('pendDistancia').value='500';
+        document.getElementById('rasCotaInicial').value='505'; document.getElementById('rasPendiente').value='0.6'; document.getElementById('rasLongitud').value='500'; document.getElementById('rasIntervalo').value='10';
+        document.getElementById('prog').value='0'; document.getElementById('cotaTerreno').value='104.52'; document.getElementById('cotaRasante').value='105'; document.getElementById('anchoSeccion').value='10';
+        document.getElementById('distIzq').value='5'; document.getElementById('cotaIzq').value='105.2'; document.getElementById('cotaEje').value='106'; document.getElementById('distDer').value='5'; document.getElementById('cotaDer').value='104.5';
+        document.getElementById('curvaDelta').value='28'; document.getElementById('curvaRadio').value='125'; document.getElementById('curvaEstPI').value='480'; document.getElementById('curvaIntervalo').value='10';
+        
+        document.querySelector('.container').style.opacity = '0.5';
+        setTimeout(()=>{ document.querySelector('.container').style.opacity = '1'; }, 150);
+    }
+
+    // Inicializador
+    window.onload = () => {
+        restablecerTodosEjemplos();
+    };
+</script>
+</body>
+</html>
