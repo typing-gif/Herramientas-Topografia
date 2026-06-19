@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LHX7547NPM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-LHX7547NPM');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>TopoCalc - Agrimensura</title>
@@ -36,9 +46,9 @@
 
         /* TABS */
         .tabs-nav { display: flex; gap: 6px; margin-bottom: 28px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
-        .tab-btn { background: transparent; color: var(--text-secondary); border: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 20px 20px 0 0; cursor: pointer; transition: 0.2s; }
-        .tab-btn.active { background: var(--accent); color: white; }
-        .tab-btn:hover:not(.active) { background: var(--header-bg); color: var(--text-primary); }
+        .tab-btn { background: transparent; color: var(--text-secondary); border: none; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border-radius: 20px 20px 0 0; cursor: pointer; transition: 0.2s; border: 1px solid transparent; border-bottom: none;}
+        .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent);}
+        .tab-btn:hover:not(.active) { background: var(--header-bg); color: var(--text-primary); border-color: var(--border);}
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
@@ -56,17 +66,18 @@
         /* BUTTONS */
         .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center;}
         .action-btn { background-color: var(--accent); color: white; border: none; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px;}
-        .action-btn:hover { background-color: var(--accent-hover); transform: translateY(-1px);}
+        .action-btn:hover { opacity: 0.9; transform: translateY(-1px);}
         .success-btn { background-color: var(--success); }
         .success-btn:hover { background-color: var(--success-hover); }
         .danger-btn { background-color: transparent; border: 1px solid var(--danger); color: var(--danger); }
         .danger-btn:hover { background-color: var(--danger); color: white; }
         
         /* TABLES */
-        .table-container { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); margin-top: 15px; -webkit-overflow-scrolling: touch;}
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th, td { padding: 12px; text-align: center; border-bottom: 1px solid var(--border); }
+        .table-container { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); margin-top: 15px; margin-bottom: 20px; -webkit-overflow-scrolling: touch;}
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 800px; }
+        th, td { padding: 10px; text-align: center; border-bottom: 1px solid var(--border); }
         th { background: var(--header-bg); font-weight: 600; position: sticky; top: 0; z-index: 10;}
+        .t-res { font-weight: bold; background: rgba(37, 99, 235, 0.05); color: var(--accent);}
         
         /* PANELS */
         .summary-panel { background: var(--header-bg); border-radius: 12px; padding: 16px; margin-top: 15px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 0.9rem; line-height: 1.5;}
@@ -76,8 +87,13 @@
         /* NOTEBOOK */
         .toggle-container { margin-top: 20px; text-align: center; }
         .toggle-btn { width: 100%; background: var(--header-bg); border: 1px solid var(--border); padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; color: var(--text-primary); transition: 0.2s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 10px;}
-        .toggle-btn:hover { background: var(--accent); color: white; }
-        .notebook-panel { background: var(--notebook-bg); border-radius: 12px; padding: 20px; margin-top: 10px; border-left: 5px solid var(--accent); font-family: 'Courier New', monospace; display: none; font-size: 0.9rem;}
+        .toggle-btn:hover { background: rgba(37, 99, 235, 0.05); }
+        .calc-sheet-container { background: var(--notebook-bg); border-radius: 12px; padding: 25px; margin-top: 10px; border-left: 5px solid var(--accent); position: relative; margin-bottom: 20px; box-shadow: var(--shadow); display: none;}
+        .calc-sheet { font-family: 'Courier New', monospace; font-size: 0.95rem; line-height: 1.6; color: #1e293b; white-space: pre-wrap; background: rgba(255,255,255,0.7); padding: 20px; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); overflow-x: auto;}
+        body.dark .calc-sheet { color: #f1f5f9; background: rgba(0,0,0,0.2); border-color: #334155; }
+        .btn-export-sheet { position: absolute; top: 20px; right: 20px; background: #0284c7; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; z-index: 5; }
+        .btn-export-sheet:hover { background: #0369a1; }
+        
         .note-step { margin-bottom: 15px; line-height: 1.6; }
         .note-step h4 { color: var(--accent); margin-bottom: 5px; font-size: 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;}
         .pencil-res { color: var(--success); font-weight: bold; }
@@ -96,6 +112,8 @@
             position: relative; 
         }
 
+        /* === NUEVAS INCORPORACIONES PREMIUM === */
+        
         /* BOTONES DE CONTROL FLOTANTES GENERALES */
         .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; }
         .help-btn-circle { background: var(--accent); color: white; border: none; width: 52px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
@@ -168,15 +186,15 @@
         <div class="btn-group">
             <button class="action-btn" onclick="ejecutarCalculoIsohipsas()" title="Procesar matemáticamente la interpolación lineal">Procesar Lineal</button>
             <button class="action-btn success-btn" onclick="exportarCSV('isoTbody', 'Isohipsas_Lineal.csv')" title="Exportar la tabla de resultados a formato Excel">📊 Exportar CSV</button>
-            <button class="action-btn danger-btn" onclick="limpiarInputs('modIsohipsas'); document.getElementById('isoTableWrapper').style.display='none'; document.getElementById('notebookIsohipsas').style.display='none'; pStates['notebookIsohipsas']=false;" title="Borrar todos los datos de la sección lineal">Limpiar Lineal</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modIsohipsas'); document.getElementById('isoTableWrapper').style.display='none'; document.getElementById('calcSheetContainerIso').style.display='none'; pStates['calcSheetContainerIso']=false;" title="Borrar todos los datos de la sección lineal">Limpiar Lineal</button>
         </div>
         <div id="isoError" class="error-panel"></div>
         <div id="isoTableWrapper" class="table-container" style="display:none;">
             <table title="Resultados de la interpolación lineal"><thead><tr><th>Curva de Nivel (m)</th><th>Distancia desde Punto A</th></tr></thead><tbody id="isoTbody"></tbody></table>
         </div>
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookIsohipsas')" title="Ver el desglose matemático detallado de los 6 pasos"><span>▼ Mostrar memoria (6 pasos de cálculo)</span></button></div>
-        <div class="notebook-panel" id="notebookIsohipsas">
-            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA DE CÁLCULO: ISOHIPSA LINEAL</b></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerIso')" title="Ver el desglose matemático detallado de los 6 pasos"><span>▼</span> Mostrar memoria (6 pasos de cálculo)</button></div>
+        <div class="calc-sheet-container" id="calcSheetContainerIso">
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA DE CÁLCULO: ISOHIPSA LINEAL</b></div>
             <div class="note-step"><h4>1) Desnivel Total (ΔH)</h4><div id="iso_paso1"></div></div>
             <div class="note-step"><h4>2) Módulos (Paquetes)</h4><div id="iso_paso2"></div></div>
             <div class="note-step"><h4>3) Curvas Enteras a Encontrar</h4><div id="iso_paso3"></div></div>
@@ -221,15 +239,15 @@
         </div>
         <div class="btn-group">
             <button class="action-btn" onclick="agregarEstacionTransversal()" title="Procesar los datos y añadirlos como una nueva fila en la tabla inferior">➕ Insertar a la Tabla</button>
-            <button class="action-btn danger-btn" onclick="baseDatosTransversales=[]; procesarMatrizTransversales(); document.getElementById('notebookTransversales').style.display='none'; pStates['notebookTransversales']=false;" title="Borrar todas las estaciones registradas">Reiniciar Tabla Completa</button>
+            <button class="action-btn danger-btn" onclick="baseDatosTransversales=[]; procesarMatrizTransversales(); document.getElementById('calcSheetContainerTrans').style.display='none'; pStates['calcSheetContainerTrans']=false;" title="Borrar todas las estaciones registradas">Reiniciar Tabla Completa</button>
         </div>
         <div class="table-container">
             <table title="Registro de estaciones calculadas"><thead><tr><th>Estación</th><th>Cota Base (m)</th><th>Dist.Total (cm)</th><th>Dist.Eje (cm)</th><th>Cota Eje Calculada (m)</th><th>Acción</th></tr></thead><tbody id="transTbody"></tbody></table>
         </div>
         <div class="summary-panel" id="transResumen" title="Controles de exportación"><span>Esperando datos...</span></div>
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookTransversales')" title="Ver el desarrollo matemático de la última fila insertada"><span>▼ Mostrar memoria de la Última Estación</span></button></div>
-        <div class="notebook-panel" id="notebookTransversales">
-            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: REGLA DE TRES HACIA EL EJE</b></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerTrans')" title="Ver el desarrollo matemático de la última fila insertada"><span>▼</span> Mostrar memoria de la Última Estación</button></div>
+        <div class="calc-sheet-container" id="calcSheetContainerTrans">
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: REGLA DE TRES HACIA EL EJE</b></div>
             <div class="note-step"><h4>1. Datos de Entrada</h4><div id="trans_s1"></div></div>
             <div class="note-step"><h4>2. Cálculo del Desnivel Parcial (Δz)</h4><div id="trans_s2"></div></div>
             <div class="note-step"><h4>3. Cota Final del Eje</h4><div id="trans_s3"></div></div>
@@ -253,15 +271,15 @@
         <div class="btn-group">
             <button class="action-btn" onclick="calcularPendiente()" title="Procesar la fórmula P=(ΔH/D)*100">Calcular Pendiente</button>
             <button class="action-btn success-btn" onclick="usarPendienteEnRasante()" title="Llevar el valor calculado automáticamente a la calculadora de Rasante">↗ Usar en módulo Rasante</button>
-            <button class="action-btn danger-btn" onclick="limpiarInputs('modPendiente'); document.getElementById('pendResultados').innerHTML='---'; document.getElementById('notebookPendiente').style.display='none'; pStates['notebookPendiente']=false;" title="Borrar campos">Limpiar</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modPendiente'); document.getElementById('pendResultados').innerHTML='---'; document.getElementById('calcSheetContainerPend').style.display='none'; pStates['calcSheetContainerPend']=false;" title="Borrar campos">Limpiar</button>
         </div>
         <div id="pendError" class="error-panel"></div>
         
         <div class="summary-panel" style="justify-content: center; text-align: center; border: 2px solid var(--accent);" title="Pendiente Resultante"><h3 style="margin:0; font-size:1.3rem;">Pendiente Resultante: <br><span id="pendResultados" style="color:var(--accent); font-weight:900; font-size: 1.8rem; display:block; margin-top:10px;">---</span></h3></div>
         
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookPendiente')" title="Ver el desglose matemático"><span>▼ Mostrar memoria del cálculo</span></button></div>
-        <div class="notebook-panel" id="notebookPendiente">
-            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ANÁLISIS DE PENDIENTE</b></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerPend')" title="Ver el desglose matemático"><span>▼</span> Mostrar memoria del cálculo</button></div>
+        <div class="calc-sheet-container" id="calcSheetContainerPend">
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ANÁLISIS DE PENDIENTE</b></div>
             <div class="note-step"><h4>1. Extracción de Datos</h4><div id="pend_paso1"></div></div>
             <div class="note-step"><h4>2. Cálculo del Desnivel (ΔH)</h4><div id="pend_paso2"></div></div>
             <div class="note-step"><h4>3. Aplicación de la Fórmula</h4><div id="pend_paso3"></div></div>
@@ -283,15 +301,15 @@
             <button class="action-btn" onclick="calcularRasante()" title="Generar iteración de cotas por cada intervalo">Calcular Cotas</button>
             <button class="action-btn success-btn" onclick="exportarCSV('rasTbody', 'Rasante_Proyecto.csv')" title="Descargar tabla en formato Excel (.csv)">📊 Exportar a Excel (CSV)</button>
             <button class="action-btn" style="background:#2c5a7a;" onclick="exportarCivil3D('rasTbody', 'Rasante_Civil3D.txt')" title="Formato compatible con AutoCAD Civil 3D">📐 Exportar a Civil 3D</button>
-            <button class="action-btn danger-btn" onclick="limpiarInputs('modRasante'); document.getElementById('rasTableContainer').style.display='none'; document.getElementById('notebookRasante').style.display='none'; pStates['notebookRasante']=false;" title="Borrar todo">Limpiar</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modRasante'); document.getElementById('rasTableContainer').style.display='none'; document.getElementById('calcSheetContainerRas').style.display='none'; pStates['calcSheetContainerRas']=false;" title="Borrar todo">Limpiar</button>
         </div>
         <div id="rasError" class="error-panel"></div>
         <div class="table-container" id="rasTableContainer" style="display:none;">
             <table title="Registro de progresivas y sus cotas de diseño"><thead><tr><th>Progresiva (Estación)</th><th>Distancia Acumulada (x)</th><th>Cota de Proyecto Calculada (m)</th></tr></thead><tbody id="rasTbody"></tbody></table>
         </div>
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookRasante')" title="Ver la fórmula base y comprobaciones"><span>▼ Mostrar memoria matemática</span></button></div>
-        <div class="notebook-panel" id="notebookRasante">
-            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: PROYECCIÓN DE RASANTE</b></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerRas')" title="Ver la fórmula base y comprobaciones"><span>▼</span> Mostrar memoria matemática</button></div>
+        <div class="calc-sheet-container" id="calcSheetContainerRas">
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: PROYECCIÓN DE RASANTE</b></div>
             <div class="note-step"><h4>Ecuación de la Recta Aplicada</h4><div id="ras_formula"></div></div>
             <div class="note-step"><h4>Demostración de los 3 primeros intervalos</h4><div id="ras_ejemplo"></div></div>
             <div class="note-step"><h4>Comprobación de Cierre Final</h4><div id="ras_cierre"></div></div>
@@ -330,9 +348,9 @@
             </div>
         </div>
 
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookCorteRelleno')" title="Ver el desglose matemático del volumen entre las últimas dos secciones"><span>▼ Mostrar memoria (Método del Trapecio del último tramo)</span></button></div>
-        <div class="notebook-panel" id="notebookCorteRelleno">
-            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: CUBICACIÓN POR ÁREAS MEDIAS</b></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCR')" title="Ver el desglose matemático del volumen entre las últimas dos secciones"><span>▼</span> Mostrar memoria (Método del Trapecio del último tramo)</button></div>
+        <div class="calc-sheet-container" id="calcSheetContainerCR">
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: CUBICACIÓN POR ÁREAS MEDIAS</b></div>
             <div class="note-step"><h4>1. Análisis de Diferencias (Rasante - Terreno)</h4><div id="cr_paso1"></div></div>
             <div class="note-step"><h4>2. Clasificación de la Sección</h4><div id="cr_paso2"></div></div>
             <div class="note-step"><h4>3. Áreas de la Sección Transversal</h4><div id="cr_paso3"></div></div>
@@ -355,7 +373,7 @@
         </div>
         <div class="btn-group">
             <button class="action-btn" onclick="calcularPerfilTransversal()" title="Resolver áreas mediante intersecciones y generar gráfico de la sección">Calcular Áreas y Generar Gráfico</button>
-            <button class="action-btn danger-btn" onclick="limpiarInputs('modPerfilTransversal'); document.getElementById('perfilCanvas').style.display='none'; document.getElementById('leyendaPerfil').style.display='none'; document.getElementById('perfilResumen').innerHTML='Ingrese datos para visualizar el perfil transversal.'; document.getElementById('notebookPerfil').style.display='none'; pStates['notebookPerfil']=false;" title="Borrar gráfico y cálculos">Limpiar Sección</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modPerfilTransversal'); document.getElementById('perfilCanvas').style.display='none'; document.getElementById('leyendaPerfil').style.display='none'; document.getElementById('perfilResumen').innerHTML='Ingrese datos para visualizar el perfil transversal.'; document.getElementById('calcSheetContainerPerfil').style.display='none'; pStates['calcSheetContainerPerfil']=false;" title="Borrar gráfico y cálculos">Limpiar Sección</button>
         </div>
         <div class="summary-panel" id="perfilResumen" title="Resultados geométricos"><span>Ingrese datos para visualizar el perfil transversal.</span></div>
         
@@ -365,9 +383,9 @@
         </div>
         <canvas id="perfilCanvas" width="800" height="400" style="display:none; margin: 10px auto; max-width: 100%; background:#f8fafc;" title="Representación visual de la sección transversal. La línea punteada oscura es la rasante."></canvas>
         
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookPerfil')" title="Ver el detalle del cálculo de áreas (integración geométrica)"><span>▼ Mostrar memoria detallada (Cálculo de Áreas Sb/Sr)</span></button></div>
-        <div class="notebook-panel" id="notebookPerfil">
-            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ÁREAS DE SECCIÓN (MÉTODO GEOMÉTRICO)</b></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerPerfil')" title="Ver el detalle del cálculo de áreas (integración geométrica)"><span>▼</span> Mostrar memoria detallada (Cálculo de Áreas Sb/Sr)</button></div>
+        <div class="calc-sheet-container" id="calcSheetContainerPerfil">
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ÁREAS DE SECCIÓN (MÉTODO GEOMÉTRICO)</b></div>
             <div class="note-step"><h4>1. Definición de Coordenadas (Origen en el Eje)</h4><div id="perfil_paso1"></div></div>
             <div class="note-step"><h4>2. Ecuación de la Rasante</h4><div id="perfil_paso2"></div></div>
             <div class="note-step"><h4>3. Resolución de Áreas Parciales por Segmento</h4><div id="perfil_paso3"></div></div>
@@ -388,7 +406,7 @@
         <div class="btn-group">
             <button class="action-btn" onclick="calcularCurvaHorizontal()" title="Procesar la geometría completa y dibujar el plano interactivo">📐 Calcular Curva y Generar Plano</button>
             <button class="action-btn success-btn" onclick="exportarCSV('curvaReplanteoTbody', 'Replanteo_Curva.csv')" title="Descargar libreta de replanteo">📊 Exportar Libreta de Replanteo</button>
-            <button class="action-btn danger-btn" onclick="limpiarInputs('modCurvaHorizontal'); document.getElementById('curvaTableWrapper').style.display='none'; document.getElementById('curvaReplanteoWrapper').style.display='none'; document.getElementById('notebookCurva').style.display='none'; document.getElementById('canvasCurvaWrapper').style.display='none'; pStates['notebookCurva']=false;" title="Borrar todos los cálculos e imágenes">Limpiar Todo</button>
+            <button class="action-btn danger-btn" onclick="limpiarInputs('modCurvaHorizontal'); document.getElementById('curvaTableWrapper').style.display='none'; document.getElementById('curvaReplanteoWrapper').style.display='none'; document.getElementById('calcSheetContainerCurva').style.display='none'; document.getElementById('canvasCurvaWrapper').style.display='none'; pStates['calcSheetContainerCurva']=false;" title="Borrar todos los cálculos e imágenes">Limpiar Todo</button>
         </div>
         <div id="curvaError" class="error-panel"></div>
         
@@ -406,9 +424,9 @@
             <table title="Libreta de replanteo lista para trabajo de campo"><thead><tr><th colspan="4" style="background:var(--success); color:white;">Libreta de Replanteo por Deflexiones (Método de Arco)</th></tr><tr><th>Estación / Punto</th><th>Dist. Acumulada S (m)</th><th>Ángulo Deflexión (G° M' S")</th><th>Observación Topográfica</th></tr></thead><tbody id="curvaReplanteoTbody"></tbody></table>
         </div>
         
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('notebookCurva')" title="Ver las fórmulas aplicadas de la libreta universitaria"><span>▼ Mostrar Memoria Universitaria (Paso a Paso)</span></button></div>
-        <div class="notebook-panel" id="notebookCurva">
-            <div class="notebook-title" style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: FÓRMULAS DE CURVA CIRCULAR SIMPLE</b></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCurva')" title="Ver las fórmulas aplicadas de la libreta universitaria"><span>▼</span> Mostrar Memoria Universitaria (Paso a Paso)</button></div>
+        <div class="calc-sheet-container" id="calcSheetContainerCurva">
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: FÓRMULAS DE CURVA CIRCULAR SIMPLE</b></div>
             <div class="note-step"><h4>1. Conversión de Ángulo Δ a Radianes</h4><div id="curva_paso1"></div></div>
             <div class="note-step"><h4>2. Cálculo de la Sub-Tangente (ST)</h4><div id="curva_paso2"></div></div>
             <div class="note-step"><h4>3. Cálculo de la Longitud de Curva (LC)</h4><div id="curva_paso3"></div></div>
@@ -443,7 +461,7 @@
     <button class="help-btn-circle" style="background:#0284c7;" onclick="toggleCalculatorLocal()" title="Abre la calculadora científica arrastrable de escritorio">🧮</button>
 </div>
 
-<div class="watermark" title="Sello de Autoría de Propiedad Intelectual">👨‍💻 Cristopher Cedeño | TopoCalc v9.3 Premium</div>
+<div class="watermark" title="Sello de Autoría de Propiedad Intelectual">👨‍💻 Cristopher Cedeño | TopoCalc v9.3 Final</div>
 
 <!-- MODAL DE AYUDA ACADÉMICA -->
 <div id="helpModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
@@ -496,7 +514,7 @@
         <button class="calc-btn op" onclick="calcOp('sqrt')" title="Extrae la raíz cuadrada del número en pantalla">√</button>
         <button class="calc-btn op" onclick="calcClear()" title="Limpia la pantalla dejándola en 0" style="color:var(--danger)">C</button>
         
-        <button class="calc-btn op" id="btnGMSInserter" onclick="calcOp('°')" title="Formateador Casio de Grados, Minutos y Segundos (GMS)" style="font-weight:900; background:rgba(37, 99, 235, 0.1); color:var(--accent);">° ' "</button>
+        <button class="calc-btn op" id="btnGMSInserter" onclick="calcOp('°')" title="Formateador Casio de Grados, Minutos y Segundos (GMS)" style="font-weight:900; background:rgba(44, 110, 158, 0.1); color:var(--accent);">° ' "</button>
         <button class="calc-btn" onclick="calcNum('7')">7</button>
         <button class="calc-btn" onclick="calcNum('8')">8</button>
         <button class="calc-btn" onclick="calcNum('9')">9</button>
@@ -522,7 +540,6 @@
     </div>
     <div style="background:#0f172a; color:#94a3b8; font-size:0.7rem; text-align:center; padding-bottom:5px;" id="calcModeText">Modo: GRADOS (DEG)</div>
 </div>
-
 
 <!-- =======================================================================================
      MOTOR CORE JAVASCRIPT GLOBAL UNIFICADO
@@ -588,7 +605,7 @@
     }
     function limpiarCorteRellenoTotal() {
         puntosCR = []; actualizarTablaCorteRelleno();
-        document.getElementById('notebookCorteRelleno').style.display='none'; pStates['notebookCorteRelleno']=false;
+        document.getElementById('calcSheetContainerCR').style.display='none'; pStates['calcSheetContainerCR']=false;
     }
 
     // -----------------------------------------------------
