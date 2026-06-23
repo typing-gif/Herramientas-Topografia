@@ -11,6 +11,28 @@
       gtag('config', 'G-LHX7547NPM');
     </script>
 
+    <!-- ESCUDO DE SEGURIDAD OPTIMIZADO (ANTI-INSPECCIÓN) -->
+    <script>
+        // 1. Bloquear clic derecho (Evita el "Inspeccionar elemento" rápido del ratón)
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        
+        // 2. Bloquear atajos de teclado para desarrolladores (Permitiendo explícitamente Ctrl+C y Ctrl+V)
+        document.addEventListener('keydown', function(e) {
+            // Bloquear F12 (Herramientas de desarrollador)
+            if (e.keyCode === 123) { e.preventDefault(); return false; }
+            // Bloquear Ctrl+Shift+I (Abrir inspector)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'I'.charCodeAt(0)) { e.preventDefault(); return false; }
+            // Bloquear Ctrl+Shift+J (Abrir consola)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'J'.charCodeAt(0)) { e.preventDefault(); return false; }
+            // Bloquear Ctrl+Shift+C (Modo inspección)
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 'C'.charCodeAt(0)) { e.preventDefault(); return false; }
+            // Bloquear Ctrl+U (Ver código fuente de la página)
+            if (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0)) { e.preventDefault(); return false; }
+            // Bloquear Ctrl+S (Guardar página web completa)
+            if (e.ctrlKey && e.keyCode === 'S'.charCodeAt(0)) { e.preventDefault(); return false; }
+        });
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>TopoCalc - Agrimensura</title>
@@ -112,8 +134,6 @@
             position: relative; 
         }
 
-        /* === NUEVAS INCORPORACIONES PREMIUM === */
-        
         /* BOTONES DE CONTROL FLOTANTES GENERALES */
         .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; }
         .help-btn-circle { background: var(--accent); color: white; border: none; width: 52px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
@@ -192,7 +212,7 @@
         <div id="isoTableWrapper" class="table-container" style="display:none;">
             <table title="Resultados de la interpolación lineal"><thead><tr><th>Curva de Nivel (m)</th><th>Distancia desde Punto A</th></tr></thead><tbody id="isoTbody"></tbody></table>
         </div>
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerIso')" title="Ver el desglose matemático detallado de los 6 pasos"><span>▼</span> Mostrar memoria (6 pasos de cálculo)</button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerIso')" title="Ver el desglose matemático detallado de los 6 pasos"><span>▼ Mostrar memoria (6 pasos de cálculo)</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerIso">
             <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA DE CÁLCULO: ISOHIPSA LINEAL</b></div>
             <div class="note-step"><h4>1) Desnivel Total (ΔH)</h4><div id="iso_paso1"></div></div>
@@ -245,7 +265,7 @@
             <table title="Registro de estaciones calculadas"><thead><tr><th>Estación</th><th>Cota Base (m)</th><th>Dist.Total (cm)</th><th>Dist.Eje (cm)</th><th>Cota Eje Calculada (m)</th><th>Acción</th></tr></thead><tbody id="transTbody"></tbody></table>
         </div>
         <div class="summary-panel" id="transResumen" title="Controles de exportación"><span>Esperando datos...</span></div>
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerTrans')" title="Ver el desarrollo matemático de la última fila insertada"><span>▼</span> Mostrar memoria de la Última Estación</button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerTrans')" title="Ver el desarrollo matemático de la última fila insertada"><span>▼ Mostrar memoria de la Última Estación</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerTrans">
             <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: REGLA DE TRES HACIA EL EJE</b></div>
             <div class="note-step"><h4>1. Datos de Entrada</h4><div id="trans_s1"></div></div>
@@ -277,7 +297,7 @@
         
         <div class="summary-panel" style="justify-content: center; text-align: center; border: 2px solid var(--accent);" title="Pendiente Resultante"><h3 style="margin:0; font-size:1.3rem;">Pendiente Resultante: <br><span id="pendResultados" style="color:var(--accent); font-weight:900; font-size: 1.8rem; display:block; margin-top:10px;">---</span></h3></div>
         
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerPend')" title="Ver el desglose matemático"><span>▼</span> Mostrar memoria del cálculo</button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerPend')" title="Ver el desglose matemático"><span>▼ Mostrar memoria del cálculo</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerPend">
             <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ANÁLISIS DE PENDIENTE</b></div>
             <div class="note-step"><h4>1. Extracción de Datos</h4><div id="pend_paso1"></div></div>
@@ -307,7 +327,7 @@
         <div class="table-container" id="rasTableContainer" style="display:none;">
             <table title="Registro de progresivas y sus cotas de diseño"><thead><tr><th>Progresiva (Estación)</th><th>Distancia Acumulada (x)</th><th>Cota de Proyecto Calculada (m)</th></tr></thead><tbody id="rasTbody"></tbody></table>
         </div>
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerRas')" title="Ver la fórmula base y comprobaciones"><span>▼</span> Mostrar memoria matemática</button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerRas')" title="Ver la fórmula base y comprobaciones"><span>▼ Mostrar memoria matemática</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerRas">
             <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: PROYECCIÓN DE RASANTE</b></div>
             <div class="note-step"><h4>Ecuación de la Recta Aplicada</h4><div id="ras_formula"></div></div>
@@ -348,7 +368,7 @@
             </div>
         </div>
 
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCR')" title="Ver el desglose matemático del volumen entre las últimas dos secciones"><span>▼</span> Mostrar memoria (Método del Trapecio del último tramo)</button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCR')" title="Ver el desglose matemático del volumen entre las últimas dos secciones"><span>▼ Mostrar memoria (Método del Trapecio del último tramo)</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerCR">
             <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: CUBICACIÓN POR ÁREAS MEDIAS</b></div>
             <div class="note-step"><h4>1. Análisis de Diferencias (Rasante - Terreno)</h4><div id="cr_paso1"></div></div>
@@ -383,7 +403,7 @@
         </div>
         <canvas id="perfilCanvas" width="800" height="400" style="display:none; margin: 10px auto; max-width: 100%; background:#f8fafc;" title="Representación visual de la sección transversal. La línea punteada oscura es la rasante."></canvas>
         
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerPerfil')" title="Ver el detalle del cálculo de áreas (integración geométrica)"><span>▼</span> Mostrar memoria detallada (Cálculo de Áreas Sb/Sr)</button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerPerfil')" title="Ver el detalle del cálculo de áreas (integración geométrica)"><span>▼ Mostrar memoria detallada (Cálculo de Áreas Sb/Sr)</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerPerfil">
             <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: ÁREAS DE SECCIÓN (MÉTODO GEOMÉTRICO)</b></div>
             <div class="note-step"><h4>1. Definición de Coordenadas (Origen en el Eje)</h4><div id="perfil_paso1"></div></div>
@@ -424,7 +444,7 @@
             <table title="Libreta de replanteo lista para trabajo de campo"><thead><tr><th colspan="4" style="background:var(--success); color:white;">Libreta de Replanteo por Deflexiones (Método de Arco)</th></tr><tr><th>Estación / Punto</th><th>Dist. Acumulada S (m)</th><th>Ángulo Deflexión (G° M' S")</th><th>Observación Topográfica</th></tr></thead><tbody id="curvaReplanteoTbody"></tbody></table>
         </div>
         
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCurva')" title="Ver las fórmulas aplicadas de la libreta universitaria"><span>▼</span> Mostrar Memoria Universitaria (Paso a Paso)</button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCurva')" title="Ver las fórmulas aplicadas de la libreta universitaria"><span>▼ Mostrar Memoria Universitaria (Paso a Paso)</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerCurva">
             <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: FÓRMULAS DE CURVA CIRCULAR SIMPLE</b></div>
             <div class="note-step"><h4>1. Conversión de Ángulo Δ a Radianes</h4><div id="curva_paso1"></div></div>
@@ -461,7 +481,7 @@
     <button class="help-btn-circle" style="background:#0284c7;" onclick="toggleCalculatorLocal()" title="Abre la calculadora científica arrastrable de escritorio">🧮</button>
 </div>
 
-<div class="watermark" title="Sello de Autoría de Propiedad Intelectual">👨‍💻 Cristopher Cedeño | TopoCalc v9.3 Final</div>
+<div class="watermark" title="Sello de Autoría de Propiedad Intelectual">👨‍💻 Cristopher Cedeño | TopoCalc v9.3 Final Corregido</div>
 
 <!-- MODAL DE AYUDA ACADÉMICA -->
 <div id="helpModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
