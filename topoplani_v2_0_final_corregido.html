@@ -115,7 +115,6 @@
 <body>
 
 <div class="container">
-    <!-- RECUADRO DE ENCABEZADO -->
     <div class="app-header">
         <div class="app-title">
             <h1 title="Plataforma de cálculo avanzado de Planimetría y Geometría Topográfica">📍 TopoPlani - Topografía I</h1>
@@ -127,7 +126,6 @@
         </div>
     </div>
     
-    <!-- BARRA DE PESTAÑAS PRINCIPALES -->
     <div class="tabs-nav">
         <button class="tab-btn active" onclick="cambiarPestañaMaestra('modAngulos', this)" title="Calculadora sexagesimal de acarreos y conversiones universales">📐 Sist. Angulares y GMS</button>
         <button class="tab-btn" onclick="cambiarPestañaMaestra('modEscalas', this)" title="Herramienta analítica de proporción de planos y escalas">📏 Escalas Universales</button>
@@ -136,11 +134,7 @@
         <button class="tab-btn" onclick="cambiarPestañaMaestra('modAreas', this)" title="Cubicación de polígonos por Gauss, DDM, Trapecios o Herón">🗺️ Áreas</button>
     </div>
 
-    <!-- =======================================================================================
-         1. MÓDULO DE ÁNGULOS Y GMS
-         ======================================================================================= -->
     <div id="modAngulos" class="tab-content active">
-        <!-- CONVERSOR -->
         <div id="modAngulos_conv">
             <h2 title="Transformación matemática directa entre sistemas radiales y sexagesimales">🔄 Conversión de Sistemas Angulares</h2>
             <div class="subtitle" title="Ayuda rápida">Escriba el valor numérico y presione el botón de cálculo manual.</div>
@@ -163,7 +157,6 @@
 
         <hr style="border: 1px dashed var(--border); margin: 30px 0;">
         
-        <!-- CALCULADORA GMS -->
         <div id="modAngulos_gms">
             <h2 title="Suma y resta analítica de ángulos sexagesimales arrastrando base 60">⏱️ Calculadora Sexagesimal (G.M.S)</h2>
             <div class="subtitle" title="Ayuda rápida">Desglose de operaciones con minutos y segundos de arco.</div>
@@ -202,9 +195,6 @@
         </div>
     </div>
 
-    <!-- =======================================================================================
-         2. MÓDULO DE ESCALAS UNIVERSALES
-         ======================================================================================= -->
     <div id="modEscalas" class="tab-content">
         <h2 title="Relación de proporción lineal entre el plano técnico y la realidad">📏 Escalas Topográficas Universales</h2>
         <div class="subtitle" title="Instrucciones">Deje en blanco el campo que desea deducir automáticamente.</div>
@@ -232,9 +222,6 @@
         </div>
     </div>
 
-    <!-- =======================================================================================
-         3. MÓDULO DE ORIENTACIÓN Y DIRECCIONES
-         ======================================================================================= -->
     <div id="modOrientacion" class="tab-content">
         <h2 title="Análisis geométrico de rumbos, azimuts y deflexiones en poligonales">🧭 Orientación: Rumbos, Azimuts y Deflexiones</h2>
         
@@ -246,7 +233,6 @@
             <button class="tab-btn" onclick="setSubOrientacionLocal('invTop', this)" style="background: rgba(15,118,110,0.1); border: 1px solid var(--accent);" title="Deducción de Azimut y Distancia conociendo las coordenadas de dos puntos">📐 Inverso Topográfico</button>
         </div>
 
-        <!-- 3.A CONVERSOR -->
         <div id="oriConvPanel" style="background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border);">
             <div style="display:flex; gap:20px; flex-wrap:wrap;">
                 <div style="flex:1; min-width: 240px;">
@@ -269,7 +255,6 @@
             </div>
         </div>
 
-        <!-- 3.B ÁNGULO ENTRE LÍNEAS -->
         <div id="oriAngPanel" style="display:none; background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border);">
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:10px;">
                 <div class="input-group"><label title="Azimut de la primera estaca mirada">Azimut Visual 1 (°)</label><input type="number" id="angL1" step="any" title="Digite azimut visual 1"></div>
@@ -281,7 +266,6 @@
             </div>
         </div>
 
-        <!-- 3.C DEFLEXIÓN -->
         <div id="oriDefPanel" style="display:none; background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border);">
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:10px;">
                 <div class="input-group"><label title="Línea por donde se transitaba">Azimut Anterior (Llegada) °</label><input type="number" id="defAnt" step="any" title="Azimut de llegada"></div>
@@ -293,7 +277,6 @@
             </div>
         </div>
 
-        <!-- 3.D PROPAGACIÓN EN SERIE -->
         <div id="oriPropPanel" style="display:none; background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border); border-left:5px solid #f59e0b;">
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:15px;">
                 <div class="input-group" style="grid-column: span 2;"><label title="Base de inicio de la poligonal">Azimut de Arranque (Línea Inicial) °</label><input type="number" id="propAzBase" step="any" placeholder="Ej: 41.583" style="font-weight:bold; border-color:#f59e0b;" title="Dato clave de inicio"></div>
@@ -311,7 +294,6 @@
             </div>
         </div>
 
-        <!-- 3.E INVERSO TOPOGRÁFICO -->
         <div id="oriInvTopPanel" style="display:none; background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border); border-left:5px solid var(--accent);">
             <div class="subtitle" title="Ayuda general">Calcula la distancia horizontal y dirección azimutal entre dos puntos conocidos a partir de sus coordenadas cartesianas absolutas.</div>
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:10px;">
@@ -340,9 +322,6 @@
         </div>
     </div>
 
-    <!-- =======================================================================================
-         4. MÓDULO DE POLIGONAL CERRADA
-         ======================================================================================= -->
     <div id="modPoligonal" class="tab-content">
         <h2 title="Ajuste planimétrico proporcional de libretas">📍 Cálculo y Compensación de Poligonal Cerrada</h2>
         <div style="background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border); margin-bottom: 20px;">
@@ -396,9 +375,6 @@
         </div>
     </div>
 
-    <!-- =======================================================================================
-         5. MÓDULO DE ÁREAS
-         ======================================================================================= -->
     <div id="modAreas" class="tab-content">
         <h2 title="Determinación analítica de la superficie topográfica">🗺️ Cálculo de Áreas Topográficas</h2>
         
@@ -409,7 +385,6 @@
             <button class="tab-btn" onclick="setSubAreaLocal('heron', this)" title="Fórmula clásica para lotes triangulados conociendo sus tres lados">Triángulo (Herón)</button>
         </div>
 
-        <!-- 5.A GAUSS -->
         <div id="areaGaussPanel" style="background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border);">
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:10px;">
                 <div class="input-group"><label title="Nombre de la esquina del terreno">Vértice</label><input type="text" id="gVert" placeholder="Ej: P1" title="Identificador del punto"></div>
@@ -427,7 +402,6 @@
             </div>
         </div>
 
-        <!-- 5.B DDM -->
         <div id="areaDDMPanel" style="display:none; background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border);">
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:10px;">
                 <div class="input-group"><label title="Identificador del lado del polígono">Línea (Ej: A-B)</label><input type="text" id="ddmLinea" title="Nombre de la línea"></div>
@@ -445,7 +419,6 @@
             </div>
         </div>
 
-        <!-- 5.C TRAPECIO -->
         <div id="areaTrapPanel" style="display:none; background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border);">
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:15px; max-width:400px; margin:0 auto;">
                 <div class="input-group"><label title="Distancia común o intervalo entre cada medición de abscisa">Separación constante (d) m:</label><input type="number" id="trapDist" step="any" value="10" title="Intervalo D"></div>
@@ -461,7 +434,6 @@
             </div>
         </div>
 
-        <!-- 5.D HERÓN -->
         <div id="areaHeronPanel" style="display:none; background:var(--header-bg); padding:20px; border-radius:12px; border:1px solid var(--border);">
             <div class="grid-inputs" style="background:transparent; border:none; padding:0; margin-bottom:10px;">
                 <div class="input-group"><label title="Longitud física leída para el primer cateto">Lado a (m)</label><input type="number" id="hLadoA" step="any" title="Longitud de A"></div>
@@ -470,7 +442,7 @@
                 <div style="display:flex; align-items:flex-end;"><button class="action-btn success-btn" onclick="calcularHeronLocal()" style="width:100%;" title="Procesa la superficie extrayendo la raíz cuadrada del semiperímetro S">📐 Calcular Triángulo</button></div>
             </div>
             <div class="btn-group" style="justify-content:center;">
-                <button class="action-btn danger-btn" onclick="limpiarInputs('areaHeronPanel', []); limpiarAreaGlobalLocal();" title="Borrar las medidas ingresadas">🗑️ Limpiar Lados</button>
+                <button class="action-btn danger-btn" onclick="limpiarInputs('areaHeronPanel'); limpiarAreaGlobalLocal();" title="Borrar las medidas ingresadas">🗑️ Limpiar Lados</button>
             </div>
         </div>
 
@@ -487,27 +459,21 @@
     </div>
 </div>
 
-<!-- ==========================================
-     ASISTENTE DESPLEGABLE SIDE DRAWER
-     ========================================== -->
 <div id="assistantPanel">
     <div class="assistant-header">
         <h3 title="Panel dinámico que te enseña a usar la ventana en la que te encuentras">💡 Guía de Asistencia</h3>
         <button class="close-assistant" onclick="toggleAssistant()" title="Ocultar el panel de guía lateral">✖</button>
     </div>
     <div class="assistant-box" id="assistantBoxContent">
-        <!-- JS Inyecta contenido interactivo aquí -->
-    </div>
+        </div>
 </div>
 
-<!-- COMPONENTES DE CONTROL FLOTANTES GENERALES -->
 <div class="flotante-controls no-print">
     <button class="help-btn-circle" onclick="document.getElementById('helpModal').style.display='flex'" title="Abre el manual oficial de uso de la herramienta">❓</button>
     <button class="help-btn-circle" style="background:#f59e0b; color:#0f172a;" onclick="toggleAssistant()" title="Abre el panel del asistente de aprendizaje inteligente">💡</button>
     <button class="help-btn-circle" style="background:#0284c7;" onclick="toggleCalculatorLocal()" title="Abre la calculadora científica arrastrable de escritorio">🧮</button>
 </div>
 
-<!-- MODAL DE AYUDA ACADÉMICA -->
 <div id="helpModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
     <div class="modal-content" id="printArea">
         <h2 style="text-align: center; color:var(--accent);">📘 Manual de Operaciones Universitarias: TopoPlani v2.0</h2>
@@ -534,9 +500,6 @@
 
 <div class="watermark" title="Derechos de Propiedad Intelectual del Desarrollo">Desarrollado por Cristopher Cedeño | TopoPlani v2.0</div>
 
-<!-- ==========================================
-     WIDGET CALCULADORA FLOTANTE ARRASTRABLE
-     ========================================== -->
 <div id="calcFlotante">
     <div id="calcHeader" title="Manten presionado este bloque azul para mover la calculadora por la pantalla">
         <span>🧮 Calculadora Topográfica</span>
@@ -578,10 +541,21 @@
 </div>
 
 
-<!-- =======================================================================================
-     MOTOR CORE JAVASCRIPT GLOBAL UNIFICADO
-     ======================================================================================= -->
 <script>
+    // === SEGURIDAD Y PROTECCIÓN DE CÓDIGO ===
+    document.addEventListener('contextmenu', event => event.preventDefault()); // Bloquea clic derecho
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 123) { // F12
+            event.preventDefault();
+        }
+        if (event.ctrlKey && event.shiftKey && (event.keyCode === 73 || event.keyCode === 74 || event.keyCode === 67)) { // Ctrl+Shift+I, J, C
+            event.preventDefault();
+        }
+        if (event.ctrlKey && (event.keyCode === 85)) { // Ctrl+U (Ver código fuente)
+            event.preventDefault();
+        }
+    });
+
     // -----------------------------------------------------
     // VARIABLES GLOBALES (Declaradas 1 sola vez)
     // -----------------------------------------------------
@@ -616,6 +590,14 @@
     // -----------------------------------------------------
     // FUNCIONES DE CONTROL DE PANTALLA Y UX
     // -----------------------------------------------------
+    function hidePanel(id) {
+        let panel = document.getElementById(id);
+        if(panel) panel.style.display = 'none';
+        if(pStates[id] !== undefined) pStates[id] = false;
+        let btn = document.querySelector(`button[onclick="toggleNotebookPanel('${id}')"] span`);
+        if(btn && btn.innerText.includes('▲')) btn.innerText = btn.innerText.replace('▲', '▼');
+    }
+
     function switchTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -956,6 +938,54 @@
     // -----------------------------------------------------
     // 3. LÓGICA ORIENTACIÓN Y NUEVO INVERSO TOPOGRÁFICO
     // -----------------------------------------------------
+    function dibujarSimuladorOrientacion(obj) {
+        document.getElementById('contenedorCanvasOrientacion').style.display = 'block';
+        const cv = document.getElementById('canvasOrientacion');
+        const ctx = cv.getContext('2d');
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        // Ejes cartesianos de referencia temporales
+        ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(cv.width/2, 0); ctx.lineTo(cv.width/2, cv.height); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, cv.height/2); ctx.lineTo(cv.width, cv.height/2); ctx.stroke();
+    }
+
+    function limpiarOriLocal(subId) {
+        if(subId === 'conv') { document.getElementById('oriAziInput').value = ''; document.getElementById('oriRumAng').value = ''; }
+        else if(subId === 'ang') { document.getElementById('angL1').value = ''; document.getElementById('angL2').value = ''; }
+        else if(subId === 'def') { document.getElementById('defAnt').value = ''; document.getElementById('defSig').value = ''; }
+        else if(subId === 'prop') { document.getElementById('propAzBase').value = ''; document.getElementById('propAngulosContainer').innerHTML = '<div class="input-group" style="flex-direction:row; align-items:center;"><label style="width:150px;">Ángulo Vértice 1 (°):</label><input type="number" class="prop-ang" step="any" style="flex:1;"></div>'; }
+        else if(subId === 'invTop') { document.getElementById('invTopNa').value = ''; document.getElementById('invTopEa').value = ''; document.getElementById('invTopNb').value = ''; document.getElementById('invTopEb').value = ''; }
+        hidePanel('oriResumen'); hidePanel('contenedorCanvasOrientacion'); hidePanel('calcSheetContainerOri');
+    }
+
+    function agregarAnguloPropagacionLocal() {
+        const container = document.getElementById('propAngulosContainer');
+        const count = container.querySelectorAll('.prop-ang').length + 1;
+        const div = document.createElement('div');
+        div.className = 'input-group'; div.style.flexDirection = 'row'; div.style.alignItems = 'center';
+        div.innerHTML = `<label style="width:150px;">Ángulo Vértice ${count} (°):</label><input type="number" class="prop-ang" step="any" style="flex:1;">`;
+        container.appendChild(div);
+    }
+
+    function calcularPropagacionSerieLocal() {
+        let azBase = parseFloat(document.getElementById('propAzBase').value);
+        if(isNaN(azBase)) { alert("⚠️ Ingrese el azimut de arranque."); return; }
+        let inputs = document.querySelectorAll('.prop-ang');
+        let mem = `==================================================\n   HOJA DE CÁLCULO: PROPAGACIÓN DE AZIMUTS\n==================================================\n\nAzimut Base = ${azBase.toFixed(3)}°\n\n`;
+        let currAz = azBase;
+        inputs.forEach((inp, idx) => {
+            let ang = parseFloat(inp.value);
+            if(!isNaN(ang)) {
+                currAz = normalizarAzimut(currAz + ang);
+                mem += `Vértice ${idx+1}: Azimut Anterior + ${ang.toFixed(3)}° = ${currAz.toFixed(3)}°\n`;
+            }
+        });
+        document.getElementById('oriResumen').style.display = 'block';
+        document.getElementById('oriResumen').innerHTML = `Azimut Final: <span style="color:var(--accent)">${currAz.toFixed(3)}°</span>`;
+        document.getElementById('calcSheetContainerOri').style.display = 'block';
+        document.getElementById('ori_memoria').innerText = mem;
+    }
+
     function calcDesdeAzimut() {
         let az = parseFloat(document.getElementById('oriAziInput').value); if(isNaN(az)){ alert("Azimut inválido"); return; } az = normalizarAzimut(az);
         let rumbo = "", inv = 0; let azStr = decToGMSStr(az);
@@ -1044,6 +1074,16 @@
     // -----------------------------------------------------
     // 4. LÓGICA POLIGONAL CERRADA
     // -----------------------------------------------------
+    function limpiarPoligonalTotalLocal() {
+        polCerrada = []; polCompensada = [];
+        document.getElementById('polPuntoArr').value = 'A';
+        document.getElementById('polN0').value = '1000'; document.getElementById('polE0').value = '1000';
+        document.getElementById('panelIngresoPoligonal').style.opacity = '0.5';
+        document.getElementById('panelIngresoPoligonal').style.pointerEvents = 'none';
+        document.getElementById('tbPoligonalCerrada').innerHTML = '<tr><td colspan="13">Fije arranque para comenzar.</td></tr>';
+        hidePanel('resPoligonal'); hidePanel('contenedorCanvasPoligonal'); hidePanel('calcSheetContainerPol');
+    }
+
     function fijarArranquePoligonalLocal() {
         ptoInicio = document.getElementById('polPuntoArr').value || "A"; cN0 = parseFloat(document.getElementById('polN0').value); cE0 = parseFloat(document.getElementById('polE0').value);
         if(isNaN(cN0) || isNaN(cE0)) { alert("⚠️ Defina coordenadas numéricas válidas para el arranque."); return; }
