@@ -67,11 +67,26 @@
         .toggle-btn { width: 100%; background: var(--header-bg); border: 1px solid var(--border); padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; color: var(--text-primary); transition: 0.2s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 10px;}
         .toggle-btn:hover { background: rgba(15, 118, 110, 0.05); }
 
-        .calc-sheet-container { background: var(--notebook-bg); border-radius: 12px; padding: 25px; margin-top: 10px; border-left: 5px solid var(--accent); position: relative; margin-bottom: 20px; box-shadow: var(--shadow); }
-        .calc-sheet { font-family: 'Courier New', monospace; font-size: 0.95rem; line-height: 1.6; color: #1e293b; white-space: pre-wrap; background: rgba(255,255,255,0.7); padding: 20px; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); overflow-x: auto;}
-        body.dark .calc-sheet { color: #f1f5f9; background: rgba(0,0,0,0.2); border-color: #334155; }
-        .btn-export-sheet { position: absolute; top: 20px; right: 20px; background: #0284c7; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; z-index: 5; }
-        .btn-export-sheet:hover { background: #0369a1; }
+        /* === ESTILOS MODERNOS PARA LA HOJA DE CÁLCULO === */
+        .calc-sheet-container { 
+            background: linear-gradient(135deg, var(--header-bg) 0%, rgba(15,118,110,0.05) 100%);
+            border-radius: 16px; padding: 25px; margin-top: 15px; 
+            border-left: 6px solid var(--accent); position: relative; margin-bottom: 25px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+        }
+        body.dark .calc-sheet-container { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+        
+        .calc-sheet { 
+            font-family: 'Courier New', monospace; font-size: 0.95rem; line-height: 1.8; 
+            color: var(--text-primary); 
+            background: rgba(255, 255, 255, 0.6); 
+            padding: 25px; border-radius: 12px; border: 1px solid rgba(15, 118, 110, 0.2); 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02); overflow-x: auto;
+        }
+        body.dark .calc-sheet { color: #f8fafc; background: rgba(0, 0, 0, 0.2); border-color: rgba(20, 184, 166, 0.2); }
+        
+        .btn-export-sheet { position: absolute; top: 20px; right: 20px; background: #0284c7; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; z-index: 5; transition: 0.2s;}
+        .btn-export-sheet:hover { background: #0369a1; transform: scale(1.05);}
 
         canvas { max-width: 100%; height: auto; background: var(--bg-card); border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); display: block; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); margin-left: auto; margin-right: auto;}
         
@@ -98,13 +113,15 @@
         .calc-btn.eq:hover { background: var(--success-hover); }
         
         /* BOTONES DE CONTROL FLOTANTES GENERALES */
-        .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; }
+        .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; max-width: 90%; }
         .help-btn-circle { background: var(--accent); color: white; border: none; width: 52px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
         .help-btn-circle:hover { transform: scale(1.1); }
+        .help-btn-pill { background: var(--accent); color: white; border: none; height: 50px; padding: 0 20px; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s; }
+        .help-btn-pill:hover { transform: scale(1.05); }
         
         /* MODALES */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--bg-card); padding: 32px; border-radius: 20px; max-width: 850px; width: 95%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 20px;}
+        .modal-content { background: var(--bg-card); padding: 32px; border-radius: 20px; max-width: 850px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .modal-table th, .modal-table td { border: 1px solid var(--border); padding: 12px; text-align: left; font-size: 0.85rem;}
         .modal-table th { background: var(--header-bg); font-weight: bold; }
@@ -151,7 +168,7 @@
             <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerAngConv')" title="Despliega el desarrollo matemático paso a paso"><span>▼ Mostrar Hoja de Conversión Paso a Paso</span></button></div>
             <div class="calc-sheet-container" id="calcSheetContainerAngConv" style="display:none;">
                 <button class="btn-export-sheet" onclick="imprimirHojaCalculo('conv_paso1')" title="Descarga en formato PDF">📄 Exportar a PDF</button>
-                <pre class="calc-sheet" id="conv_paso1" title="Desglose analítico de la operación">Realice un cálculo para visualizar la hoja.</pre>
+                <div class="calc-sheet" id="conv_paso1" title="Desglose analítico de la operación">Realice un cálculo para visualizar la hoja.</div>
             </div>
         </div>
 
@@ -190,7 +207,7 @@
             <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerAngGMS')" title="Despliega el desarrollo matemático paso a paso"><span>▼ Mostrar Hoja de Cálculo GMS</span></button></div>
             <div class="calc-sheet-container" id="calcSheetContainerAngGMS" style="display:none;">
                 <button class="btn-export-sheet" onclick="imprimirHojaCalculo('gms_paso1')" title="Descarga en formato PDF">📄 Exportar a PDF</button>
-                <pre class="calc-sheet" id="gms_paso1" title="Desglose analítico de la operación GMS">Realice una suma o resta para visualizar la hoja.</pre>
+                <div class="calc-sheet" id="gms_paso1" title="Desglose analítico de la operación GMS">Realice una suma o resta para visualizar la hoja.</div>
             </div>
         </div>
     </div>
@@ -218,7 +235,7 @@
         <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerEsc')" title="Despliega el desarrollo matemático paso a paso"><span>▼ Mostrar Hoja de Cálculo de Escala</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerEsc" style="display:none;">
             <button class="btn-export-sheet" onclick="imprimirHojaCalculo('esc_paso1')" title="Descarga en formato PDF">📄 Exportar a PDF</button>
-            <pre class="calc-sheet" id="esc_paso1" title="Desglose de cálculo de escala">Realice un cálculo para visualizar la hoja.</pre>
+            <div class="calc-sheet" id="esc_paso1" title="Desglose de cálculo de escala">Realice un cálculo para visualizar la hoja.</div>
         </div>
     </div>
 
@@ -318,7 +335,7 @@
         <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerOri')" title="Despliega el desarrollo matemático paso a paso"><span>▼ Mostrar Hoja de Cálculo Analítica</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerOri" style="display:none;">
             <button class="btn-export-sheet" onclick="imprimirHojaCalculo('ori_memoria')" title="Guardar hoja del gabinete en PDF">📄 Exportar a PDF</button>
-            <pre class="calc-sheet" id="ori_memoria" title="Desglose analítico">Realice un cálculo para visualizar la hoja paso a paso.</pre>
+            <div class="calc-sheet" id="ori_memoria" title="Desglose analítico">Realice un cálculo para visualizar la hoja paso a paso.</div>
         </div>
     </div>
 
@@ -370,7 +387,7 @@
             <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerPol')" title="Despliega el desarrollo matemático paso a paso"><span>▼ Mostrar Hoja de Compensación Paso a Paso</span></button></div>
             <div class="calc-sheet-container" id="calcSheetContainerPol" style="display:none;">
                 <button class="btn-export-sheet" onclick="imprimirHojaCalculo('pol_memoria')" title="Guardar hoja de compensaciones en PDF">📄 Exportar a PDF</button>
-                <pre class="calc-sheet" id="pol_memoria" title="Detalle matemático analítico del error de cierre">Ejecute la compensación para visualizar el desglose.</pre>
+                <div class="calc-sheet" id="pol_memoria" title="Detalle matemático analítico del error de cierre">Ejecute la compensación para visualizar el desglose.</div>
             </div>
         </div>
     </div>
@@ -442,7 +459,7 @@
                 <div style="display:flex; align-items:flex-end;"><button class="action-btn success-btn" onclick="calcularHeronLocal()" style="width:100%;" title="Procesa la superficie extrayendo la raíz cuadrada del semiperímetro S">📐 Calcular Triángulo</button></div>
             </div>
             <div class="btn-group" style="justify-content:center;">
-                <button class="action-btn danger-btn" onclick="limpiarInputs('areaHeronPanel'); limpiarAreaGlobalLocal();" title="Borrar las medidas ingresadas">🗑️ Limpiar Lados</button>
+                <button class="action-btn danger-btn" onclick="limpiarInputs('areaHeronPanel', []); limpiarAreaGlobalLocal();" title="Borrar las medidas ingresadas">🗑️ Limpiar Lados</button>
             </div>
         </div>
 
@@ -454,7 +471,7 @@
         <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerArea')" title="Despliega el desarrollo matemático paso a paso"><span>▼ Mostrar Hoja de Cálculo Analítica</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerArea" style="display:none;">
             <button class="btn-export-sheet" onclick="imprimirHojaCalculo('area_memoria')" title="Guardar hoja técnica de cubicación en PDF">📄 Exportar a PDF</button>
-            <pre class="calc-sheet" id="area_memoria" title="Explicación detallada de cómo se operó la fórmula para deducir el área">Realice un cálculo para visualizar la hoja paso a paso.</pre>
+            <div class="calc-sheet" id="area_memoria" title="Explicación detallada de cómo se operó la fórmula para deducir el área">Realice un cálculo para visualizar la hoja paso a paso.</div>
         </div>
     </div>
 </div>
@@ -469,31 +486,86 @@
 </div>
 
 <div class="flotante-controls no-print">
-    <button class="help-btn-circle" onclick="document.getElementById('helpModal').style.display='flex'" title="Abre el manual oficial de uso de la herramienta">❓</button>
+    <button class="help-btn-pill" onclick="document.getElementById('helpModal').style.display='flex'" title="Abre la guía de uso paso a paso">❓ Guía Rápida</button>
     <button class="help-btn-circle" style="background:#f59e0b; color:#0f172a;" onclick="toggleAssistant()" title="Abre el panel del asistente de aprendizaje inteligente">💡</button>
     <button class="help-btn-circle" style="background:#0284c7;" onclick="toggleCalculatorLocal()" title="Abre la calculadora científica arrastrable de escritorio">🧮</button>
+    <button class="help-btn-circle" style="background:#8b5cf6;" onclick="document.getElementById('buzonModal').style.display='flex'" title="Buzón de Sugerencias">✉️</button>
 </div>
 
 <div id="helpModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
-    <div class="modal-content" id="printArea">
-        <h2 style="text-align: center; color:var(--accent);">📘 Manual de Operaciones Universitarias: TopoPlani v2.0</h2>
-        <p style="text-align: center; font-size:0.9rem; color:var(--text-secondary); margin-bottom:15px;">Diseñado en cooperación con las metodologías formales de Topografía Plana.</p>
-        <table class="modal-table">
-            <thead><tr><th>Módulo Técnico</th><th>Objetivo Práctico de Gabinete</th></tr></thead>
-            <tbody>
-                <tr><td><b>📐 Ángulos y GMS</b></td><td>Suma y resta azimuts con minutos/segundos prestando unidades base 60. Conversión cruzada de sistemas radiales.</td></tr>
-                <tr><td><b>📏 Escalas</b></td><td>Deducción proporcional mediante la ley de tres ($E = T/P$) con escalímetro digital integrado.</td></tr>
-                <tr><td><b>🧭 Orientación</b></td><td>Conversión analítica de vectores rumbo/azimut, cálculo de deflexiones, propagación corrida de azimuts por método de espaldas y **Inverso Topográfico** para replanteo.</td></tr>
-                <tr><td><b>📍 Poligonal</b></td><td>Compensación analítica de poligonales cerradas repartiendo errores lineales por el algoritmo de Bowditch.</td></tr>
-                <tr><td><b>🗺️ Áreas</b></td><td>Cubicación exacta de parcelas catastrales a partir de linderos coordinados, proyecciones (Δ) o triangulación de Herón.</td></tr>
-            </tbody>
-        </table>
+    <div class="modal-content" id="printArea" style="line-height: 1.6;">
+        <h2 style="text-align: center; color:var(--accent);">📖 Guía de Uso Rápido y Ejemplos</h2>
+        <p style="text-align: center; font-size:0.95rem; color:var(--text-secondary); margin-bottom:20px;">Esta herramienta está diseñada para ahorrarte horas de cálculos manuales. Aquí te explico cómo usar cada ventana paso a paso:</p>
+        
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">1. 📐 Sist. Angulares y GMS</h3>
+            <p><strong>¿Para qué sirve?</strong> Para convertir unidades (ej. grados a radianes) y hacer sumas o restas de ángulos sin enredarte con los minutos y segundos.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Convertir:</strong> Si tienes 45.5 grados, escribe <code>45.5</code> en la casilla "Grados Sexagesimales" y dale a "Calcular Conversión". Listo, te dará los Radianes y Gradianes.</li>
+                <li><strong>Sumar/Restar:</strong> Escribe tu primer ángulo arriba (ej. 10° 50' 40") y el segundo abajo (ej. 5° 20' 30"). Presiona el botón <strong>"➕"</strong> y la página "lleva" los segundos y minutos sobrantes automáticamente para darte 16° 11' 10".</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">2. 📏 Escalas Universales</h3>
+            <p><strong>¿Para qué sirve?</strong> Para saber cuánto mide algo en la realidad si lo mides en el plano, o viceversa.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Ejemplo:</strong> Tienes un plano impreso a escala 1:500. Escribe <code>500</code> en "Escala del Mapa". Con tu regla mides un lindero y da 10 cm. Escribe <code>10</code> en "Distancia en el Plano". Deja la otra casilla en blanco y dale a calcular. Te dirá que en la vida real mide exactamente 50 metros.</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">3. 🧭 Orientación</h3>
+            <p><strong>¿Para qué sirve?</strong> Para deducir rumbos, azimuts y replantear puntos.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Inverso Topográfico:</strong> Estás parado en el Punto A (Norte: 1000, Este: 1000) y quieres mirar hacia el Punto B (Norte: 1050, Este: 1020). Escribe esos números y dale a calcular. Te dirá que configures tu equipo con un Azimut de 21°48'05" y que el punto está a 53.85 metros.</li>
+                <li><strong>Conversor:</strong> Escribe un Azimut (ej. 145°) y te dirá en qué cuadrante cae y cuál es su Rumbo exacto.</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">4. 📍 Poligonal Cerrada</h3>
+            <p><strong>¿Para qué sirve?</strong> Para repartir el error de cierre cuando mides un terreno de varios lados.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Paso 1:</strong> Escribe tu estaca de inicio (ej. "A") y sus coordenadas (1000 y 1000). Presiona <strong>"Fijar Arranque"</strong>.</li>
+                <li><strong>Paso 2:</strong> Ingresa cada línea que mediste (ej. Miraste a "B", distancia 50m, Azimut 90°) y presiona <strong>"Añadir Línea"</strong> por cada una.</li>
+                <li><strong>Paso 3:</strong> Presiona <strong>"⚖️ Compensar (Bowditch)"</strong>. La página distribuirá el error matemáticamente y te dará las coordenadas corregidas de todo el terreno.</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">5. 🗺️ Áreas (4 Métodos)</h3>
+            <p><strong>¿Para qué sirve?</strong> Para calcular los metros cuadrados de cualquier terreno, sin importar cómo lo mediste.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Gauss (Coordenadas):</strong> Si tienes un solar de 4 esquinas, agrega cada una en orden (ej. V1: 0,0 ➔ Agregar. V2: 10,0 ➔ Agregar...). Dale calcular y hará los productos cruzados para darte el área.</li>
+                <li><strong>DDM (Proyecciones):</strong> Si ya tienes el cuadro de proyecciones compensadas (ΔN y ΔE) de una poligonal, ingrésalas línea por línea. El sistema calculará la Doble Distancia Meridiana y el área final.</li>
+                <li><strong>Trapecio (Ríos/Caminos curvos):</strong> Imagina que el lindero de la finca bordea un río. Escribes a qué distancia tomaste medidas (Separación 'd', ej. cada 10m) y vas añadiendo la altura (h) de cada medida hasta el río. El sistema calculará el área de esa curva.</li>
+                <li><strong>Herón (Triángulos):</strong> Si mediste un lote triangular con cinta (ej. Lado A=30m, Lado B=40m, Lado C=50m), los escribes, calculas, y te dará los metros cuadrados.</li>
+            </ul>
+        </div>
+
+        <div style="background: var(--notebook-bg); padding: 15px; border-radius: 10px; border-left: 5px solid #f59e0b; margin-bottom: 20px; font-size: 0.9rem;">
+            <strong>💡 Tip de oro:</strong> Después de hacer cualquier cálculo en las ventanas, busca el botón gris que dice <strong>"▼ Mostrar Hoja de Cálculo..."</strong>. Ahí verás las fórmulas matemáticas desglosadas paso a paso, ideal para adjuntar en tus reportes universitarios.
+        </div>
+
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:25px;" class="no-print">
-            <span style="font-size:0.8rem; font-weight:bold; color:var(--accent);">Autor: Cristopher Cedeño © 2026 | UASD</span>
+            <span style="font-size:0.85rem; font-weight:bold; color:var(--text-secondary);">Autor: Cristopher Cedeño © 2026</span>
             <div style="display:flex; gap:10px;">
                 <button class="action-btn danger-btn" onclick="document.getElementById('helpModal').style.display='none'">Cerrar Guía</button>
-                <button class="action-btn success-btn" onclick="imprimirGuiaPDF()">📥 Exportar Manual a PDF</button>
+                <button class="action-btn success-btn" onclick="imprimirGuiaPDF()">📥 Descargar Guía PDF</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="buzonModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-content" style="max-width: 450px; text-align: center;">
+        <h2 style="color: #8b5cf6; margin-bottom: 10px;">✉️ Buzón de Sugerencias</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5;">¿Tienes alguna idea para mejorar TopoPlani, necesitas una función nueva, o encontraste algún error? ¡Tu opinión ayuda a que esta herramienta sea mejor para todos los estudiantes!</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <button class="action-btn" style="background:#0f172a; width: 100%; font-size: 1rem; padding: 12px;" onclick="window.open('mailto:criscdeno@hotmail.com?subject=Sugerencia TopoPlani', '_blank')">📧 Enviar por Correo</button>
+            <button class="action-btn" style="background:#25d366; width: 100%; font-size: 1rem; padding: 12px;" onclick="window.open('https://wa.me/18492200102?text=Hola Cristopher, tengo una sugerencia para la página de TopoPlani: ', '_blank')">💬 Enviar por WhatsApp</button>
+            <button class="action-btn danger-btn" style="width: 100%; margin-top:10px;" onclick="document.getElementById('buzonModal').style.display='none'">Cancelar</button>
         </div>
     </div>
 </div>
@@ -540,24 +612,17 @@
     <div style="background:#0f172a; color:#94a3b8; font-size:0.7rem; text-align:center; padding-bottom:5px;" id="calcModeText">Modo: GRADOS (DEG)</div>
 </div>
 
-
 <script>
     // === SEGURIDAD Y PROTECCIÓN DE CÓDIGO ===
-    document.addEventListener('contextmenu', event => event.preventDefault()); // Bloquea clic derecho
+    document.addEventListener('contextmenu', event => event.preventDefault()); 
     document.addEventListener('keydown', function (event) {
-        if (event.keyCode === 123) { // F12
-            event.preventDefault();
-        }
-        if (event.ctrlKey && event.shiftKey && (event.keyCode === 73 || event.keyCode === 74 || event.keyCode === 67)) { // Ctrl+Shift+I, J, C
-            event.preventDefault();
-        }
-        if (event.ctrlKey && (event.keyCode === 85)) { // Ctrl+U (Ver código fuente)
-            event.preventDefault();
-        }
+        if (event.keyCode === 123) { event.preventDefault(); }
+        if (event.ctrlKey && event.shiftKey && (event.keyCode === 73 || event.keyCode === 74 || event.keyCode === 67)) { event.preventDefault(); }
+        if (event.ctrlKey && (event.keyCode === 85)) { event.preventDefault(); }
     });
 
     // -----------------------------------------------------
-    // VARIABLES GLOBALES (Declaradas 1 sola vez)
+    // VARIABLES GLOBALES
     // -----------------------------------------------------
     let pStates = {};
     let currentTabId = 'modAngulos';
@@ -570,7 +635,6 @@
     let ptsDDM = [];
     const factorToMeters = { "mm": 0.001, "cm": 0.01, "m": 1, "km": 1000 };
 
-    // Variables Calculadora y Drag
     let isDragging = false; 
     let startX, startY, initialLeft, initialTop;
     let isRad = false; 
@@ -590,6 +654,17 @@
     // -----------------------------------------------------
     // FUNCIONES DE CONTROL DE PANTALLA Y UX
     // -----------------------------------------------------
+    function renderMemoria(id, texto) {
+        let html = texto
+            .replace(/==================================================/g, '<hr style="border: 0; height: 2px; background: linear-gradient(to right, transparent, #0f766e, transparent); margin: 15px 0;">')
+            .replace(/(HOJA DE CÁLCULO:.*)/g, '<span style="color: #0f766e; font-size: 1.1rem; font-weight: 900;">$1</span>')
+            .replace(/(PASO \d+:)/g, '<span style="color: #0284c7; font-weight: bold;">$1</span>')
+            .replace(/(RESULTADO DE GABINETE:.*)/g, '<span style="color: #2b7a4b; font-weight: bold; font-size: 1.05rem;">$1</span>')
+            .replace(/(DATO BASE ENTRADA:|DATOS DE ENTRADA:|COORDENADAS DE CONTROL ENTRADA:)/g, '<span style="color: #f59e0b; font-weight: bold;">$1</span>')
+            .replace(/\n/g, '<br>');
+        document.getElementById(id).innerHTML = html;
+    }
+
     function hidePanel(id) {
         let panel = document.getElementById(id);
         if(panel) panel.style.display = 'none';
@@ -664,17 +739,39 @@
     }
     
     function limpiarInputs(id) { document.querySelectorAll(`#${id} input`).forEach(i => i.value = ''); }
-
     function abrirModalAyuda() { document.getElementById('helpModal').style.display = 'flex'; }
 
     // -----------------------------------------------------
-    // EVENTO: AUTO-COMPLETAR DECIMALES
+    // EVENTO: AUTO-COMPLETAR DECIMALES Y PROGRESIVAS
     // -----------------------------------------------------
+    function parseProgresiva(str) {
+        if(!str) return NaN;
+        str = String(str).trim();
+        if(str.includes('+')) {
+            let parts = str.split('+');
+            let kmStr = parts[0];
+            let km = parseFloat(kmStr) || 0;
+            let m = parseFloat(parts[1]) || 0;
+            let isNegative = kmStr.startsWith('-');
+            return (Math.abs(km) * 1000 + m) * (isNegative ? -1 : 1);
+        }
+        return parseFloat(str);
+    }
+
     document.addEventListener("focusout", function(e) {
         if(e.target && e.target.type === 'number' && e.target.value !== "") {
             let id = e.target.id || "";
             let ignore = id.includes('a1_g') || id.includes('a1_m') || id.includes('a2_g') || id.includes('a2_m') || id.includes('escDenominador');
             if(!ignore) { e.target.value = parseFloat(e.target.value).toFixed(3); }
+        }
+        
+        if(e.target && e.target.classList.contains('input-prog') && e.target.value !== "") {
+            let v = parseProgresiva(e.target.value);
+            if(!isNaN(v)) {
+                let km = Math.floor(Math.abs(v) / 1000);
+                let m = Math.abs(v) % 1000;
+                e.target.value = `${v < 0 ? '-' : ''}${km}+${m.toFixed(3).padStart(7, '0')}`;
+            }
         }
     });
 
@@ -684,14 +781,14 @@
     function imprimirGuiaPDF() { 
         const modalToPrint = document.getElementById('printArea').innerHTML; 
         const win = window.open('', '_blank'); 
-        win.document.write(`<html><head><title>Guia TopoPlani - PDF</title><style>@page { size: A4; margin: 20mm; } body { font-family: sans-serif; line-height: 1.5; color:#333; } h2 { color: #0f766e; text-align: center; border-bottom: 2px solid #0f766e; padding-bottom:10px; } table { width: 100%; border-collapse: collapse; margin-top: 15px;} th, td { border: 1px solid #cbd5e1; padding: 12px;} th { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; } .no-print { display: none !important; }</style></head><body style="background:white; color:black;">${modalToPrint}<script>window.onload=function(){window.print();setTimeout(function(){window.close();},1500);}<\/script></body></html>`); 
+        win.document.write(`<html><head><title>Guia TopoPlani - PDF</title><style>:root { --accent: #0f766e; --success: #2b7a4b; --border: #dce3ec; --text-secondary: #475569; --notebook-bg: #fefce8; } @page { size: A4; margin: 20mm; } body { font-family: sans-serif; line-height: 1.5; color:#333; } h2 { color: var(--accent); text-align: center; border-bottom: 2px solid var(--accent); padding-bottom:10px; } table { width: 100%; border-collapse: collapse; margin-top: 15px;} th, td { border: 1px solid var(--border); padding: 12px;} th { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; } .no-print { display: none !important; }</style></head><body style="background:white; color:black;">${modalToPrint}<script>window.onload=function(){window.print();setTimeout(function(){window.close();},1500);}<\/script></body></html>`); 
         win.document.close(); 
     }
 
     function imprimirHojaCalculo(elementId) {
-        const sheetContent = document.getElementById(elementId).innerText;
+        const sheetContent = document.getElementById(elementId).innerHTML;
         const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Hoja de Cálculo Analítica</title><style>@page { size: letter; margin: 25mm; } body { font-family: 'Courier New', Courier, monospace; font-size: 11pt; line-height: 1.5; color:#000; padding: 0; margin: 0; background: white;} pre { white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', Courier, monospace; } .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }</style></head><body><div class="header"><h2>UNIVERSIDAD - GABINETE DE TOPOGRAFÍA I</h2><p>Desarrollado por Cristopher Cedeño | TopoPlani v2.0</p></div><pre>${sheetContent}</pre><script>window.onload=function(){window.print();setTimeout(function(){window.close();},1500);}<\/script></body></html>`);
+        win.document.write(`<html><head><title>Hoja de Cálculo Analítica</title><style>:root { --accent: #0f766e; --success: #2b7a4b; } @page { size: letter; margin: 25mm; } body { font-family: 'Courier New', Courier, monospace; font-size: 11pt; line-height: 1.5; color:#000; padding: 0; margin: 0; background: white;} .calc-sheet { white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', Courier, monospace; background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #cbd5e1; } hr { border: 0; height: 2px; background: #0f766e; margin: 15px 0; } .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }</style></head><body><div class="header"><h2>UNIVERSIDAD - GABINETE DE TOPOGRAFÍA I</h2><p>Desarrollado por Cristopher Cedeño | TopoPlani v2.0</p></div><div class="calc-sheet">${sheetContent}</div><script>window.onload=function(){window.print();setTimeout(function(){window.close();},1500);}<\/script></body></html>`);
         win.document.close();
     }
 
@@ -805,7 +902,6 @@
     function calcEqual() {
         try {
             let expr = disp.value;
-            // Parse GMS to decimal for evaluation
             expr = expr.replace(/(\d+(?:\.\d+)?)°(\d+(?:\.\d+)?)?'?(\d+(?:\.\d+)?)?"?/g, function(m, g, min, s) {
                 let deg = parseFloat(g) || 0; let mn = parseFloat(min) || 0; let sc = parseFloat(s) || 0;
                 return "(" + (deg + (mn / 60) + (sc / 3600)).toString() + ")";
@@ -859,17 +955,17 @@
         if (origenActual === 'deg' && dInp.value !== '') {
             let d = parseFloat(dInp.value); let grad = d * (400 / 360); let rad = d * (Math.PI / 180);
             gInp.value = grad.toFixed(3); rInp.value = rad.toFixed(3);
-            mem += `DATO BASE ENTRADA: ${d.toFixed(3)}° Sexagesimales\n\nDESGLOSE DE FORMULACIÓN ACADÉMICA:\n  1. Conversión a Gradianes Centesimales (g):\n     Formula: Nᵍ = N° × (400 / 360)\n     Sustitución: ${d.toFixed(3)}° × 1.111111 = ${grad.toFixed(3)}ᵍ\n\n  2. Conversión a Radianes (rad):\n     Formula: Rad = N° × (π / 180)\n     Sustitución: ${d.toFixed(3)}° × (3.141592 / 180) = ${rad.toFixed(3)} rad`;
+            mem += `DATO BASE ENTRADA: ${d.toFixed(3)}° Sexagesimales\n\nPASO 1: Conversión a Gradianes Centesimales (g):\n  Formula: Nᵍ = N° × (400 / 360)\n  Sustitución: ${d.toFixed(3)}° × 1.111111 = ${grad.toFixed(3)}ᵍ\n\nPASO 2: Conversión a Radianes (rad):\n  Formula: Rad = N° × (π / 180)\n  Sustitución: ${d.toFixed(3)}° × (3.141592 / 180) = ${rad.toFixed(3)} rad`;
         } else if (origenActual === 'grad' && gInp.value !== '') {
             let g = parseFloat(gInp.value); let deg = g * (360 / 400); let rad = g * (Math.PI / 200);
             dInp.value = deg.toFixed(3); rInp.value = rad.toFixed(3);
-            mem += `DATO BASE ENTRADA: ${g.toFixed(3)}ᵍ Centesimales\n\nDESGLOSE DE FORMULACIÓN ACADÉMICA:\n  1. Conversión a Grados Sexagesimales (°):\n     Formula: N° = Nᵍ × (360 / 400)\n     Sustitución: ${g.toFixed(3)}ᵍ × 0.900000 = ${deg.toFixed(3)}°\n\n  2. Conversión a Radianes (rad):\n     Formula: Rad = Nᵍ × (π / 200)\n     Sustitución: ${g.toFixed(3)}ᵍ × (3.141592 / 200) = ${rad.toFixed(3)} rad`;
+            mem += `DATO BASE ENTRADA: ${g.toFixed(3)}ᵍ Centesimales\n\nPASO 1: Conversión a Grados Sexagesimales (°):\n  Formula: N° = Nᵍ × (360 / 400)\n  Sustitución: ${g.toFixed(3)}ᵍ × 0.900000 = ${deg.toFixed(3)}°\n\nPASO 2: Conversión a Radianes (rad):\n  Formula: Rad = Nᵍ × (π / 200)\n  Sustitución: ${g.toFixed(3)}ᵍ × (3.141592 / 200) = ${rad.toFixed(3)} rad`;
         } else if (origenActual === 'rad' && rInp.value !== '') {
             let r = parseFloat(rInp.value); let deg = r * (180 / Math.PI); let grad = r * (200 / Math.PI);
             dInp.value = deg.toFixed(3); gInp.value = grad.toFixed(3);
-            mem += `DATO BASE ENTRADA: ${r.toFixed(3)} rad Radianes\n\nDESGLOSE DE FORMULACIÓN ACADÉMICA:\n  1. Conversión a Grados Sexagesimales (°):\n     Formula: N° = Rad × (180 / π)\n     Sustitución: ${r.toFixed(3)} rad × 57.29578 = ${deg.toFixed(3)}°\n\n  2. Conversión a Gradianes Centesimales (g):\n     Formula: Nᵍ = Rad × (200 / π)\n     Sustitución: ${r.toFixed(3)} rad × 63.66197 = ${grad.toFixed(3)}ᵍ`;
+            mem += `DATO BASE ENTRADA: ${r.toFixed(3)} rad Radianes\n\nPASO 1: Conversión a Grados Sexagesimales (°):\n  Formula: N° = Rad × (180 / π)\n  Sustitución: ${r.toFixed(3)} rad × 57.29578 = ${deg.toFixed(3)}°\n\nPASO 2: Conversión a Gradianes Centesimales (g):\n  Formula: Nᵍ = Rad × (200 / π)\n  Sustitución: ${r.toFixed(3)} rad × 63.66197 = ${grad.toFixed(3)}ᵍ`;
         }
-        document.getElementById('calcSheetContainerAngConv').style.display = 'block'; document.getElementById('conv_paso1').innerText = mem;
+        document.getElementById('calcSheetContainerAngConv').style.display = 'block'; renderMemoria('conv_paso1', mem);
     }
 
     function operarGMS(op) {
@@ -894,7 +990,7 @@
             rG = g1 - g2; mem += `Resta Grados: ${g1}° - ${g2}° = ${rG}°\n`;
         }
         document.getElementById('resGMS').style.display = 'flex'; document.getElementById('resGMS_text').innerText = `${rG}° ${rM}' ${rS.toFixed(2)}"`;
-        document.getElementById('calcSheetContainerAngGMS').style.display = 'block'; document.getElementById('gms_paso1').innerText = mem + `\nRESULTADO DE GABINETE: ${rG}° ${rM}' ${rS.toFixed(2)}"`;
+        document.getElementById('calcSheetContainerAngGMS').style.display = 'block'; renderMemoria('gms_paso1', mem + `\nRESULTADO DE GABINETE: ${rG}° ${rM}' ${rS.toFixed(2)}"`);
     }
 
     function limpiarGMS() {
@@ -916,14 +1012,14 @@
         if (!isNaN(pV) && isNaN(tV)) {
             let pM = pV * factorToMeters[pU]; let tM = pM * E; tV = tM / factorToMeters[tU];
             document.getElementById('escTerrenoVal').value = tV.toFixed(3);
-            mem += `RESOLVIENDO: DISTANCIA REAL EN TERRENO (Incógnita)\n\nPaso 1: Homologar distancia de plano a metros base:\n  ${pV} ${pU} × ${factorToMeters[pU]} = ${pM.toFixed(4)} metros\n\nPaso 2: Multiplicar por el factor de escala E (Amplificación):\n  ${pM.toFixed(4)} m × ${E} = ${tM.toFixed(3)} metros reales\n\nPaso 3: Convertir a la unidad de destino del terreno (${tU}):\n  ${tM.toFixed(3)} / ${factorToMeters[tU]} = ${tV.toFixed(3)} ${tU}`;
+            mem += `RESOLVIENDO: DISTANCIA REAL EN TERRENO (Incógnita)\n\nPASO 1: Homologar distancia de plano a metros base:\n  ${pV} ${pU} × ${factorToMeters[pU]} = ${pM.toFixed(4)} metros\n\nPASO 2: Multiplicar por el factor de escala E (Amplificación):\n  ${pM.toFixed(4)} m × ${E} = ${tM.toFixed(3)} metros reales\n\nPASO 3: Convertir a la unidad de destino del terreno (${tU}):\n  ${tM.toFixed(3)} / ${factorToMeters[tU]} = ${tV.toFixed(3)} ${tU}`;
         } else if (isNaN(pV) && !isNaN(tV)) {
             let tM = tV * factorToMeters[tU]; let pM = tM / E; pV = pM / factorToMeters[pU];
             document.getElementById('escPlanoVal').value = pV.toFixed(3);
-            mem += `RESOLVIENDO: DISTANCIA GRÁFICA EN PLANO (Incógnita)\n\nPaso 1: Homologar distancia de campo real a metros base:\n  ${tV} ${tU} × ${factorToMeters[tU]} = ${tM.toFixed(3)} metros\n\nPaso 2: Reducir por el factor de escala E (División proporcional):\n  ${tM.toFixed(3)} m / ${E} = ${pM.toFixed(4)} metros gráficos\n\nPaso 3: Convertir a la unidad de salida en papel (${pU}):\n  ${pM.toFixed(4)} / ${factorToMeters[pU]} = ${pV.toFixed(3)} ${pU}`;
+            mem += `RESOLVIENDO: DISTANCIA GRÁFICA EN PLANO (Incógnita)\n\nPASO 1: Homologar distancia de campo real a metros base:\n  ${tV} ${tU} × ${factorToMeters[tU]} = ${tM.toFixed(3)} metros\n\nPASO 2: Reducir por el factor de escala E (División proporcional):\n  ${tM.toFixed(3)} m / ${E} = ${pM.toFixed(4)} metros gráficos\n\nPASO 3: Convertir a la unidad de salida en papel (${pU}):\n  ${pM.toFixed(4)} / ${factorToMeters[pU]} = ${pV.toFixed(3)} ${pU}`;
         } else { alert("⚠️ Deje en blanco exactamente un campo (Plano o Terreno) para resolverlo."); return; }
 
-        document.getElementById('calcSheetContainerEsc').style.display = 'block'; document.getElementById('esc_paso1').innerText = mem;
+        document.getElementById('calcSheetContainerEsc').style.display = 'block'; renderMemoria('esc_paso1', mem);
         
         const cv = document.getElementById('canvasEscala'); cv.style.display = 'block'; const ctx = cv.getContext('2d');
         ctx.clearRect(0,0,cv.width,cv.height);
@@ -943,10 +1039,122 @@
         const cv = document.getElementById('canvasOrientacion');
         const ctx = cv.getContext('2d');
         ctx.clearRect(0, 0, cv.width, cv.height);
-        // Ejes cartesianos de referencia temporales
-        ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(cv.width/2, 0); ctx.lineTo(cv.width/2, cv.height); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, cv.height/2); ctx.lineTo(cv.width, cv.height/2); ctx.stroke();
+        
+        let cx = cv.width / 2; let cy = cv.height / 2; let radius = 180;
+        
+        // CORRECCIÓN BUG: Dibujar los Cuadrantes Topográficos de Fondo
+        ctx.fillStyle="rgba(148,163,184,0.15)"; 
+        ctx.font="bold 60px sans-serif"; 
+        ctx.textAlign="center"; 
+        ctx.textBaseline="middle";
+        ctx.fillText("I (NE)", cx+120, cy-120); 
+        ctx.fillText("II (SE)", cx+120, cy+120); 
+        ctx.fillText("III (SW)", cx-120, cy+120); 
+        ctx.fillText("IV (NW)", cx-120, cy-120);
+        
+        // Dibujar Ejes
+        ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5; ctx.setLineDash([5, 5]);
+        ctx.beginPath(); ctx.moveTo(cx, 20); ctx.lineTo(cx, cv.height - 20); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(cv.width - 20, cy); ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Letras Cardinales (Mejoradas con los grados exactos)
+        ctx.fillStyle = "#1e293b"; ctx.font = "bold 16px sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+        ctx.fillText("N (0°)", cx, 15); 
+        ctx.fillText("S (180°)", cx, cv.height - 15);
+        ctx.fillText("E (90°)", cv.width - 35, cy); 
+        ctx.fillText("W (270°)", 35, cy);
+        
+        let azToCanvasRad = (az) => (az - 90) * Math.PI / 180;
+        ctx.lineWidth = 3;
+
+        if (obj.tipo === 'azimut') {
+            let radDir=azToCanvasRad(obj.az); let vx=cx+radius*Math.cos(radDir); let vy=cy+radius*Math.sin(radDir);
+            ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(vx,vy); ctx.strokeStyle="#0f766e"; ctx.lineWidth=4; ctx.stroke(); 
+            ctx.beginPath(); ctx.arc(vx,vy,6,0,Math.PI*2); ctx.fillStyle="#0f766e"; ctx.fill();
+            
+            // Arco Azimut
+            ctx.beginPath(); ctx.arc(cx,cy,40,azToCanvasRad(0),radDir,false); ctx.strokeStyle="#f59e0b"; ctx.lineWidth=3; ctx.stroke();
+            
+            // Línea Inverso (Contra-Azimut)
+            let radInv=azToCanvasRad(obj.inv); let ix=cx+radius*Math.cos(radInv); let iy=cy+radius*Math.sin(radInv);
+            ctx.setLineDash([8,6]); ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(ix,iy); ctx.strokeStyle="#ef4444"; ctx.lineWidth=3; ctx.stroke(); ctx.setLineDash([]);
+        } 
+        else if (obj.tipo === 'angulo') {
+            let r1=azToCanvasRad(obj.az1), x1=cx+radius*Math.cos(r1), y1=cy+radius*Math.sin(r1);
+            let r2=azToCanvasRad(obj.az2), x2=cx+radius*Math.cos(r2), y2=cy+radius*Math.sin(r2);
+            ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x1,y1); ctx.strokeStyle="#3b82f6"; ctx.lineWidth=4; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x2,y2); ctx.strokeStyle="#ef4444"; ctx.lineWidth=4; ctx.stroke();
+            let isCCW = obj.az2 - obj.az1 > 180 || (obj.az1 - obj.az2 > 0 && obj.az1 - obj.az2 < 180);
+            ctx.beginPath(); ctx.arc(cx, cy, 50, r1, r2, isCCW); ctx.strokeStyle = "#f59e0b"; ctx.stroke();
+        } 
+        else if (obj.tipo === 'deflexion') {
+            let azL=normalizarAzimut(obj.azA+180), radL=azToCanvasRad(azL), xL=cx+radius*Math.cos(radL), yL=cy+radius*Math.sin(radL);
+            ctx.beginPath(); ctx.moveTo(xL,yL); ctx.lineTo(cx,cy); ctx.strokeStyle="#64748b"; ctx.lineWidth=6; ctx.stroke();
+            let radP=azToCanvasRad(obj.azA), xP=cx+radius*Math.cos(radP), yP=cy+radius*Math.sin(radP);
+            ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(xP,yP); ctx.strokeStyle="#94a3b8"; ctx.setLineDash([8,6]); ctx.stroke(); ctx.setLineDash([]);
+            let radN=azToCanvasRad(obj.azS), xN=cx+radius*Math.cos(radN), yN=cy+radius*Math.sin(radN);
+            ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(xN,yN); ctx.strokeStyle="#0f766e"; ctx.lineWidth=5; ctx.stroke();
+            
+            // Arco Deflexión
+            let sRad=azToCanvasRad(obj.azA), eRad=azToCanvasRad(obj.azS);
+            let ccw = (obj.giro === 'I');
+            ctx.beginPath(); ctx.arc(cx,cy,100,sRad,eRad,ccw); ctx.strokeStyle = obj.giro==='D'?'#16a34a':'#ef4444'; ctx.lineWidth=3; ctx.stroke();
+        }
+    }
+
+    function calcDesdeAzimut() {
+        let az = parseFloat(document.getElementById('oriAziInput').value); if(isNaN(az)){ alert("Azimut inválido"); return; } az = normalizarAzimut(az);
+        let rumbo = "", inv = 0; let azStr = decToGMSStr(az);
+        let hoja = `==================================================\n   HOJA DE CÁLCULO: CONVERSIÓN DE ORIENTACIÓN\n==================================================\n\nDATOS DE ENTRADA: Az = ${azStr}\n\n`;
+        if(az <= 90) { rumbo = `N ${decToGMSStr(az)} E`; inv = az + 180; hoja += `PASO 1: Cuadrante I (NE)\n  Fórmula: Rumbo = Azimut\n  Rb = ${rumbo}\n\nPASO 2: Inverso (Contra-Azimut):\n  Como es < 180°, sumamos 180°:\n  Inv = ${azStr} + 180° = ${decToGMSStr(inv)}\n`; } 
+        else if(az <= 180) { rumbo = `S ${decToGMSStr(180-az)} E`; inv = az + 180; hoja += `PASO 1: Cuadrante II (SE)\n  Fórmula: Rumbo = 180° - Azimut\n  Rb = 180° - ${azStr} = ${rumbo}\n\nPASO 2: Inverso (Contra-Azimut):\n  Como es < 180°, sumamos 180°:\n  Inv = ${azStr} + 180° = ${decToGMSStr(inv)}\n`; } 
+        else if(az <= 270) { rumbo = `S ${decToGMSStr(az-180)} W`; inv = az - 180; hoja += `PASO 1: Cuadrante III (SW)\n  Fórmula: Rumbo = Azimut - 180°\n  Rb = ${azStr} - 180° = ${rumbo}\n\nPASO 2: Inverso (Contra-Azimut):\n  Como es > 180°, restamos 180°:\n  Inv = ${azStr} - 180° = ${decToGMSStr(inv)}\n`; } 
+        else { rumbo = `N ${decToGMSStr(360-az)} W`; inv = az - 180; hoja += `PASO 1: Cuadrante IV (NW)\n  Fórmula: Rumbo = 360° - Azimut\n  Rb = 360° - ${azStr} = ${rumbo}\n\nPASO 2: Inverso (Contra-Azimut):\n  Como es > 180°, restamos 180°:\n  Inv = ${azStr} - 180° = ${decToGMSStr(inv)}\n`; }
+
+        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Rumbo: <span style="color:var(--accent)">${rumbo}</span> | Inverso: <span style="color:#ef4444">${inv.toFixed(3)}°</span>`;
+        document.getElementById('calcSheetContainerOri').style.display='block'; renderMemoria('ori_memoria', hoja + `\nRESULTADO DE GABINETE: Análisis de cuadrante finalizado correctamente.`);
+        dibujarSimuladorOrientacion({tipo: 'azimut', az: az, inv: inv});
+    }
+
+    function calcDesdeRumbo() {
+        let ns = document.getElementById('oriRumNS').value; let ew = document.getElementById('oriRumEW').value; let rA = parseFloat(document.getElementById('oriRumAng').value);
+        if(isNaN(rA) || rA < 0 || rA > 90) { alert("⚠️ El rumbo debe estar acotado entre 0 y 90°."); return; }
+        let az = 0, inv = 0; let rAStr = decToGMSStr(rA);
+        let hoja = `==================================================\n   HOJA DE CÁLCULO: DEDUCCIÓN RUMBO A AZIMUT\n==================================================\n\nDATOS DE ENTRADA: ${ns} ${rAStr} ${ew}\n\n`;
+        if(ns==="N" && ew==="E") { az=rA; hoja+=`PASO 1: Cuadrante I (NE)\n  Fórmula: Azimut = Rumbo\n  Azimut = ${az.toFixed(3)}°\n`; }
+        else if(ns==="S" && ew==="E") { az=180-rA; hoja+=`PASO 1: Cuadrante II (SE)\n  Fórmula: Azimut = 180° - Rumbo\n  Azimut = 180° - ${rAStr} = ${az.toFixed(3)}°\n`; }
+        else if(ns==="S" && ew==="W") { az=180+rA; hoja+=`PASO 1: Cuadrante III (SW)\n  Fórmula: Azimut = 180° + Rumbo\n  Azimut = 180° + ${rAStr} = ${az.toFixed(3)}°\n`; }
+        else if(ns==="N" && ew==="W") { az=360-rA; hoja+=`PASO 1: Cuadrante IV (NW)\n  Fórmula: Azimut = 360° - Rumbo\n  Azimut = 360° - ${rAStr} = ${az.toFixed(3)}°\n`; }
+        inv = normalizarAzimut(az+180);
+        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Azimut Deducción: <span style="color:var(--accent)">${decToGMSStr(az)}</span>`;
+        document.getElementById('calcSheetContainerOri').style.display='block'; renderMemoria('ori_memoria', hoja + `\nRESULTADO DE GABINETE: Deducción azimutal finalizada.`);
+        dibujarSimuladorOrientacion({tipo: 'azimut', az: az, inv: inv});
+    }
+
+    function calcAnguloLineas() {
+        let az1 = parseFloat(document.getElementById('angL1').value); let az2 = parseFloat(document.getElementById('angL2').value);
+        if(isNaN(az1) || isNaN(az2)) { alert("⚠️ Ingrese ambos azimuts de las visuales."); return; }
+        az1 = normalizarAzimut(az1); az2 = normalizarAzimut(az2);
+        let dif = Math.abs(az1 - az2); let angInt = dif > 180 ? 360 - dif : dif;
+        let hoja = `==================================================\n    HOJA DE CÁLCULO: ÁNGULO INTERIOR DE ESTACIÓN\n==================================================\n\nDATOS DE ENTRADA:\n  Visual L1 = ${decToGMSStr(az1)}\n  Visual L2 = ${decToGMSStr(az2)}\n\nPASO 1: Diferencia Absoluta Inicial\n  |Az1 - Az2| = ${decToGMSStr(dif)}\n\n`;
+        if (dif > 180) { hoja += `PASO 2: Evaluación Complementaria\n  Al ser mayor a 180°, corresponde al ángulo exterior. Restamos de 360°:\n  Ángulo Interior = 360° - ${decToGMSStr(dif)} = ${decToGMSStr(angInt)}`; }
+        else { hoja += `PASO 2: Evaluación\n  Al ser menor a 180°, es directamente el ángulo interior de vértice.`; }
+        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Ángulo Interior: <span style="color:var(--accent)">${decToGMSStr(angInt)}</span>`;
+        document.getElementById('calcSheetContainerOri').style.display='block'; renderMemoria('ori_memoria', hoja + `\n\nRESULTADO DE GABINETE: Ángulo Calculado = ${decToGMSStr(angInt)}`);
+        dibujarSimuladorOrientacion({tipo: 'angulo', az1: az1, az2: az2, angInt: angInt});
+    }
+
+    function calcDeflexion() {
+        let azA = parseFloat(document.getElementById('defAnt').value); let azS = parseFloat(document.getElementById('defSig').value);
+        if(isNaN(azA) || isNaN(azS)) { alert("⚠️ Ingrese las direcciones de arribo y salida."); return; }
+        azA = normalizarAzimut(azA); azS = normalizarAzimut(azS);
+        let def = azS - azA; if (def > 180) def -= 360; else if (def < -180) def += 360;
+        let giro = def >= 0 ? "Derecha (D)" : "Izquierda (I)"; let defAbs = Math.abs(def);
+        let hoja = `==================================================\n       HOJA DE CÁLCULO: ÁNGULO DE DEFLEXIÓN DE EJE\n==================================================\n\nDATOS DE ENTRADA:\n  Azimut Anterior Llegada = ${decToGMSStr(azA)}\n  Azimut Siguiente Salida = ${decToGMSStr(azS)}\n\nPASO 1: Delta Aritmético\n  Az_Sig - Az_Ant = ${decToGMSStr(azS - azA)}\n\nPASO 2: Sentido de Giro Resultante\n  ${decToGMSStr(defAbs)} hacia la ${giro}`;
+        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Deflexión: <span style="color:${def>=0?'var(--success)':'var(--danger)'}">${decToGMSStr(defAbs)} ${giro}</span>`;
+        document.getElementById('calcSheetContainerOri').style.display='block'; renderMemoria('ori_memoria', hoja + `\n\nRESULTADO DE GABINETE: Quiebre de vía hacia la ${giro}.`);
+        dibujarSimuladorOrientacion({tipo: 'deflexion', azA: azA, azS: azS, defAbs: defAbs, giro: giro.charAt(0)});
     }
 
     function limpiarOriLocal(subId) {
@@ -971,7 +1179,7 @@
         let azBase = parseFloat(document.getElementById('propAzBase').value);
         if(isNaN(azBase)) { alert("⚠️ Ingrese el azimut de arranque."); return; }
         let inputs = document.querySelectorAll('.prop-ang');
-        let mem = `==================================================\n   HOJA DE CÁLCULO: PROPAGACIÓN DE AZIMUTS\n==================================================\n\nAzimut Base = ${azBase.toFixed(3)}°\n\n`;
+        let mem = `==================================================\n   HOJA DE CÁLCULO: PROPAGACIÓN DE AZIMUTS\n==================================================\n\nDATO BASE ENTRADA: Azimut Arranque = ${azBase.toFixed(3)}°\n\n`;
         let currAz = azBase;
         inputs.forEach((inp, idx) => {
             let ang = parseFloat(inp.value);
@@ -983,61 +1191,8 @@
         document.getElementById('oriResumen').style.display = 'block';
         document.getElementById('oriResumen').innerHTML = `Azimut Final: <span style="color:var(--accent)">${currAz.toFixed(3)}°</span>`;
         document.getElementById('calcSheetContainerOri').style.display = 'block';
-        document.getElementById('ori_memoria').innerText = mem;
-    }
-
-    function calcDesdeAzimut() {
-        let az = parseFloat(document.getElementById('oriAziInput').value); if(isNaN(az)){ alert("Azimut inválido"); return; } az = normalizarAzimut(az);
-        let rumbo = "", inv = 0; let azStr = decToGMSStr(az);
-        let hoja = `==================================================\n   HOJA DE CÁLCULO: CONVERSIÓN DE ORIENTACIÓN\n==================================================\n\nDATOS DE ENTRADA: Az = ${azStr}\n\n`;
-        if(az <= 90) { rumbo = `N ${decToGMSStr(az)} E`; inv = az + 180; hoja += `ANÁLISIS DE CUADRANTE: Cuadrante I (NE)\nFórmula: Rumbo = Azimut\nRb = ${rumbo}\n\nInverso (Contra-Azimut): Como es < 180°, sumamos 180°:\nInv = ${azStr} + 180° = ${decToGMSStr(inv)}\n`; } 
-        else if(az <= 180) { rumbo = `S ${decToGMSStr(180-az)} E`; inv = az + 180; hoja += `ANÁLISIS DE CUADRANTE: Cuadrante II (SE)\nFórmula: Rumbo = 180° - Azimut\nRb = 180° - ${azStr} = ${rumbo}\n\nInverso (Contra-Azimut): Como es < 180°, sumamos 180°:\nInv = ${azStr} + 180° = ${decToGMSStr(inv)}\n`; } 
-        else if(az <= 270) { rumbo = `S ${decToGMSStr(az-180)} W`; inv = az - 180; hoja += `ANÁLISIS DE CUADRANTE: Cuadrante III (SW)\nFórmula: Rumbo = Azimut - 180°\nRb = ${azStr} - 180° = ${rumbo}\n\nInverso (Contra-Azimut): Como es > 180°, restamos 180°:\nInv = ${azStr} - 180° = ${decToGMSStr(inv)}\n`; } 
-        else { rumbo = `N ${decToGMSStr(360-az)} W`; inv = az - 180; hoja += `ANÁLISIS DE CUADRANTE: Cuadrante IV (NW)\nFórmula: Rumbo = 360° - Azimut\nRb = 360° - ${azStr} = ${rumbo}\n\nInverso (Contra-Azimut): Como es > 180°, restamos 180°:\nInv = ${azStr} - 180° = ${decToGMSStr(inv)}\n`; }
-
-        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Rumbo: <span style="color:var(--accent)">${rumbo}</span> | Inverso: <span style="color:#ef4444">${inv.toFixed(3)}°</span>`;
-        document.getElementById('calcSheetContainerOri').style.display='block'; document.getElementById('ori_memoria').innerText=hoja;
-        dibujarSimuladorOrientacion({tipo: 'azimut', az: az, inv: inv});
-    }
-
-    function calcDesdeRumbo() {
-        let ns = document.getElementById('oriRumNS').value; let ew = document.getElementById('oriRumEW').value; let rA = parseFloat(document.getElementById('oriRumAng').value);
-        if(isNaN(rA) || rA < 0 || rA > 90) { alert("⚠️ El rumbo debe estar acotado entre 0 y 90°."); return; }
-        let az = 0, inv = 0; let rAStr = decToGMSStr(rA);
-        let hoja = `==================================================\n   HOJA DE CÁLCULO: DEDUCCIÓN RUMBO A AZIMUT\n==================================================\n\nDato de Entrada: ${ns} ${rAStr} ${ew}\n\n`;
-        if(ns==="N" && ew==="E") { az=rA; hoja+=`Cuadrante I (NE): Azimut = Rumbo = ${az.toFixed(3)}°\n`; }
-        else if(ns==="S" && ew==="E") { az=180-rA; hoja+=`Cuadrante II (SE): Azimut = 180° - Rumbo = 180° - ${rAStr} = ${az.toFixed(3)}°\n`; }
-        else if(ns==="S" && ew==="W") { az=180+rA; hoja+=`Cuadrante III (SW): Azimut = 180° + Rumbo = 180° + ${rAStr} = ${az.toFixed(3)}°\n`; }
-        else if(ns==="N" && ew==="W") { az=360-rA; hoja+=`Cuadrante IV (NW): Azimut = 360° - Rumbo = 360° - ${rAStr} = ${az.toFixed(3)}°\n`; }
-        inv = normalizarAzimut(az+180);
-        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Azimut Deducción: <span style="color:var(--accent)">${decToGMSStr(az)}</span>`;
-        document.getElementById('calcSheetContainerOri').style.display='block'; document.getElementById('ori_memoria').innerText=hoja;
-        dibujarSimuladorOrientacion({tipo: 'azimut', az: az, inv: inv});
-    }
-
-    function calcAnguloLineas() {
-        let az1 = parseFloat(document.getElementById('angL1').value); let az2 = parseFloat(document.getElementById('angL2').value);
-        if(isNaN(az1) || isNaN(az2)) { alert("⚠️ Ingrese ambos azimuts de las visuales."); return; }
-        az1 = normalizarAzimut(az1); az2 = normalizarAzimut(az2);
-        let dif = Math.abs(az1 - az2); let angInt = dif > 180 ? 360 - dif : dif;
-        let hoja = `==================================================\n    HOJA DE CÁLCULO: ÁNGULO INTERIOR DE ESTACIÓN\n==================================================\n\nVisual L1 = ${decToGMSStr(az1)}\nVisual L2 = ${decToGMSStr(az2)}\n\nDiferencia Absoluta Inicial = |Az1 - Az2| = ${decToGMSStr(dif)}\n`;
-        if (dif > 180) { hoja += `Evaluación: Al ser mayor a 180°, corresponde al ángulo exterior. Restamos de 360°:\nÁngulo Interior = 360° - ${decToGMSStr(dif)} = ${decToGMSStr(angInt)}`; }
-        else { hoja += `Evaluación: Al ser menor a 180°, es directamente el ángulo interior de vértice.`; }
-        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Ángulo Interior: <span style="color:var(--accent)">${decToGMSStr(angInt)}</span>`;
-        document.getElementById('calcSheetContainerOri').style.display='block'; document.getElementById('ori_memoria').innerText=hoja;
-        dibujarSimuladorOrientacion({tipo: 'angulo', az1: az1, az2: az2, angInt: angInt});
-    }
-
-    function calcDeflexion() {
-        let azA = parseFloat(document.getElementById('defAnt').value); let azS = parseFloat(document.getElementById('defSig').value);
-        if(isNaN(azA) || isNaN(azS)) { alert("⚠️ Ingrese las direcciones de arribo y salida."); return; }
-        azA = normalizarAzimut(azA); azS = normalizarAzimut(azS);
-        let def = azS - azA; if (def > 180) def -= 360; else if (def < -180) def += 360;
-        let giro = def >= 0 ? "Derecha (D)" : "Izquierda (I)"; let defAbs = Math.abs(def);
-        let hoja = `==================================================\n       HOJA DE CÁLCULO: ÁNGULO DE DEFLEXIÓN DE EJE\n==================================================\n\nAzimut Anterior Llegada = ${decToGMSStr(azA)}\nAzimut Siguiente Salida = ${decToGMSStr(azS)}\n\nDelta Aritmético: Az_Sig - Az_Ant = ${decToGMSStr(azS - azA)}\nGiro Angular Resultante = ${decToGMSStr(defAbs)} hacia la ${giro}`;
-        document.getElementById('oriResumen').style.display='block'; document.getElementById('oriResumen').innerHTML=`Deflexión: <span style="color:${def>=0?'var(--success)':'var(--danger)'}">${decToGMSStr(defAbs)} ${giro}</span>`;
-        document.getElementById('calcSheetContainerOri').style.display='block'; document.getElementById('ori_memoria').innerText=hoja;
-        dibujarSimuladorOrientacion({tipo: 'deflexion', azA: azA, azS: azS, defAbs: defAbs, giro: giro.charAt(0)});
+        renderMemoria('ori_memoria', mem + `\nRESULTADO DE GABINETE: Propagación completada. Azimut de salida = ${currAz.toFixed(3)}°`);
+        document.getElementById('contenedorCanvasOrientacion').style.display='none';
     }
 
     function calcularInversoTopograficoLocal() {
@@ -1062,18 +1217,18 @@
         hoja += `PASO 1: Cálculo de Incrementos Métricos (Diferenciales):\n  ΔN = N_B - N_A = ${nB.toFixed(3)} - ${nA.toFixed(3)} = ${dN.toFixed(3)} m\n  ΔE = E_B - E_A = ${eB.toFixed(3)} - ${eA.toFixed(3)} = ${dE.toFixed(3)} m\n\n`;
         hoja += `PASO 2: Cálculo de la Distancia Horizontal (Pitágoras):\n  Distancia = √(ΔN² + ΔE²) = √(${dN.toFixed(3)}² + ${dE.toFixed(3)}²)\n  Distancia = ${dist.toFixed(3)} metros\n\n`;
         hoja += `PASO 3: Deducción del Azimut Angular (ArcoTangente):\n  Radianes = atan2(ΔE, ΔN) = ${azRad.toFixed(5)} rad\n  Azimut Decimal = ${azDeg.toFixed(3)}°\n  Azimut Sexagesimal = ${decToGMSStr(azDeg)}\n\n`;
-        hoja += `PASO 4: Clasificación Geométrica:\n  Cuadrante Catastral = ${cuadrante}\n  Rumbo Deducido = ${rumboStr}\n==================================================`;
+        hoja += `PASO 4: Clasificación Geométrica:\n  Cuadrante Catastral = ${cuadrante}\n  Rumbo Deducido = ${rumboStr}`;
 
         document.getElementById('oriResumen').style.display='block';
         document.getElementById('oriResumen').innerHTML=`Distancia: <span style="color:var(--accent)">${dist.toFixed(3)} m</span> | Azimut: <span style="color:var(--accent)">${decToGMSStr(azDeg)}</span>`;
-        document.getElementById('calcSheetContainerOri').style.display='block'; document.getElementById('ori_memoria').innerText = hoja;
+        document.getElementById('calcSheetContainerOri').style.display='block'; renderMemoria('ori_memoria', hoja + `\n\nRESULTADO DE GABINETE: Replantear a ${dist.toFixed(3)} m con Azimut de ${decToGMSStr(azDeg)}`);
         
         dibujarSimuladorOrientacion({tipo: 'azimut', az: azDeg, inv: normalizarAzimut(azDeg+180)});
     }
 
-    // -----------------------------------------------------
-    // 4. LÓGICA POLIGONAL CERRADA
-    // -----------------------------------------------------
+    // =======================================================================================
+    // 4. CODIFICACIÓN POLIGONAL CERRADA
+    // =======================================================================================
     function limpiarPoligonalTotalLocal() {
         polCerrada = []; polCompensada = [];
         document.getElementById('polPuntoArr').value = 'A';
@@ -1122,7 +1277,7 @@
 
         polCompensada = []; let currN = cN0, currE = cE0;
         let hoja = `==================================================\n   HOJA DE COMPENSACIÓN INTERNA: REGLA DE LA BRÚJULA\n==================================================\n\n`;
-        hoja += `Perímetro Desarrollado = ${perimetro.toFixed(3)} m\nError Absoluto Norte (ΣΔN) = ${errorN.toFixed(4)} m\nError Absoluto Este (ΣΔE) = ${errorE.toFixed(4)} m\nError Lineal Combinado = ${errorLineal.toFixed(4)} m\nPrecisión de Cierre = 1 : ${precision}\n\nREPARTICIÓN PROPORCIONAL POR TRASLACIÓN:\n`;
+        hoja += `PASO 1: Evaluación Perimetral\n  Perímetro Desarrollado = ${perimetro.toFixed(3)} m\n  Error Absoluto Norte (ΣΔN) = ${errorN.toFixed(4)} m\n  Error Absoluto Este (ΣΔE) = ${errorE.toFixed(4)} m\n  Error Lineal Combinado = ${errorLineal.toFixed(4)} m\n  Precisión de Cierre = 1 : ${precision}\n\nPASO 2: Repartición Proporcional Bowditch (Traslación)\n  Fórmula: Corrección = - Error Total × (Distancia Tramo / Perímetro)\n`;
 
         polCerrada.forEach(p => {
             let cN = -errorN * (p.dist / perimetro); let cE = -errorE * (p.dist / perimetro);
@@ -1130,7 +1285,8 @@
             currN += pCorrN; currE += pCorrE;
             polCompensada.push({ ...p, cN, cE, pCorrN, pCorrE, coordN: currN, coordE: currE });
         });
-        actualizarTablaPoligonalLocal(); document.getElementById('calcSheetContainerPol').style.display = 'block'; document.getElementById('pol_memoria').innerText = hoja + `\nPoligonal compensada y balanceada de acuerdo al algoritmo matemático de Bowditch de forma exitosa.`;
+        actualizarTablaPoligonalLocal(); document.getElementById('calcSheetContainerPol').style.display = 'block'; 
+        renderMemoria('pol_memoria', hoja + `\nRESULTADO DE GABINETE: Poligonal compensada y balanceada de acuerdo al algoritmo matemático de Bowditch de forma exitosa.`);
         
         document.getElementById('contenedorCanvasPoligonal').style.display = 'block'; const cv = document.getElementById('canvasPoligonalCerrada'); const ctx = cv.getContext('2d');
         ctx.clearRect(0,0,cv.width,cv.height); ctx.fillStyle="#f8fafc"; ctx.fillRect(0,0,cv.width,cv.height);
@@ -1143,9 +1299,14 @@
         pts.forEach((p, idx)=> { ctx.beginPath(); ctx.arc(getX(p.e), getY(p.n), 5, 0, Math.PI*2); ctx.fillStyle="#ef4444"; ctx.fill(); });
     }
 
-    // -----------------------------------------------------
-    // 5. LÓGICA DE ÁREAS (GAUSS Y DDM)
-    // -----------------------------------------------------
+    // =======================================================================================
+    // 5. CODIFICACIÓN MÓDULO DE ÁREAS
+    // =======================================================================================
+    function limpiarAreaGlobalLocal() {
+        document.getElementById('resArea').style.display = 'none'; document.getElementById('contenedorCanvasArea').style.display = 'none';
+        document.getElementById('calcSheetContainerArea').style.display = 'none'; document.getElementById('area_memoria').innerHTML = 'Realice un cálculo para visualizar la hoja paso a paso.';
+    }
+
     function addPuntoGaussLocal() {
         let v = document.getElementById('gVert').value || `P${ptsGauss.length+1}`; let n = parseFloat(document.getElementById('gNorte').value); let e = parseFloat(document.getElementById('gEste').value);
         if(isNaN(n)||isNaN(e)) { alert("⚠️ Ingrese coordenadas Y/X válidas."); return; } 
@@ -1162,7 +1323,8 @@
         for(let i=0; i<p.length-1; i++) { sD += p[i].n * p[i+1].e; sI += p[i].e * p[i+1].n; }
         let area = Math.abs(sD - sI)/2; 
         document.getElementById('resArea').style.display='block'; document.getElementById('resArea').innerHTML=`Área Calculada = ${area.toFixed(3)} m²`;
-        document.getElementById('calcSheetContainerArea').style.display='block'; document.getElementById('area_memoria').innerText = hoja + `Suma Derechas (+) = ${sD.toFixed(3)}\nSuma Izquierdas (-) = ${sI.toFixed(3)}\n\nÁrea = |Suma(+) - Suma(-)| / 2 = ${area.toFixed(3)} m²`;
+        document.getElementById('calcSheetContainerArea').style.display='block'; 
+        renderMemoria('area_memoria', hoja + `PASO 1: Sumatoria de Productos Cruzados\n  Suma Derechas (+) = ${sD.toFixed(3)}\n  Suma Izquierdas (-) = ${sI.toFixed(3)}\n\nRESULTADO DE GABINETE: Área = |Suma(+) - Suma(-)| / 2 = ${area.toFixed(3)} m²`);
         dibujarAreaCanvasLocal(p);
     }
 
@@ -1185,7 +1347,8 @@
         });
         let area = Math.abs(sDA)/2; 
         document.getElementById('resArea').style.display='block'; document.getElementById('resArea').innerHTML=`Área DDM = ${area.toFixed(3)} m²`;
-        document.getElementById('calcSheetContainerArea').style.display='block'; document.getElementById('area_memoria').innerText = `==================================================\n  HOJA DE CÁLCULO: DOBLE DISTANCIA MERIDIANA (DDM)\n==================================================\n\nSuma Doble Área = ${sDA.toFixed(3)}\nÁrea = |Suma Doble Área| / 2 = ${area.toFixed(3)} m²`;
+        document.getElementById('calcSheetContainerArea').style.display='block'; 
+        renderMemoria('area_memoria', `==================================================\n  HOJA DE CÁLCULO: DOBLE DISTANCIA MERIDIANA (DDM)\n==================================================\n\nPASO 1: Sumatoria Acumulada\n  Suma Doble Área = ${sDA.toFixed(3)}\n\nRESULTADO DE GABINETE: Área = |Suma Doble Área| / 2 = ${area.toFixed(3)} m²`);
     }
 
     function addOrdenadaTrapLocal() {
@@ -1197,8 +1360,12 @@
     function calcularTrapecioLocal() {
         let d = parseFloat(document.getElementById('trapDist').value); let inputs = document.querySelectorAll('.trap-ord'); let hs = [];
         inputs.forEach(i=> { let v=parseFloat(i.value); if(!isNaN(v)) hs.push(v); });
+        if(hs.length < 2) return;
         let h0 = hs[0], hn = hs[hs.length-1]; let sumI = 0; for(let i=1; i<hs.length-1; i++) sumI += hs[i];
         let area = d * ((h0+hn)/2 + sumI); document.getElementById('resArea').style.display='block'; document.getElementById('resArea').innerHTML=`Área Trapecio = ${area.toFixed(3)} m²`;
+        
+        document.getElementById('calcSheetContainerArea').style.display='block';
+        renderMemoria('area_memoria', `==================================================\n   HOJA DE CÁLCULO: ÁREA POR TRAPECIOS (ORDENADAS)\n==================================================\n\nDATOS DE ENTRADA:\n  Separación constante (d) = ${d.toFixed(3)} m\n  Ordenada Inicial (h0) = ${h0.toFixed(3)} m\n  Ordenada Final (hn) = ${hn.toFixed(3)} m\n  Sumatoria de Ordenadas Intermedias (Σhi) = ${sumI.toFixed(3)} m\n\nPASO 1: Aplicar Fórmula de Trapecios\n  Área = d × ( (h0 + hn)/2 + Σhi )\n  Área = ${d.toFixed(3)} × ( (${h0.toFixed(3)} + ${hn.toFixed(3)})/2 + ${sumI.toFixed(3)} )\n\nRESULTADO DE GABINETE: Área = ${area.toFixed(3)} m²`);
     }
     function limpiarAreaTrapLocal() {
         document.getElementById('trapOrdenadasContainer').innerHTML = `<div class="input-group" style="flex-direction:row; align-items:center;"><label style="width:100px;">h0 (m):</label><input type="number" class="trap-ord" step="any" style="flex:1;"></div><div class="input-group" style="flex-direction:row; align-items:center;"><label style="width:100px;">h1 (m):</label><input type="number" class="trap-ord" step="any" style="flex:1;"></div>`;
@@ -1209,9 +1376,13 @@
         let a = parseFloat(document.getElementById('hLadoA').value); let b = parseFloat(document.getElementById('hLadoB').value); let c = parseFloat(document.getElementById('hLadoC').value);
         if(isNaN(a)||isNaN(b)||isNaN(c)) return; let s = (a+b+c)/2; let area = Math.sqrt(s*(s-a)*(s-b)*(s-c));
         document.getElementById('resArea').style.display='block'; document.getElementById('resArea').innerHTML=`Área Herón = ${area.toFixed(3)} m²`;
+        
+        document.getElementById('calcSheetContainerArea').style.display='block';
+        renderMemoria('area_memoria', `==================================================\n   HOJA DE CÁLCULO: ÁREA POR TRIANGULACIÓN (HERÓN)\n==================================================\n\nDATOS DE ENTRADA:\n  Lado a = ${a.toFixed(3)} m\n  Lado b = ${b.toFixed(3)} m\n  Lado c = ${c.toFixed(3)} m\n\nPASO 1: Calcular Semiperímetro (S)\n  S = (a + b + c) / 2\n  S = (${a.toFixed(3)} + ${b.toFixed(3)} + ${c.toFixed(3)}) / 2 = ${s.toFixed(3)} m\n\nPASO 2: Fórmula de Herón\n  Área = √(S × (S - a) × (S - b) × (S - c))\n  Área = √(${s.toFixed(3)} × ${(s-a).toFixed(3)} × ${(s-b).toFixed(3)} × ${(s-c).toFixed(3)})\n\nRESULTADO DE GABINETE: Área = ${area.toFixed(3)} m²`);
     }
 
     function dibujarAreaCanvasLocal(poly) {
+        if(!poly || poly.length === 0) return;
         document.getElementById('contenedorCanvasArea').style.display = 'block'; const cv = document.getElementById('canvasArea'); const ctx = cv.getContext('2d');
         ctx.clearRect(0,0,cv.width,cv.height); 
         let minN = Math.min(...poly.map(p=>p.n)), maxN = Math.max(...poly.map(p=>p.n)), minE = Math.min(...poly.map(p=>p.e)), maxE = Math.max(...poly.map(p=>p.e));
@@ -1222,37 +1393,30 @@
         ctx.fillStyle="rgba(15,118,110,0.15)"; ctx.fill(); ctx.strokeStyle="var(--accent)"; ctx.lineWidth=3; ctx.stroke();
     }
 
-    function limpiarAreaGlobalLocal() {
-        document.getElementById('resArea').style.display = 'none'; document.getElementById('contenedorCanvasArea').style.display = 'none';
-        document.getElementById('calcSheetContainerArea').style.display = 'none'; document.getElementById('area_memoria').innerText = 'Realice un cálculo para visualizar la hoja paso a paso.';
-    }
-
     // -----------------------------------------------------
     // FUNCIÓN DE EJEMPLOS GLOBALES "MODO SILENCIOSO"
     // -----------------------------------------------------
     function restablecerEjemplosGlobal() {
-        // Solo inyecta los valores en las casillas, pero NO calcula nada automáticamente ni da alertas.
-        
         // Módulo 1: Ángulos
-        if(document.getElementById('angDeg')) { document.getElementById('angDeg').value = '45'; origenActual='deg'; }
+        if(document.getElementById('angDeg')) { document.getElementById('angDeg').value = '45.000'; origenActual='deg'; }
         if(document.getElementById('a1_g')) { 
             document.getElementById('a1_g').value = '41'; document.getElementById('a1_m').value = '35'; document.getElementById('a1_s').value = '0'; 
             document.getElementById('a2_g').value = '129'; document.getElementById('a2_m').value = '11'; document.getElementById('a2_s').value = '0'; 
         }
         // Módulo 2: Escalas
-        if(document.getElementById('escDenominador')) { document.getElementById('escDenominador').value = '500'; document.getElementById('escPlanoVal').value = '20'; }
+        if(document.getElementById('escDenominador')) { document.getElementById('escDenominador').value = '500'; document.getElementById('escPlanoVal').value = '20.000'; }
         // Módulo 3: Orientación
-        if(document.getElementById('oriAziInput')) document.getElementById('oriAziInput').value = '210.5'; 
+        if(document.getElementById('oriAziInput')) document.getElementById('oriAziInput').value = '210.500'; 
         if(document.getElementById('propAzBase')) document.getElementById('propAzBase').value = '41.583';
         if(document.getElementById('invTopNa')) {
             document.getElementById('invTopNa').value = '1000.000'; document.getElementById('invTopEa').value = '1000.000';
             document.getElementById('invTopNb').value = '1221.500'; document.getElementById('invTopEb').value = '1140.750'; 
         }
         // Módulo 5: Áreas
-        if(document.getElementById('gNorte')) { document.getElementById('gNorte').value = '1050'; document.getElementById('gEste').value = '1020'; }
-        if(document.getElementById('hLadoA')) { document.getElementById('hLadoA').value = '30'; document.getElementById('hLadoB').value = '40'; document.getElementById('hLadoC').value = '50'; }
+        if(document.getElementById('gNorte')) { document.getElementById('gNorte').value = '1050.000'; document.getElementById('gEste').value = '1020.000'; }
+        if(document.getElementById('hLadoA')) { document.getElementById('hLadoA').value = '30.000'; document.getElementById('hLadoB').value = '40.000'; document.getElementById('hLadoC').value = '50.000'; }
         
-        // Animación visual de carga silenciosa
+        // Animación visual
         document.querySelector('.container').style.opacity = '0.5'; 
         setTimeout(()=>{ document.querySelector('.container').style.opacity = '1'; }, 200);
     }
