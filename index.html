@@ -10,6 +10,7 @@
       gtag('config', 'G-LHX7547NPM');
     </script>
 
+    <!-- ESCUDO DE SEGURIDAD OPTIMIZADO (ANTI-INSPECCIÓN) -->
     <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('keydown', function(e) {
@@ -124,9 +125,11 @@
         }
 
         /* BOTONES DE CONTROL FLOTANTES GENERALES */
-        .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; }
+        .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; max-width: 90%; }
         .help-btn-circle { background: var(--accent); color: white; border: none; width: 52px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
         .help-btn-circle:hover { transform: scale(1.1); }
+        .help-btn-pill { background: var(--accent); color: white; border: none; height: 50px; padding: 0 20px; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s; }
+        .help-btn-pill:hover { transform: scale(1.05); }
 
         /* PANEL ASISTENTE DESPLEGABLE SIDE DRAWER */
         #assistantPanel { position: fixed; top: 0; right: -400px; width: 380px; height: 100vh; background: var(--bg-card); border-left: 3px solid var(--accent); box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 2500; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 24px; overflow-y: auto; }
@@ -446,7 +449,7 @@
             <div class="input-group"><label title="Separación en metros para colocar las estacas topográficas">Intervalo de Estacado (m)</label><input type="number" id="curvaIntervalo" step="any" title="Cuerda unidad (ej: 10 o 20 metros)"></div>
         </div>
         <div class="btn-group">
-            <button class="action-btn" onclick="calcularCurvaHorizontal()" title="Procesar la geometry completa y dibujar el plano interactivo">📐 Calcular Curva y Generar Plano</button>
+            <button class="action-btn" onclick="calcularCurvaHorizontal()" title="Procesar la geometría completa y dibujar el plano interactivo">📐 Calcular Curva y Generar Plano</button>
             <button class="action-btn success-btn" onclick="exportarCSV('curvaReplanteoTbody', 'Replanteo_Curva.csv')" title="Descargar libreta de replanteo">📊 Exportar Libreta de Replanteo</button>
             <button class="action-btn danger-btn" onclick="limpiarInputs('modCurvaHorizontal'); document.getElementById('curvaTableWrapper').style.display='none'; document.getElementById('curvaReplanteoWrapper').style.display='none'; document.getElementById('calcSheetContainerCurva').style.display='none'; document.getElementById('canvasCurvaWrapper').style.display='none'; pStates['calcSheetContainerCurva']=false;" title="Borrar todos los cálculos e imágenes">Limpiar Todo</button>
         </div>
@@ -541,45 +544,108 @@
 
 <!-- COMPONENTES DE CONTROL FLOTANTES GENERALES -->
 <div class="flotante-controls no-print">
-    <button class="help-btn-circle" onclick="document.getElementById('helpModal').style.display='flex'" title="Abre el manual oficial de uso de la herramienta">❓</button>
+    <button class="help-btn-pill" onclick="document.getElementById('helpModal').style.display='flex'" title="Abre la guía de uso paso a paso">❓ Guía Rápida</button>
     <button class="help-btn-circle" style="background:#f59e0b; color:#0f172a;" onclick="toggleAssistant()" title="Abre el panel del asistente de aprendizaje inteligente">💡</button>
     <button class="help-btn-circle" style="background:#0284c7;" onclick="toggleCalculatorLocal()" title="Abre la calculadora científica arrastrable de escritorio">🧮</button>
+    <button class="help-btn-circle" style="background:#8b5cf6;" onclick="document.getElementById('buzonModal').style.display='flex'" title="Buzón de Sugerencias">✉️</button>
 </div>
 
 <div class="watermark" title="Sello de Autoría de Propiedad Intelectual">👨‍💻 Cristopher Cedeño | TopoCalc v10.0 Premium</div>
 
 <!-- MODAL DE AYUDA ACADÉMICA -->
 <div id="helpModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
-    <div class="modal-content" id="printArea">
-        <h2 style="text-align: center; color:var(--accent);">📘 Guía de Usuario Completa TopoCalc</h2>
-        <p style="text-align: center;">Herramienta profesional de apoyo para estudiantes de Agrimensura y Topografía.</p>
-        <hr style="margin: 15px 0; border: 1px solid var(--border);">
-        <table class="modal-table">
-            <thead><tr><th>Módulo</th><th>¿Qué hace la herramienta?</th><th>Variables de Entrada</th><th>Resultados de Salida</th></tr></thead>
-            <tbody>
-                <tr><td><b>📈 Isohipsas</b></td><td>Interpola el paso exacto de las curvas de nivel. Tiene módulo lineal y un generador de Malla 2D suavizada.</td><td>Cotas A/B, distancia de separación, equidistancia base.</td><td>Valores de curvas enteras y distancias métricas de paso.</td></tr>
-                <tr><td><b>🛣️ Cotas Eje</b></td><td>Halla la cota del terreno en el centro de la vía usando datos de las curvas laterales.</td><td>Cota inferior, distancia total entre curvas, distancia hacia el eje.</td><td>Cota matemática central en el eje.</td></tr>
-                <tr><td><b>📐 Pendiente</b></td><td>Calcula la inclinación longitudinal de un terreno.</td><td>Cotas de inicio y fin, distancia horizontal real.</td><td>Porcentaje (%) con signo analítico (ascendente ➕ / descendente ➖).</td></tr>
-                <tr><td><b>🛤️ Rasante</b></td><td>Crea el perfil longitudinal teórico del trazado de una obra.</td><td>Cota base oficial, pendiente de diseño, longitud, intervalo.</td><td>Tabla de progresivas con sus cotas rasantes de proyecto.</td></tr>
-                <tr><td><b>📊 Corte y Relleno</b></td><td>Cubica el volumen de tierras usando el método de áreas medias (Trapecio). Incluye visualización de Perfil Longitudinal.</td><td>Progresiva (estación), cota terreno, cota rasante, ancho tipo.</td><td>Volúmenes parciales y acumulados de desmonte/terraplén, y gráfico de perfil.</td></tr>
-                <tr><td><b>📐 Perfil Transversal</b></td><td>Motor Avanzado de Secciones Irregulares para cálculo exacto de Sb y Sr con matriz de puntos.</td><td>Distancia X y Cota Terreno Y. Rasante base transversal.</td><td>S_b (Área de corte roja), S_r (Área de relleno verde) a partir de iteraciones vectoriales.</td></tr>
-                <tr><td><b>🔄 Curva Horizontal</b></td><td>Diseña la geometría circular simple y simula su trazo.</td><td>Ángulo Δ, radio R de diseño, estación PI de quiebre, intervalo.</td><td>Elementos (ST, LC, E, M, CL) y libreta topográfica de deflexión.</td></tr>
-                <tr><td><b>🎢 Curva Vertical</b></td><td>Corrección parabólica del perfil longitudinal en puntos de quiebre de pendiente (Cimas y Columpios).</td><td>Pendientes i1/i2, Longitud Lv, y Datos del PIV.</td><td>Tabla de correcciones de altura Y, y elevaciones finales de la rasante.</td></tr>
-            </tbody>
-        </table>
+    <div class="modal-content" id="printArea" style="line-height: 1.6;">
+        <h2 style="text-align: center; color:var(--accent);">📖 Guía de Uso Rápido y Ejemplos</h2>
+        <p style="text-align: center; font-size:0.95rem; color:var(--text-secondary); margin-bottom:20px;">Esta herramienta está diseñada para ahorrarte horas de cálculos manuales. Aquí te explico cómo usar cada ventana paso a paso:</p>
         
-        <h3 style="margin-top:25px; color:var(--accent);">⚙️ Consideraciones Metodológicas</h3>
-        <ul style="padding-left: 20px; font-size: 0.9rem; line-height: 1.6; color:var(--text-secondary);">
-            <li>El botón <b>"Mostrar memoria"</b> en cada pestaña desglosa el cálculo paso a paso como se exige en las entregas de prácticas universitarias.</li>
-            <li>En <b>Pendiente</b> se aplica la regla de proporcionalidad inversa: a mayor distancia, menor pendiente (más plano); a menor distancia, mayor pendiente (escarpado).</li>
-            <li>En <b>Curvas Horizontales</b> se utiliza la nomenclatura <b>ST</b> (Sub-Tangente) y <b>LC</b> (Longitud de Curva). El cálculo de deflexiones para el replanteo utiliza la fórmula del Arco inverso: <code>Sen⁻¹(Distancia / 2R)</code> exportando en formato GMS.</li>
-            <li>Para cálculos rápidos, simplemente presione la tecla <b>ENTER</b> dentro de cualquier campo numérico.</li>
-        </ul>
-        <div style="text-align: center; margin-top: 30px; font-size: 0.85rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top:15px;">Diseño e Ingeniería de Software: Cristopher Cedeño</div>
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">1. 📈 Isohipsas</h3>
+            <p><strong>¿Para qué sirve?</strong> Para encontrar la ubicación matemática exacta por donde pasa una curva de nivel entera entre dos estacas con diferente elevación.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Lineal:</strong> Tienes el Punto A (Cota 280.350) y el Punto B (Cota 279.720) separados por 10 cm en tu plano. Al calcular, te dirá a cuántos centímetros exactos de A debes dibujar la curva de 280m.</li>
+                <li><strong>Malla 2D:</strong> Si tienes un polígono de 4 esquinas, ingresa las cotas. La herramienta calculará los 4 lados al mismo tiempo y te dibujará un croquis de cómo cruzan las curvas en el terreno.</li>
+            </ul>
+        </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 25px;" class="no-print">
-            <button class="action-btn danger-btn" onclick="document.getElementById('helpModal').style.display='none'" title="Cerrar ventana emergente">Cerrar Guía</button>
-            <button class="action-btn success-btn" onclick="imprimirGuiaPDF()" title="Abre el menú de impresión para guardar este documento como PDF">📥 Imprimir Guía PDF</button>
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">2. 🛣️ Cotas Eje (Transversales)</h3>
+            <p><strong>¿Para qué sirve?</strong> Cuando levantas perfiles transversales, a veces necesitas saber la cota exacta en el centro de la vía (el eje), pero solo tienes dibujadas las curvas de nivel a los lados.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Modo de uso:</strong> Ingresa la cota de la curva inferior más cercana, la distancia total que la separa de la curva superior, y la distancia desde la curva inferior hasta el eje. El sistema hará una interpolación por regla de tres para darte la cota central.</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">3. 📐 Pendiente</h3>
+            <p><strong>¿Para qué sirve?</strong> Calcula el porcentaje exacto de inclinación de un terreno entre dos puntos.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Ejemplo:</strong> La calle sube desde la Cota Inicial (505m) hasta la Cota Final (508m) en una distancia de 500m. Al calcular, te dirá que la pendiente es de <strong>+0.600% (Ascendente)</strong>. <em>Tip: Puedes enviar este resultado directo a la pestaña "Rasante".</em></li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">4. 🛤️ Rasante</h3>
+            <p><strong>¿Para qué sirve?</strong> Para proyectar el nivel de diseño (cotas rojas) de una carretera o canal a lo largo del cadenamiento.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Modo de uso:</strong> Imagina que tu vía arranca en la cota 505m con una pendiente de +0.6%. Si le pides un intervalo de 10m, la tabla te generará la cota teórica exacta para cada estaca (0+010, 0+020, etc.) hasta cubrir la longitud total.</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">5. 📊 Corte/Relleno</h3>
+            <p><strong>¿Para qué sirve?</strong> Para calcular cuántos metros cúbicos de tierra hay que mover en una obra vial mediante el método del trapecio (áreas medias).</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Modo de uso:</strong> Ingresa el ancho de tu carretera. Luego, estación por estación, ingresa la cota del Terreno Natural (negra) y la cota de la Rasante de diseño (roja). La herramienta graficará el perfil longitudinal, dibujará la Curva de Masas (Brückner) y te dará el balance total de tierras.</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">6. 📐 Perfil Transversal (Sección Irregular)</h3>
+            <p><strong>¿Para qué sirve?</strong> Motor gráfico para hallar el área exacta de desmonte (corte) y terraplén (relleno) en una estación transversal de la vía.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Modo de uso:</strong> Fija la Cota Rasante Base (nivel de la calle). Luego ingresa los puntos levantados en campo como coordenadas cartesianas: X (negativo a la izquierda, positivo a la derecha del eje) y su Cota (Y). El sistema cruzará la línea del terreno con la rasante y sombreará las áreas S<sub>b</sub> y S<sub>r</sub> correspondientes.</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">7. 🔄 Curva Horizontal</h3>
+            <p><strong>¿Para qué sirve?</strong> Resuelve la geometría de una curva circular simple en planta y genera su libreta de replanteo.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Modo de uso:</strong> Ingresa el ángulo de deflexión (Δ), el radio diseñado, la estación del PI y cada cuántos metros quieres poner estacas. Obtendrás las tangentes (ST), longitud de curva (LC) y una tabla con los ángulos de deflexión en formato G° M' S" (grados, minutos y segundos).</li>
+            </ul>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <h3 style="color:var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px;">8. 🎢 Curva Vertical (Corr. Subrasante)</h3>
+            <p><strong>¿Para qué sirve?</strong> Redondea el "pico" que se forma cuando dos pendientes diferentes se encuentran en un perfil longitudinal.</p>
+            <ul style="margin-left: 20px; font-size: 0.9rem;">
+                <li><strong>Modo de uso:</strong> Ingresa las pendientes de entrada y salida, la longitud del redondeo (Lv) y el punto de quiebre (PIV). TopoCalc trazará la curva parabólica suavizada y te dará una tabla con la corrección exacta (Y) que debes aplicar a cada estaca de tu rasante recta.</li>
+            </ul>
+        </div>
+
+        <div style="background: var(--notebook-bg); padding: 15px; border-radius: 10px; border-left: 5px solid #f59e0b; margin-bottom: 20px; font-size: 0.9rem;">
+            <strong>💡 Tip de oro:</strong> Después de hacer cualquier cálculo, busca el botón gris que dice <strong>"▼ Mostrar memoria..."</strong>. Ahí verás las fórmulas matemáticas desglosadas paso a paso, ideal para adjuntar en tus reportes y prácticas universitarias.
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:25px;" class="no-print">
+            <span style="font-size:0.85rem; font-weight:bold; color:var(--text-secondary);">Autor: Cristopher Cedeño © 2026</span>
+            <div style="display:flex; gap:10px;">
+                <button class="action-btn danger-btn" onclick="document.getElementById('helpModal').style.display='none'">Cerrar Guía</button>
+                <button class="action-btn success-btn" onclick="imprimirGuiaPDF()">📥 Descargar Guía PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL BUZÓN DE SUGERENCIAS -->
+<div id="buzonModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-content" style="max-width: 450px; text-align: center;">
+        <h2 style="color: #8b5cf6; margin-bottom: 10px;">✉️ Buzón de Sugerencias</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5;">¿Tienes alguna idea para mejorar TopoCalc, necesitas una función nueva, o encontraste algún error? ¡Tu opinión ayuda a que esta herramienta sea mejor para todos los estudiantes!</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <button class="action-btn" style="background:#0f172a; width: 100%; font-size: 1rem; padding: 12px;" onclick="window.open('mailto:criscdeno@hotmail.com?subject=Sugerencia TopoCalc', '_blank')">📧 Enviar por Correo</button>
+            <button class="action-btn" style="background:#25d366; width: 100%; font-size: 1rem; padding: 12px;" onclick="window.open('https://wa.me/18492200102?text=Hola Cristopher, tengo una sugerencia para la página de TopoCalc: ', '_blank')">💬 Enviar por WhatsApp</button>
+            <button class="action-btn danger-btn" style="width: 100%; margin-top:10px;" onclick="document.getElementById('buzonModal').style.display='none'">Cancelar</button>
         </div>
     </div>
 </div>
@@ -676,7 +742,6 @@
             if(!isNaN(v)) e.target.value = v.toFixed(3);
         }
         if(e.target && e.target.classList.contains('input-prog') && e.target.value !== "") {
-            // CORRECCIÓN BUG 1: Usar parseProgresiva en el evento blur en lugar del replace
             let v = parseProgresiva(e.target.value);
             if(!isNaN(v)) {
                 let km = Math.floor(Math.abs(v) / 1000);
@@ -809,7 +874,6 @@
             let cota = r.cells[2].innerText; 
             if(tbodyId === "transTbody") cota = r.cells[4].innerText; 
             
-            // CORRECCIÓN BUG 3: Exportar Cota Curva en Módulo Vertical (no la Corrección Y)
             if(tbodyId === "vertTbody") cota = r.cells[3].innerText; 
             
             txt += `${prog} ${cota}\n`;
@@ -1060,7 +1124,7 @@
     function usarPendienteEnRasante(){ document.getElementById('rasPendiente').value=ultimaPendiente.toFixed(4); switchTab('modRasante', document.querySelectorAll('.tab-btn')[3]); }
     
     // -----------------------------------------------------
-    // LÓGICA RASANTE 
+    // LÓGICA RASANTE
     // -----------------------------------------------------
     function calcularRasante() {
         let C0=parseFloat(document.getElementById('rasCotaInicial').value), P=parseFloat(document.getElementById('rasPendiente').value), L=parseFloat(document.getElementById('rasLongitud').value), int=parseFloat(document.getElementById('rasIntervalo').value);
