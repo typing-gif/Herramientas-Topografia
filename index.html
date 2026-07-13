@@ -116,25 +116,16 @@
         .btn-export-sheet { position: absolute; top: 20px; right: 20px; background: #0284c7; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; z-index: 5; transition: 0.2s;}
         .btn-export-sheet:hover { background: #0369a1; transform: scale(1.05);}
         .note-step { margin-bottom: 15px; line-height: 1.6; }
-        .note-step h4 { color: var(--accent); margin-bottom: 5px; font-size: 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;}
+        .note-step h4 { color: var(--accent); margin-bottom: 5px; font-size: 1.1rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3px;}
         .pencil-res { color: var(--success); font-weight: bold; }
         
         /* CANVAS GENERAL */
         canvas { max-width: 100%; height: auto; background: var(--bg-card); border-radius: 12px; margin-top: 20px; border: 1px solid var(--border); display: block; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); margin-left: auto; margin-right: auto;}
         
-        #canvasLongitudinal, #curvaCanvas, #canvasMasas, #perfilCanvas, #canvasCurvaVertical {
-            transition: transform 0.3s ease, box-shadow 0.3s ease; 
-        }
-        #canvasLongitudinal:hover, #curvaCanvas:hover, #canvasMasas:hover, #perfilCanvas:hover, #canvasCurvaVertical:hover {
-            transform: scale(1.15); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
-            z-index: 10; 
-            position: relative; 
-        }
+        #canvasLongitudinal, #curvaCanvas, #canvasMasas, #perfilCanvas, #canvasCurvaVertical { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        #canvasLongitudinal:hover, #curvaCanvas:hover, #canvasMasas:hover, #perfilCanvas:hover, #canvasCurvaVertical:hover { transform: scale(1.15); box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 10; position: relative; }
 
-        /* =========================================================
-           ESTILOS PURISTAS DEL MEGA-MOTOR DE MALLA PREMIUM 
-           ========================================================= */
+        /* CSS EXCLUSIVO PARA EL MEGA-MOTOR PREMIUM */
         .mega-layout { display: flex; flex-direction: column; gap: 20px; margin-top: 25px; }
         @media (min-width: 1024px) { .mega-layout { flex-direction: row; align-items: flex-start; } }
         
@@ -165,7 +156,6 @@
         
         .mega-legend { margin-top: 20px; display: flex; flex-direction: column; gap: 15px; background: var(--header-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
 
-
         /* BOTONES DE CONTROL FLOTANTES GENERALES */
         .flotante-controls { position: fixed; bottom: 25px; left: 25px; z-index: 1500; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; max-width: 90%; }
         .help-btn-circle { background: var(--accent); color: white; border: none; width: 52px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
@@ -190,7 +180,7 @@
         .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 12px; background: var(--header-bg); }
         .calc-btn { padding: 12px 6px; font-size: 0.8rem; font-weight: bold; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer; text-align: center; transition: 0.15s; }
         .calc-btn:hover { background: var(--accent); color: white; }
-        .calc-btn.op { background: rgba(44, 110, 158, 0.15); color: var(--accent); }
+        .calc-btn.op { background: rgba(15, 118, 110, 0.15); color: var(--accent); }
         .calc-btn.shift-active { background: #f59e0b; color: #000; }
         .calc-btn.eq { grid-column: span 2; background: var(--success); color: white; border: none; font-size: 1.1rem; }
         .calc-btn.eq:hover { background: var(--success-hover); }
@@ -347,8 +337,8 @@
 
                     <!-- Canvas Interactivo (Panning Dinámico) -->
                     <div id="megaCanvasWrapper" class="mega-canvas-container" title="Usa la tecla ESPACIO + Clic Izquierdo para arrastrar el plano.">
-                        <!-- EL FIX DEL ZOOM ESTÁ AQUÍ: max-width: none evita que el CSS global aplaste el lienzo -->
-                        <canvas id="megaCanvasMalla"></canvas>
+                        <!-- FIX DEL ZOOM (max-width: none) -->
+                        <canvas id="megaCanvasMalla" style="display: block; max-width: none !important; margin: 0;"></canvas>
                         
                         <div id="megaInspector" class="mega-fade-out">
                             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #475569; padding-bottom: 5px; margin-bottom: 10px;">
@@ -626,18 +616,21 @@
             <table title="Libreta de replanteo lista para trabajo de campo"><thead><tr><th colspan="4" style="background:var(--success); color:white;">Libreta de Replanteo por Deflexiones (Método de Arco)</th></tr><tr><th>Estación / Punto</th><th>Dist. Acumulada S (m)</th><th>Ángulo Deflexión (G° M' S")</th><th>Observación Topográfica</th></tr></thead><tbody id="curvaReplanteoTbody"></tbody></table>
         </div>
         
-        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCurva')" title="Ver las fórmulas aplicadas de la libreta universitaria"><span>▼ Mostrar Memoria Universitaria (Paso a Paso)</span></button></div>
+        <div class="toggle-container"><button class="toggle-btn" onclick="toggleNotebookPanel('calcSheetContainerCurva')" title="Ver las fórmulas aplicadas de la libreta universitaria"><span>▼ Mostrar Teoría: Pasos del Cálculo (Método Universitario)</span></button></div>
         <div class="calc-sheet-container" id="calcSheetContainerCurva">
             <button class="btn-export-sheet" onclick="imprimirHojaCalculo('calcSheetContainerCurva')" title="Descarga en formato PDF">📄 Exportar a PDF</button>
-            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: FÓRMULAS DE CURVA CIRCULAR SIMPLE</b></div>
-            <div class="note-step"><h4>1. Conversión de Ángulo Δ a Radianes</h4><div id="curva_paso1"></div></div>
-            <div class="note-step"><h4>2. Cálculo de la Sub-Tangente (ST)</h4><div id="curva_paso2"></div></div>
-            <div class="note-step"><h4>3. Cálculo de la Longitud de Curva (LC)</h4><div id="curva_paso3"></div></div>
-            <div class="note-step"><h4>4. Cálculo de la Externa (E)</h4><div id="curva_paso4"></div></div>
-            <div class="note-step"><h4>5. Cálculo de la Ordenada Media (M)</h4><div id="curva_paso5"></div></div>
-            <div class="note-step"><h4>6. Cálculo de la Cuerda Larga (CL)</h4><div id="curva_paso6"></div></div>
-            <div class="note-step"><h4>7. Determinación Estación PC (Principio de Curva)</h4><div id="curva_paso7"></div></div>
-            <div class="note-step"><h4>8. Determinación Estación PT (Principio de Tangente)</h4><div id="curva_paso8"></div></div>
+            <div style="margin-bottom: 15px; color:var(--text-primary); border-bottom:2px solid var(--accent); padding-bottom:5px;"><b>📝 MEMORIA: PASOS DEL CÁLCULO (Método Universitario - 9 Pasos)</b></div>
+            
+            <div class="note-step"><h4>1. Subtangente (ST)</h4><div id="curva_paso1"></div></div>
+            <div class="note-step"><h4>2. Estación del PI (Punto de Inflexión)</h4><div id="curva_paso2"></div></div>
+            <div class="note-step"><h4>3. PC (Principio de Curva)</h4><div id="curva_paso3"></div></div>
+            <div class="note-step"><h4>4. LC (Longitud de Curva)</h4><div id="curva_paso4"></div></div>
+            <div class="note-step"><h4>5. PT (Punto de Tangencia)</h4><div id="curva_paso5"></div></div>
+            <div class="note-step"><h4>6. CL (Cuerda Larga)</h4><div id="curva_paso6"></div></div>
+            <div class="note-step"><h4>7. E (Externa)</h4><div id="curva_paso7"></div></div>
+            <div class="note-step"><h4>8. M (Ordenada Media)</h4><div id="curva_paso8"></div></div>
+            <div class="note-step"><h4>9. Radio en el Plano (para dibujo)</h4><div id="curva_paso9"></div></div>
+
             <hr style="border: 1px dashed var(--border); margin: 25px 0;">
             <div class="note-step"><h4>📍 METODOLOGÍA DE REPLANTEO (Demostración)</h4><div id="curva_paso_def"></div></div>
         </div>
@@ -774,7 +767,7 @@
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:25px;" class="no-print">
-            <span style="font-size:0.8rem; font-weight:bold; color:var(--text-secondary);">Autor: Cristopher Cedeño © 2026 | UASD</span>
+            <span style="font-size:0.8rem; font-weight:bold; color:var(--accent);">Autor: Cristopher Cedeño © 2026 | UASD</span>
             <div style="display:flex; gap:10px;">
                 <button class="action-btn danger-btn" onclick="document.getElementById('helpModal').style.display='none'">Cerrar Guía</button>
                 <button class="action-btn success-btn" onclick="imprimirGuiaPDF()">📥 Exportar Manual a PDF</button>
@@ -841,8 +834,8 @@
     let ptsPerfil = []; 
     
     // Variables Calculadora y Drag
-    let isDragging = false; 
-    let startX, startY, initialLeft, initialTop;
+    let isDraggingCalc = false; 
+    let startXCalc, startYCalc, initialLeftCalc, initialTopCalc;
     let isRad = false; 
     let shiftActive = false;
 
@@ -855,7 +848,7 @@
     let megaMostrarHeatmap = false;
     let megaMostrarCotas = true; 
     let megaMostrarCabeceras = true;
-    let megaMostrarFondoMilimetrico = false; // Papel apagado por defecto para limpieza visual
+    let megaMostrarFondoMilimetrico = false; 
     
     let megaOffsetX = 0, megaOffsetY = 0;
     let megaCellSize = 0; 
@@ -893,7 +886,6 @@
 
     document.addEventListener("focusout", function(e) {
         if(e.target && e.target.type === 'number' && e.target.value !== "") {
-            // Ignorar los campos del MegaMotor para que no se formanteen y compliquen la edición rápida
             if(!e.target.id.startsWith('cell-mega-')) {
                 let v = parseFloat(e.target.value);
                 if(!isNaN(v)) e.target.value = v.toFixed(3);
@@ -911,8 +903,8 @@
 
     document.addEventListener('keypress', function(e) {
         if(e.key === 'Enter') {
+            e.preventDefault();
             const activeTab = currentTabId;
-            // Solo ejecuta el cálculo lineal con ENTER si no estamos escribiendo en la cuadrícula de la Malla.
             if(activeTab === 'modIsohipsas' && !e.target.id.startsWith('cell-mega-')) { ejecutarCalculoIsohipsas(); }
             if(activeTab === 'modTransversales') agregarEstacionTransversal();
             if(activeTab === 'modPendiente') calcularPendiente();
@@ -951,115 +943,17 @@
         if(dk) {
             dk.querySelector('span:first-child').innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
         }
-        megaDibujar(); // Redibujar malla por si cambian los colores
+        megaDibujar(); 
     }
     
     function limpiarInputs(id) { document.querySelectorAll(`#${id} input`).forEach(i => i.value = ''); }
+    function limpiarInputsMalla2D() {
+        ['megaCols', 'megaRows', 'megaDistancia', 'megaEquidistancia', 'megaEscala'].forEach(id => { document.getElementById(id).value = ''; });
+        document.getElementById('megaCanvasMalla').style.display = 'none'; document.getElementById('megaTablaMallaWrapper').style.display = 'none';
+    }
     function limpiarCorteRellenoTotal() {
         puntosCR = []; actualizarTablaCorteRelleno();
         document.getElementById('calcSheetContainerCR').style.display='none'; pStates['calcSheetContainerCR']=false;
-    }
-
-    // -----------------------------------------------------
-    // CALCULADORA CIENTÍFICA (ARRASTRABLE + GMS + INVERSAS)
-    // -----------------------------------------------------
-    
-    function toggleCalculatorLocal() { 
-        let calc = document.getElementById('calcFlotante');
-        if(calc) calc.style.display = (calc.style.display === 'none' || calc.style.display === '') ? 'block' : 'none'; 
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        let calc = document.getElementById('calcFlotante');
-        let calcHeader = document.getElementById('calcHeader');
-        
-        if(calcHeader && calc) {
-            calcHeader.addEventListener('mousedown', (e) => {
-                isDragging = true; startX = e.clientX; startY = e.clientY;
-                initialLeft = calc.offsetLeft; initialTop = calc.offsetTop;
-                document.addEventListener('mousemove', dragCalculator);
-                document.addEventListener('mouseup', stopDragCalculator);
-            });
-        }
-    });
-
-    function dragCalculator(e) {
-        if (!isDragging) return;
-        let calc = document.getElementById('calcFlotante');
-        let dx = e.clientX - startX; let dy = e.clientY - startY;
-        calc.style.left = (initialLeft + dx) + 'px'; calc.style.top = (initialTop + dy) + 'px';
-    }
-    
-    function stopDragCalculator() { isDragging = false; document.removeEventListener('mousemove', dragCalculator); }
-
-    let disp = document.getElementById('calcDisplay');
-    function calcNum(n) { if(disp.value === '0' || disp.value === 'Error') disp.value = n; else disp.value += n; }
-    function calcClear() { disp.value = '0'; }
-    function calcBack() { disp.value = disp.value.slice(0, -1) || '0'; }
-    
-    function toggleShift() {
-        shiftActive = !shiftActive;
-        const btn = document.getElementById('btnShiftGMS');
-        if(shiftActive) {
-            btn.classList.add('shift-active');
-            document.querySelectorAll('.calc-btn.trig').forEach(b => {
-                if(b.innerText === 'sin') b.innerText = 'asin';
-                else if(b.innerText === 'cos') b.innerText = 'acos';
-                else if(b.innerText === 'tan') b.innerText = 'atan';
-            });
-        } else {
-            btn.classList.remove('shift-active');
-            document.querySelectorAll('.calc-btn.trig').forEach(b => {
-                if(b.innerText === 'asin') b.innerText = 'sin';
-                else if(b.innerText === 'acos') b.innerText = 'cos';
-                else if(b.innerText === 'atan') b.innerText = 'tan';
-            });
-        }
-    }
-
-    function calcEqual() {
-        try {
-            let expr = disp.value;
-            expr = expr.replace(/(\d+(?:\.\d+)?)°(\d+(?:\.\d+)?)?'?(\d+(?:\.\d+)?)?"?/g, function(m, g, min, s) {
-                let deg = parseFloat(g) || 0; let mn = parseFloat(min) || 0; let sc = parseFloat(s) || 0;
-                return "(" + (deg + (mn / 60) + (sc / 3600)).toString() + ")";
-            });
-            let res = eval(expr);
-            if(Number.isInteger(res)) { disp.value = res; } else { disp.value = Number(res).toFixed(5); }
-        } catch(e) { disp.value = 'Error'; }
-    }
-
-    function calcOp(op) {
-        if(disp.value === 'Error') disp.value = '0';
-        let v = parseFloat(disp.value);
-        
-        if(op === 'sin' || op === 'cos' || op === 'tan') {
-            calcEqual(); v = parseFloat(disp.value);
-            let angle = isRad ? v : v * Math.PI / 180;
-            if(!shiftActive) {
-                if(op === 'sin') disp.value = Math.sin(angle).toFixed(5);
-                if(op === 'cos') disp.value = Math.cos(angle).toFixed(5);
-                if(op === 'tan') disp.value = Math.tan(angle).toFixed(5);
-            } else {
-                let resRad = 0;
-                if(op === 'sin') resRad = Math.asin(v);
-                if(op === 'cos') resRad = Math.acos(v);
-                if(op === 'tan') resRad = Math.atan(v);
-                let resFinal = isRad ? resRad : resRad * 180 / Math.PI;
-                disp.value = resFinal.toFixed(5);
-                toggleShift();
-            }
-        } 
-        else if(op === 'sqrt') { calcEqual(); v = parseFloat(disp.value); disp.value = Math.sqrt(v).toFixed(5); }
-        else if(op === 'pow') { calcEqual(); v = parseFloat(disp.value); disp.value = Math.pow(v,2).toFixed(4); }
-        else if(op === 'radDeg') { isRad = !isRad; document.getElementById('calcModeText').innerText = isRad ? "Modo: RADIANES (RAD)" : "Modo: GRADOS (DEG)"; }
-        else if(op === '°') {
-            let str = disp.value;
-            if(!str.includes('°')) disp.value += '°';
-            else if(str.includes('°') && !str.includes("'")) disp.value += "'";
-            else if(str.includes("'") && !str.includes('"')) disp.value += '"';
-        } 
-        else { disp.value += op; }
     }
 
     // -----------------------------------------------------
@@ -1105,6 +999,119 @@
     }
 
     // -----------------------------------------------------
+    // CALCULADORA CIENTÍFICA (ARRASTRABLE + GMS + INVERSAS)
+    // -----------------------------------------------------
+    
+    function toggleCalculatorLocal() { 
+        let calc = document.getElementById('calcFlotante');
+        if(calc) calc.style.display = (calc.style.display === 'none' || calc.style.display === '') ? 'block' : 'none'; 
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        let calc = document.getElementById('calcFlotante');
+        let calcHeader = document.getElementById('calcHeader');
+        
+        if(calcHeader && calc) {
+            calcHeader.addEventListener('mousedown', (e) => {
+                isDraggingCalc = true; startXCalc = e.clientX; startYCalc = e.clientY;
+                initialLeftCalc = calc.offsetLeft; initialTopCalc = calc.offsetTop;
+                document.addEventListener('mousemove', dragCalculator);
+                document.addEventListener('mouseup', stopDragCalculator);
+            });
+        }
+    });
+
+    function dragCalculator(e) {
+        if (!isDraggingCalc) return;
+        let calc = document.getElementById('calcFlotante');
+        let dx = e.clientX - startXCalc; let dy = e.clientY - startYCalc;
+        calc.style.left = (initialLeftCalc + dx) + 'px'; calc.style.top = (initialTopCalc + dy) + 'px';
+    }
+    
+    function stopDragCalculator() { isDraggingCalc = false; document.removeEventListener('mousemove', dragCalculator); document.removeEventListener('mouseup', stopDragCalculator); }
+
+    function calcNum(n) { 
+        let disp = document.getElementById('calcDisplay');
+        if(!disp) return;
+        if(disp.value === '0' || disp.value === 'Error') disp.value = n; else disp.value += n; 
+    }
+    
+    function calcClear() { 
+        let disp = document.getElementById('calcDisplay');
+        if(disp) disp.value = '0'; 
+    }
+    
+    function toggleShift() {
+        shiftActive = !shiftActive;
+        const btn = document.getElementById('btnShiftGMS');
+        if(!btn) return;
+        if(shiftActive) {
+            btn.classList.add('shift-active');
+            document.querySelectorAll('.calc-btn.trig').forEach(b => {
+                if(b.innerText === 'sin') b.innerText = 'asin';
+                else if(b.innerText === 'cos') b.innerText = 'acos';
+                else if(b.innerText === 'tan') b.innerText = 'atan';
+            });
+        } else {
+            btn.classList.remove('shift-active');
+            document.querySelectorAll('.calc-btn.trig').forEach(b => {
+                if(b.innerText === 'asin') b.innerText = 'sin';
+                else if(b.innerText === 'acos') b.innerText = 'cos';
+                else if(b.innerText === 'atan') b.innerText = 'tan';
+            });
+        }
+    }
+
+    function calcEqual() {
+        let disp = document.getElementById('calcDisplay');
+        if(!disp) return;
+        try {
+            let expr = disp.value;
+            expr = expr.replace(/(\d+(?:\.\d+)?)°(\d+(?:\.\d+)?)?'?(\d+(?:\.\d+)?)?"?/g, function(m, g, min, s) {
+                let deg = parseFloat(g) || 0; let mn = parseFloat(min) || 0; let sc = parseFloat(s) || 0;
+                return "(" + (deg + (mn / 60) + (sc / 3600)).toString() + ")";
+            });
+            let res = eval(expr);
+            if(Number.isInteger(res)) { disp.value = res; } else { disp.value = Number(res).toFixed(5); }
+        } catch(e) { disp.value = 'Error'; }
+    }
+
+    function calcOp(op) {
+        let disp = document.getElementById('calcDisplay');
+        if(!disp) return;
+        if(disp.value === 'Error') disp.value = '0';
+        let v = parseFloat(disp.value);
+        
+        if(op === 'sin' || op === 'cos' || op === 'tan') {
+            calcEqual(); v = parseFloat(disp.value);
+            let angle = isRad ? v : v * Math.PI / 180;
+            if(!shiftActive) {
+                if(op === 'sin') disp.value = Math.sin(angle).toFixed(5);
+                if(op === 'cos') disp.value = Math.cos(angle).toFixed(5);
+                if(op === 'tan') disp.value = Math.tan(angle).toFixed(5);
+            } else {
+                let resRad = 0;
+                if(op === 'sin') resRad = Math.asin(v);
+                if(op === 'cos') resRad = Math.acos(v);
+                if(op === 'tan') resRad = Math.atan(v);
+                let resFinal = isRad ? resRad : resRad * 180 / Math.PI;
+                disp.value = resFinal.toFixed(5);
+                toggleShift();
+            }
+        } 
+        else if(op === 'sqrt') { calcEqual(); v = parseFloat(disp.value); disp.value = Math.sqrt(v).toFixed(5); }
+        else if(op === 'pow') { calcEqual(); v = parseFloat(disp.value); disp.value = Math.pow(v,2).toFixed(4); }
+        else if(op === 'radDeg') { isRad = !isRad; document.getElementById('calcModeText').innerText = isRad ? "Modo: RADIANES (RAD)" : "Modo: GRADOS (DEG)"; }
+        else if(op === '°') {
+            let str = disp.value;
+            if(!str.includes('°')) disp.value += '°';
+            else if(str.includes('°') && !str.includes("'")) disp.value += "'";
+            else if(str.includes("'") && !str.includes('"')) disp.value += '"';
+        } 
+        else { disp.value += op; }
+    }
+
+    // -----------------------------------------------------
     // EXPORTACIÓN (PDF, CSV Y CIVIL 3D) DE TOPOCALC
     // -----------------------------------------------------
     function exportarCSV(tbodyId, filename) {
@@ -1142,7 +1149,7 @@
     function imprimirGuiaPDF() { 
         const modalToPrint = document.getElementById('printArea').innerHTML; 
         const win = window.open('', '_blank'); 
-        win.document.write(`<html><head><title>Guia TopoCalc - PDF</title><style>@page { size: A4; margin: 20mm; } body { font-family: sans-serif; line-height: 1.5; color:#333; } h2 { color: #0f766e; text-align: center; border-bottom: 2px solid #0f766e; padding-bottom:10px; } table { width: 100%; border-collapse: collapse; margin-top: 15px;} th, td { border: 1px solid #cbd5e1; padding: 12px;} th { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; } .no-print { display: none !important; }</style></head><body style="background:white; color:black;">${modalToPrint}<script>window.onload=function(){window.print();setTimeout(function(){window.close();},1500);}<\/script></body></html>`); 
+        win.document.write(`<html><head><title>Guia TopoCalc - PDF</title><style>@page { size: A4; margin: 20mm; } body { font-family: sans-serif; line-height: 1.5; color:#333; } h2 { color: #2c6e9e; text-align: center; border-bottom: 2px solid #2c6e9e; padding-bottom:10px; } table { width: 100%; border-collapse: collapse; margin-top: 15px;} th, td { border: 1px solid #cbd5e1; padding: 12px;} th { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; } .no-print { display: none !important; }</style></head><body style="background:white; color:black;">${modalToPrint}<script>window.onload=function(){window.print();setTimeout(function(){window.close();},1500);}<\/script></body></html>`); 
         win.document.close(); 
     }
 
@@ -1162,31 +1169,17 @@
     // MEGA-MOTOR DE MALLA PREMIUM (AISLADO PARA NO ROMPER TOPOCALC)
     // =======================================================================================
     
-    // AISLAMIENTO DE EVENTOS DEL MEGA-MOTOR
     window.addEventListener('keydown', (e) => {
-        // Solo escuchar si la pestaña Isohipsas está activa
         if(document.getElementById('modIsohipsas').classList.contains('active')) {
             if(e.target.tagName === 'INPUT') return; 
-            
-            if (e.key === 'm' || e.key === 'M') {
-                e.preventDefault();
-                megaTogglePapel();
-            }
-            
-            if (e.code === 'Space') {
-                e.preventDefault();
-                megaSpacePressed = true;
-                if(!megaIsPanning) document.getElementById('megaCanvasWrapper').style.cursor = 'grab';
-            }
+            if (e.key === 'm' || e.key === 'M') { e.preventDefault(); megaTogglePapel(); }
+            if (e.code === 'Space') { e.preventDefault(); megaSpacePressed = true; if(!megaIsPanning) document.getElementById('megaCanvasWrapper').style.cursor = 'grab'; }
         }
     });
 
     window.addEventListener('keyup', (e) => {
         if(document.getElementById('modIsohipsas').classList.contains('active')) {
-            if (e.code === 'Space') {
-                megaSpacePressed = false;
-                if(!megaIsPanning) document.getElementById('megaCanvasWrapper').style.cursor = 'crosshair';
-            }
+            if (e.code === 'Space') { megaSpacePressed = false; if(!megaIsPanning) document.getElementById('megaCanvasWrapper').style.cursor = 'crosshair'; }
         }
     });
 
@@ -1197,39 +1190,27 @@
                 if (e.button === 1 || (e.button === 0 && megaSpacePressed)) {
                     e.preventDefault();
                     megaIsPanning = true;
-                    megaStartPanX = e.clientX;
-                    megaStartPanY = e.clientY;
-                    megaScrollLeft = megaWrapper.scrollLeft;
-                    megaScrollTop = megaWrapper.scrollTop;
+                    megaStartPanX = e.clientX; megaStartPanY = e.clientY;
+                    megaScrollLeft = megaWrapper.scrollLeft; megaScrollTop = megaWrapper.scrollTop;
                     megaWrapper.classList.add('grabbing');
                 }
             }
         });
 
         megaWrapper.addEventListener('mouseleave', () => {
-            if(megaIsPanning) {
-                megaIsPanning = false;
-                megaWrapper.classList.remove('grabbing');
-                megaWrapper.style.cursor = megaSpacePressed ? 'grab' : 'crosshair';
-            }
+            if(megaIsPanning) { megaIsPanning = false; megaWrapper.classList.remove('grabbing'); megaWrapper.style.cursor = megaSpacePressed ? 'grab' : 'crosshair'; }
         });
     }
 
     window.addEventListener('mousemove', (e) => {
         if (!megaIsPanning) return;
         e.preventDefault();
-        const walkX = (e.clientX - megaStartPanX);
-        const walkY = (e.clientY - megaStartPanY);
-        megaWrapper.scrollLeft = megaScrollLeft - walkX;
-        megaWrapper.scrollTop = megaScrollTop - walkY;
+        const walkX = (e.clientX - megaStartPanX); const walkY = (e.clientY - megaStartPanY);
+        megaWrapper.scrollLeft = megaScrollLeft - walkX; megaWrapper.scrollTop = megaScrollTop - walkY;
     });
 
     window.addEventListener('mouseup', () => {
-        if(megaIsPanning) {
-            megaIsPanning = false;
-            megaWrapper.classList.remove('grabbing');
-            megaWrapper.style.cursor = megaSpacePressed ? 'grab' : 'crosshair';
-        }
+        if(megaIsPanning) { megaIsPanning = false; megaWrapper.classList.remove('grabbing'); megaWrapper.style.cursor = megaSpacePressed ? 'grab' : 'crosshair'; }
     });
 
     function megaInicializarMalla() {
@@ -1755,69 +1736,6 @@
         } else { megaCerrarInspector(); }
     });
 
-    function megaExportarCSV() {
-        let csv = "data:text/csv;charset=utf-8,\uFEFF";
-        csv += "COORDENADA X,COORDENADA Y,ELEVACION Z\n";
-        const distReal = parseFloat(document.getElementById('megaDistancia').value) || 10;
-        for (let i = 0; i < megaRowsCount; i++) {
-            for (let j = 0; j < megaColsCount; j++) {
-                let rx = j * distReal; let ry = -i * distReal; let rz = megaMallaCotas[i][j];
-                csv += `${rx.toFixed(3)},${ry.toFixed(3)},${rz.toFixed(3)}\n`;
-            }
-        }
-        let a = document.createElement('a'); a.href = encodeURI(csv); a.download = "Matriz_Nivelacion_Premium.csv"; a.click();
-    }
-
-    function megaExportarDXF() {
-        if(megaLineasDXF.length === 0) { alert("Genere curvas de nivel primero."); return; }
-        let dxf = "  0\nSECTION\n  2\nENTITIES\n";
-        megaLineasDXF.forEach(linea => {
-            dxf += "  0\nLINE\n  8\n" + (linea.esMaestra ? "Curvas_Maestras" : "Curvas_Ordinarias") + "\n";
-            dxf += " 10\n" + linea.x1.toFixed(3) + "\n 20\n" + linea.y1.toFixed(3) + "\n 30\n" + linea.z.toFixed(3) + "\n";
-            dxf += " 11\n" + linea.x2.toFixed(3) + "\n 21\n" + linea.y2.toFixed(3) + "\n 31\n" + linea.z.toFixed(3) + "\n";
-            if (linea.esMaestra) dxf += " 62\n1\n"; else dxf += " 62\n8\n";
-        });
-        dxf += "  0\nENDSEC\n  0\nEOF\n";
-        let blob = new Blob([dxf], {type: 'text/plain'}); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "Curvas_TopoCalc_Pro.dxf"; a.click();
-    }
-
-    function megaImprimirPlano() {
-        const esc = parseFloat(document.getElementById('megaEscala').value) || 100;
-        let zoomActual = megaZoomGlobal; let slider = document.getElementById('megaZoomCanvas');
-        if(slider) { slider.value = 100; document.getElementById('megaZoomPorcentaje').innerText = '100%'; }
-        megaZoomGlobal = 1.0; megaDibujar(); 
-        const imgData = document.getElementById('megaCanvasMalla').toDataURL("image/jpeg", 1.0); 
-        if(slider) { slider.value = zoomActual * 100; document.getElementById('megaZoomPorcentaje').innerText = (zoomActual * 100) + '%'; }
-        megaZoomGlobal = zoomActual; megaDibujar(); 
-
-        const win = window.open('', '_blank');
-        win.document.write(`<html><head><title>Impresión a Escala 1:${esc}</title><style>@page { size: auto; margin: 10mm; } body { font-family: sans-serif; text-align: center; background: white; margin:0; padding:20px;} .hoja-tecnica { border: 2px solid #000; padding: 20px; display: inline-block; margin-top:20px; background: white; } h2 { margin: 0 0 5px 0; color: #1e293b; } p { margin: 0 0 20px 0; color: #475569; font-size: 14px; } .img-container { position: relative; margin: 0 auto; border: 1px solid #ccc; background: white; overflow: hidden; } img { max-width: 100%; height: auto; }</style></head><body><div class="hoja-tecnica"><h2>Plano Topográfico (Isohipsas y Malla)</h2><p><b>Escala 1 : ${esc}</b> | Equidistancia: ${document.getElementById('megaEquidistancia').value} m</p><div class="img-container"><img src="${imgData}" alt="Plano a Escala"></div></div><script>window.onload = function() { setTimeout(() => { window.print(); window.close(); }, 500); }<\/script></body></html>`);
-        win.document.close();
-    }
-
-    function megaExportarPDF() {
-        if(!window.jspdf) { alert("Error cargando el motor de PDF. Revisa tu conexión a internet."); return; }
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-        doc.setFont("helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(15, 23, 42); doc.text("Plano Topográfico (Isohipsas y Malla)", 14, 20);
-        doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139); 
-        const eq = document.getElementById('megaEquidistancia').value; const distReal = document.getElementById('megaDistancia').value; const esc = document.getElementById('megaEscala').value;
-        doc.text(`Equidistancia: ${eq} m  |  Dist. Estacas: ${distReal} m  |  Escala Papel 1:${esc} |  Cota Min: ${megaCotaMinGlobal.toFixed(2)} m  |  Cota Max: ${megaCotaMaxGlobal.toFixed(2)} m`, 14, 28);
-        
-        let zoomActual = megaZoomGlobal; let slider = document.getElementById('megaZoomCanvas');
-        if(slider) { slider.value = 100; document.getElementById('megaZoomPorcentaje').innerText = '100%'; }
-        megaZoomGlobal = 1.0; megaDibujar(); 
-        const canvas = document.getElementById('megaCanvasMalla'); const imgData = canvas.toDataURL("image/jpeg", 1.0); 
-        if(slider) { slider.value = zoomActual * 100; document.getElementById('megaZoomPorcentaje').innerText = (zoomActual * 100) + '%'; }
-        megaZoomGlobal = zoomActual; megaDibujar(); 
-        
-        let pdfWidth = 269; let canvasRatio = canvas.width / canvas.height; let pdfHeight = pdfWidth / canvasRatio;
-        if (pdfHeight > 160) { pdfHeight = 160; pdfWidth = pdfHeight * canvasRatio; }
-        doc.addImage(imgData, 'JPEG', 14, 35, pdfWidth, pdfHeight);
-        doc.setFontSize(8); doc.text("Generado por TopoCalc v11.0 Master - Cristopher Cedeño", 14, 200);
-        doc.save("Plano_Topografico_Premium.pdf");
-    }
-
     // -----------------------------------------------------
     // LÓGICA DE ALTIMETRÍA (ISOHIPSAS LINEAL)
     // -----------------------------------------------------
@@ -2269,14 +2187,21 @@
         tbody.innerHTML += `<tr style="background:#f8fafc;"><td><b>${PT.toFixed(3)} (PT)</b></td><td>${S_PT.toFixed(3)}</td><td class="pencil-res">${decToGMSStr(delta/2)}</td><td>Chequeo: Ángulo = Δ/2</td></tr>`;
         document.getElementById('curvaReplanteoWrapper').style.display = 'block';
         
-        document.getElementById('curva_paso1').innerHTML = `Δ_rad = Δ × π/180 = <b class="pencil-res">${dRad.toFixed(6)} rad</b>`;
-        document.getElementById('curva_paso2').innerHTML = `ST = R · tan(Δ/2) = <b class="pencil-res">${ST.toFixed(3)} m</b>`;
-        document.getElementById('curva_paso3').innerHTML = `LC = R · Δ_rad = <b class="pencil-res">${LC.toFixed(3)} m</b>`;
-        document.getElementById('curva_paso4').innerHTML = `E = R · (sec(Δ/2) - 1) = <b>${E.toFixed(3)} m</b>`;
-        document.getElementById('curva_paso5').innerHTML = `M = R · (1 - cos(Δ/2)) = <b>${M.toFixed(3)} m</b>`;
-        document.getElementById('curva_paso6').innerHTML = `CL = 2R · sen(Δ/2) = <b>${CL.toFixed(3)} m</b>`;
-        document.getElementById('curva_paso7').innerHTML = `PC = PI - ST = ${PI.toFixed(3)} - ${ST.toFixed(3)} = <b class="pencil-res">${PC.toFixed(3)}</b>`;
-        document.getElementById('curva_paso8').innerHTML = `PT = PC + LC = ${PC.toFixed(3)} + ${LC.toFixed(3)} = <b class="pencil-res">${PT.toFixed(3)}</b>`;
+        let kmPI = Math.floor(Math.abs(PI) / 1000); let mPI = Math.abs(PI) % 1000;
+        let kmPC = Math.floor(Math.abs(PC) / 1000); let mPC = Math.abs(PC) % 1000;
+        let kmPT = Math.floor(Math.abs(PT) / 1000); let mPT = Math.abs(PT) % 1000;
+        let R_plano = R / 200;
+
+        document.getElementById('curva_paso1').innerHTML = `Distancia desde el PI hasta el PC o PT. Se calcula con la tangente del semiángulo.<br>ST = R · tan(Δ/2) = ${R.toFixed(0)} · tan(${delta.toFixed(0)}°/2) = ${R.toFixed(0)} · tan(${(delta/2).toFixed(2)}°)<br>ST = <b class="pencil-res">${ST.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso2').innerHTML = `Punto donde se intersectan las dos tangentes de la curva.<br>PI = 0+${PI.toFixed(2)} (dato de entrada)<br>PI = <b class="pencil-res">${PI.toFixed(2)} m</b>`;
+        document.getElementById('curva_paso3').innerHTML = `Punto donde comienza la curva circular. Se resta la subtangente al PI.<br>PC = PI - ST = ${PI.toFixed(2)} - ${ST.toFixed(3)} = ${PC.toFixed(2)}<br>PC = <b class="pencil-res">${kmPC}+${mPC.toFixed(2)} m</b>`;
+        document.getElementById('curva_paso4').innerHTML = `Longitud real del arco de circunferencia desde PC hasta PT.<br>LC = π · R · Δ / 180° = π · ${R.toFixed(0)} · ${delta.toFixed(0)}° / 180° = ${LC.toFixed(3)}<br>LC = <b class="pencil-res">${LC.toFixed(2)} m</b>`;
+        document.getElementById('curva_paso5').innerHTML = `Punto donde termina la curva. Se suma la longitud de curva al PC.<br>PT = PC + LC = ${PC.toFixed(2)} + ${LC.toFixed(2)} = ${PT.toFixed(2)}<br>PT = <b class="pencil-res">${kmPT}+${mPT.toFixed(2)} m</b>`;
+        document.getElementById('curva_paso6').innerHTML = `Línea recta que une el PC con el PT. Es la distancia en línea recta entre ambos extremos.<br>CL = 2 · R · sen(Δ/2) = 2 · ${R.toFixed(0)} · sen(${delta.toFixed(0)}°/2) = 2 · ${R.toFixed(0)} · sen(${(delta/2).toFixed(2)}°)<br>CL = <b class="pencil-res">${CL.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso7').innerHTML = `Distancia desde el PI hasta el punto medio de la curva. Útil para verificar obstáculos.<br>E = R · (1/cos(Δ/2) - 1) = ${R.toFixed(0)} · (1/cos(${(delta/2).toFixed(2)}°) - 1)<br>E = <b class="pencil-res">${E.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso8').innerHTML = `Distancia desde el punto medio de la cuerda larga hasta el punto medio del arco.<br>M = R · (1 - cos(Δ/2)) = ${R.toFixed(0)} · (1 - cos(${(delta/2).toFixed(2)}°))<br>M = <b class="pencil-res">${M.toFixed(3)} m</b>`;
+        document.getElementById('curva_paso9').innerHTML = `Conversión del radio real a la escala del plano para poder dibujarlo en papel.<br>R_plano = R / escala = ${R.toFixed(0)} / 200 = ${R_plano.toFixed(3)}<br>R_plano = <b class="pencil-res">${R_plano.toFixed(3)} cm</b> (en el plano a escala 1:200)`;
+        
         document.getElementById('curva_paso_def').innerHTML = mHtml;
 
         document.getElementById('canvasCurvaWrapper').style.display = 'block';
@@ -2458,28 +2383,21 @@
     // FUNCIÓN DE EJEMPLOS GLOBALES "MODO SILENCIOSO"
     // -----------------------------------------------------
     function restablecerTodosEjemplos() {
-        // 1. Isohipsas Lineal
+        megaCargarEjemplo(); 
         document.getElementById('isoCotaA').value='280.350'; document.getElementById('isoCotaB').value='279.720'; document.getElementById('isoDistPlano').value='10.00'; document.getElementById('isoEquidistancia').value='0.25';
         ejecutarCalculoIsohipsas();
-
-        // 1.5 Malla 2D Premium
-        megaCargarEjemplo();
-
-        // 2. Cotas Eje
+        
         document.getElementById('transCotaInf').value='510'; document.getElementById('transDistTotal').value='1.7'; document.getElementById('transDistEje').value='0.7'; document.getElementById('transEquidistanciaGlobal').value='10';
         document.getElementById('transProg').value='0+020';
         baseDatosTransversales = [{ est: '0+020', cInf: 510, dTot: 1.7, dEje: 0.7, eq: 10 }];
         procesarMatrizTransversales();
-
-        // 3. Pendiente
+        
         document.getElementById('pendCotaA').value='505'; document.getElementById('pendCotaB').value='508'; document.getElementById('pendDistancia').value='500';
         calcularPendiente();
-
-        // 4. Rasante
+        
         document.getElementById('rasCotaInicial').value='505'; document.getElementById('rasPendiente').value='0.6'; document.getElementById('rasLongitud').value='500'; document.getElementById('rasIntervalo').value='10';
         calcularRasante();
         
-        // 5. Corte y Relleno
         document.getElementById('anchoSeccion').value='10';
         document.getElementById('prog').value='0+060.000'; 
         document.getElementById('cotaTerreno').value='106.10'; 
@@ -2491,7 +2409,6 @@
         ];
         actualizarTablaCorteRelleno();
         
-        // 6. Perfil Transversal (Motor Irregular v10)
         document.getElementById('cotaRasantePerfil').value='106.000';
         ptsPerfil = [
             {x: -15, y: 108.5},
@@ -2503,11 +2420,9 @@
         actualizarTablaPerfil();
         calcularPerfilTransversal();
         
-        // 7. Curva Horizontal
         document.getElementById('curvaDelta').value='28'; document.getElementById('curvaRadio').value='125'; document.getElementById('curvaEstPI').value='0+480.000'; document.getElementById('curvaIntervalo').value='10';
         calcularCurvaHorizontal();
         
-        // 8. Curva Vertical
         document.getElementById('vertI1').value = '-0.58';
         document.getElementById('vertI2').value = '-0.60';
         document.getElementById('vertLv').value = '70';
@@ -2516,12 +2431,10 @@
         document.getElementById('vertInt').value = '10';
         calcularCurvaVertical();
 
-        // Efecto visual de parpadeo suave
         document.querySelector('.container').style.opacity = '0.5';
         setTimeout(()=>{ document.querySelector('.container').style.opacity = '1'; }, 150);
     }
 
-    // Inicializador
     window.onload = () => {
         restablecerTodosEjemplos();
     };
