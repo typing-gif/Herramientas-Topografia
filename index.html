@@ -1112,7 +1112,7 @@
     }
 
     // -----------------------------------------------------
-    // EXPORTACIÓN (PDF, CSV Y CIVIL 3D) DE TOPOCALC
+    // EXPORTACIÓN ORIGINAL (PDF, CSV Y CIVIL 3D) DE TOPOCALC
     // -----------------------------------------------------
     function exportarCSV(tbodyId, filename) {
         let csv = "data:text/csv;charset=utf-8,\uFEFF";
@@ -1335,6 +1335,56 @@
     }
 
     function megaCerrarInspector() { document.getElementById('megaInspector').classList.replace('mega-fade-in', 'mega-fade-out'); }
+
+    // ==========================================
+    // NUEVAS FUNCIONES DE EXPORTACIÓN REPARADAS
+    // ==========================================
+    function megaImprimirPlano() {
+        const canvas = document.getElementById('megaCanvasMalla');
+        const dataUrl = canvas.toDataURL('image/png');
+        const win = window.open('', '_blank');
+        win.document.write('<html><head><title>Imprimir Plano Malla 2D</title></head><body style="margin:0;display:flex;justify-content:center;align-items:center;background:#fff;"><img src="' + dataUrl + '" style="max-width:100%; max-height:100vh;"/></body></html>');
+        win.document.close();
+        win.focus();
+        setTimeout(() => { win.print(); win.close(); }, 500);
+    }
+
+    function megaExportarCSV() {
+        let csv = "data:text/csv;charset=utf-8,\uFEFF";
+        csv += "Matriz de Cotas - Malla 2D\n";
+        for (let i = 0; i < megaRowsCount; i++) {
+            let row = [];
+            for (let j = 0; j < megaColsCount; j++) {
+                row.push(megaMallaCotas[i][j].toFixed(3));
+            }
+            csv += row.join(",") + "\n";
+        }
+        let a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'Malla_2D_Cotas.csv'; a.click();
+    }
+
+    function megaExportarDXF() {
+        if (!megaLineasDXF || megaLineasDXF.length === 0) { alert("⚠️ No hay curvas generadas para exportar. Dibuje la malla primero."); return; }
+        let dxf = "0\nSECTION\n2\nENTITIES\n";
+        megaLineasDXF.forEach(l => {
+            let color = l.esMaestra ? "1" : "8"; // 1 = Rojo (Maestra), 8 = Gris (Secundaria)
+            dxf += `0\nLINE\n8\nCurvas_Nivel\n62\n${color}\n10\n${l.x1.toFixed(3)}\n20\n${l.y1.toFixed(3)}\n30\n${l.z.toFixed(3)}\n11\n${l.x2.toFixed(3)}\n21\n${l.y2.toFixed(3)}\n31\n${l.z.toFixed(3)}\n`;
+        });
+        dxf += "0\nENDSEC\n0\nEOF\n";
+        let blob = new Blob([dxf], {type: 'text/plain'});
+        let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Malla_2D_Civil3D.dxf'; a.click();
+    }
+
+    function megaExportarPDF() {
+        if (!window.jspdf || !window.jspdf.jsPDF) { alert("⚠️ La librería PDF aún está cargando o fue bloqueada. Intente de nuevo en unos segundos."); return; }
+        const canvas = document.getElementById('megaCanvasMalla');
+        const dataUrl = canvas.toDataURL('image/png', 1.0);
+        const { jsPDF } = window.jspdf;
+        // Calculamos formato para que encaje perfecto
+        let pdf = new jsPDF({ orientation: canvas.width > canvas.height ? "landscape" : "portrait", unit: "px", format: [canvas.width, canvas.height] });
+        pdf.addImage(dataUrl, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save("Plano_Malla_2D.pdf");
+    }
+    // ==========================================
 
     function megaCargarEjemplo() {
         document.getElementById('megaRows').value = 5; document.getElementById('megaCols').value = 5;
@@ -2438,6 +2488,56 @@
     window.onload = () => {
         restablecerTodosEjemplos();
     };
+    
+    // ==========================================
+    // NUEVAS FUNCIONES DE EXPORTACIÓN REPARADAS
+    // ==========================================
+    function megaImprimirPlano() {
+        const canvas = document.getElementById('megaCanvasMalla');
+        const dataUrl = canvas.toDataURL('image/png');
+        const win = window.open('', '_blank');
+        win.document.write('<html><head><title>Imprimir Plano Malla 2D</title></head><body style="margin:0;display:flex;justify-content:center;align-items:center;background:#fff;"><img src="' + dataUrl + '" style="max-width:100%; max-height:100vh;"/></body></html>');
+        win.document.close();
+        win.focus();
+        setTimeout(() => { win.print(); win.close(); }, 500);
+    }
+
+    function megaExportarCSV() {
+        let csv = "data:text/csv;charset=utf-8,\uFEFF";
+        csv += "Matriz de Cotas - Malla 2D\n";
+        for (let i = 0; i < megaRowsCount; i++) {
+            let row = [];
+            for (let j = 0; j < megaColsCount; j++) {
+                row.push(megaMallaCotas[i][j].toFixed(3));
+            }
+            csv += row.join(",") + "\n";
+        }
+        let a = document.createElement('a'); a.href = encodeURI(csv); a.download = 'Malla_2D_Cotas.csv'; a.click();
+    }
+
+    function megaExportarDXF() {
+        if (!megaLineasDXF || megaLineasDXF.length === 0) { alert("⚠️ No hay curvas generadas para exportar. Dibuje la malla primero."); return; }
+        let dxf = "0\nSECTION\n2\nENTITIES\n";
+        megaLineasDXF.forEach(l => {
+            let color = l.esMaestra ? "1" : "8"; // 1 = Rojo (Maestra), 8 = Gris (Secundaria)
+            dxf += `0\nLINE\n8\nCurvas_Nivel\n62\n${color}\n10\n${l.x1.toFixed(3)}\n20\n${l.y1.toFixed(3)}\n30\n${l.z.toFixed(3)}\n11\n${l.x2.toFixed(3)}\n21\n${l.y2.toFixed(3)}\n31\n${l.z.toFixed(3)}\n`;
+        });
+        dxf += "0\nENDSEC\n0\nEOF\n";
+        let blob = new Blob([dxf], {type: 'text/plain'});
+        let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Malla_2D_Civil3D.dxf'; a.click();
+    }
+
+    function megaExportarPDF() {
+        if (!window.jspdf || !window.jspdf.jsPDF) { alert("⚠️ La librería PDF aún está cargando o fue bloqueada. Intente de nuevo en unos segundos."); return; }
+        const canvas = document.getElementById('megaCanvasMalla');
+        const dataUrl = canvas.toDataURL('image/png', 1.0);
+        const { jsPDF } = window.jspdf;
+        // Calculamos formato para que encaje perfecto
+        let pdf = new jsPDF({ orientation: canvas.width > canvas.height ? "landscape" : "portrait", unit: "px", format: [canvas.width, canvas.height] });
+        pdf.addImage(dataUrl, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save("Plano_Malla_2D.pdf");
+    }
+    // ==========================================
 </script>
 </body>
 </html>
